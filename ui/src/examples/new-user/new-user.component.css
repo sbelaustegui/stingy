@@ -1,0 +1,18 @@
+.softies-color {
+  background-color: RGB(0,180,208);
+}
+label{
+  color: black;
+  font-weight: bold !important;
+}
+.softies-color {
+  background-color: RGB(0,180,208);
+}
+.softies-color:hover {
+  background-color: RGB(0,160,208);
+}
+
+.form-control-feedback {
+  color: #f44336;
+  opacity: 1;
+}

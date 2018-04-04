@@ -14,3 +14,4 @@ GET     /*file                                              controllers.Frontend
 # User
 POST    /api/user                                           controllers.UserController.register()
 GET     /api/user/all                                       controllers.UserController.getAll()
+#GET     /api/user/id/:id                                    controllers.UserController.getById(id: Long)
