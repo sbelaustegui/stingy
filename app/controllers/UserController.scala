@@ -1,6 +1,7 @@
 package controllers
 
-import play.api.mvc.{Action, Controller}
+import javax.inject.Inject
+import play.api.mvc.{AbstractController, ControllerComponents}
 import models.domain.user._
 import play.api.libs.json.Json
 import utils._
@@ -10,7 +11,7 @@ import utils._
   * Created by sebasbelaustegui on 27/03/18.
   */
 
-class UserController extends Controller {
+class UserController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def register = Action{
     request =>
@@ -43,6 +44,27 @@ class UserController extends Controller {
             )
           )
       }
+  }
+
+  def getById(id: Long) = Action {
+    User.getById(id) match {
+      case Some(user) =>
+        Ok(
+          Json.toJson(
+            ResponseGenerated(
+              OK, "User found", Json.toJson(user)
+            )
+          )
+        )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(
+              BAD_REQUEST, "No user for that id"
+            )
+          )
+        )
+    }
   }
 
   def getAll = Action{
