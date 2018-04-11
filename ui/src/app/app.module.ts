@@ -8,12 +8,19 @@ import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import { LoginComponent } from './login/login.component';
 import { NewUserComponent } from './new-user/new-user.component';
+import {HomeComponent} from "./user/home/home.component";
+import {UserComponent} from "./user/user.component";
+import {UserAuthService} from "./shared/auth/user/user-auth.service";
+import {HttpService} from "./shared/services/http.service";
+import {CookieService} from "angular2-cookie/core";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NewUserComponent,
+    UserComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,6 +28,11 @@ import { NewUserComponent } from './new-user/new-user.component';
     AppRoutingModule,
     FormsModule,
     HttpModule
+  ],
+  providers : [
+    CookieService,
+    HttpService,
+    UserAuthService,
   ],
   bootstrap: [AppComponent]
 })
