@@ -1,47 +1,144 @@
 <div class="login">
 
-    <div class="image">
-      <!--​<img src="ui/src/app/login/stingy-Icon.png" alt="Icon">-->
-    </div>
+  <div class="image" align="center">
 
+    ​<img
+    src="https://lh3.googleusercontent.com/ICSSAPt50ekhvI6HpRfTnR96OT3TB3lZUdMb6wDW6MbnsU2n2NKzfuVgmOsZdV5-KYf89SgRdCsiZRhBQSlLUwpoHxFKc01OAxuPTucQSsQwKvpUt26vZp6R_xWokp_YZ4-17YNM-9v3Wa28ImEEXA4XPBrKGjy99sZLXucXXV43k1ZGu-8bCEOKpVvBQCAkWfZhfpLgIOKkWGHSC8Q3dUc6fnlwqQrXh3DUtzu2k4OKKdmk0tmLsVYP9s1mnFv7v7V9mGkaZG9rZ36Ij5aKEe7KQLhvz8jxMCwUWgOwsIv4S0FZZRsuivRpGthAfOHY1zpcHlIXuOM_Ql0EecTDnObzU_gATkrPi7LIpKGlWB40qplHdz4EHb7r6dsU70Lldeb6XACSc2aht3O9H9byBvYOeDTnOT6S0TV5Mv18XhzlPOGRK1uh_sP8ume4qRh9iaJrWmqMYc2qdLCNYU7kGgEXboq8vOcRAr6vVE5XiY4vrW0g5ZQ5sgIGH3HopXtCuF2D0CS-C7mVKgukTX3eKwMbRXGO3h1uGP9xpjNOrxhzuUIviLHwSElkgbMpCPaI420TkkKWeNvhETl9IaKNS6sdVO4oFHAswPsMuw=w177-h72-no"
+    alt="Icon">
+
+  </div>
+
+  <form [formGroup]="formGroup" (ngSubmit)="login()">
     <div class="row">
 
       <div class="offset-4 col-4 center">
 
-        <div>
-          <h1 align="center">{{ title }}</h1>
-        </div>
 
-        <div class="input-group mb-3">
+        <fieldset>
 
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Usuario</span>
+          <div class="form-group">
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Usuario</span>
+              </div>
+
+              <input type="text"
+                     class="form-control"
+                     formControlName="username"
+                     [formGroup]="formGroup"
+                     placeholder="usuario"
+                     aria-label="Username"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="loginUser.username"
+                     required>
+
+              <div class="form-control-feedback"
+                   *ngIf="formGroup.controls.name.errors && (formGroup.controls.name.dirty || formGroup.controls.name.touched)">
+                <p *ngIf="formGroup.controls.name.errors.required">Es requerido</p>
+              </div>
+
+            </div>
           </div>
-          <input type="text" class="form-control" placeholder="example@example.com" aria-label="Username"
-                 aria-describedby="basic-addon1">
-        </div>
 
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon2">Contraseña</span>
+        </fieldset>
+
+        <fieldset>
+
+          <div class="form-group">
+
+            <div class="input-group mb-3">
+
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">Contraseña</span>
+              </div>
+
+              <input type="password"
+                     class="form-control"
+                     formControlName="password"
+                     [formGroup]="formGroup"
+                     placeholder="example1234"
+                     aria-label="Contraseña"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="loginUser.password"
+                     required>
+
+              <div class="form-control-feedback"
+                   *ngIf="formGroup.controls.name.errors && (formGroup.controls.name.dirty || formGroup.controls.name.touched)">
+                <p *ngIf="formGroup.controls.name.errors.required">Es requerido</p>
+              </div>
+
+            </div>
           </div>
 
-          <input type="text" class="form-control" placeholder="example1234" aria-label="Contraseña"
-                 aria-describedby="basic-addon2">
-        </div>
+        </fieldset>
 
+        <div class="alert alert-danger text-center" *ngIf="loginUserError">
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <p>Error. Revise los datos e inténtelo nuevamente.</p>
+            </blockquote>
+          </div>
+        </div>
 
         <div align="center">
-          <a class="account-a" [routerLink]="['/new-user']">No poseo cuenta</a>
+          <a class="account-a" [routerLink]="['new-user']">No poseo cuenta</a>
         </div>
 
-
         <div class="access-button" align="center">
-          <button type="button" class="btn btn-light">INGRESAR</button>
+          <button type="submit" class="btn btn-light" [disabled]="formGroup.invalid">INGRESAR</button>
         </div>
 
       </div>
 
     </div>
+  </form>
+
+  <!--<div class="row">-->
+
+  <!--<div class="offset-4 col-4 center">-->
+  <!---->
+  <!--<div class="image" align="center">-->
+  <!--​<img-->
+  <!--[src]="['https://lh3.googleusercontent.com/ICSSAPt50ekhvI6HpRfTnR96OT3TB3lZUdMb6wDW6MbnsU2n2NKzfuVgmOsZdV5-KYf89SgRdCsiZRhBQSlLUwpoHxFKc01OAxuPTucQSsQwKvpUt26vZp6R_xWokp_YZ4-17YNM-9v3Wa28ImEEXA4XPBrKGjy99sZLXucXXV43k1ZGu-8bCEOKpVvBQCAkWfZhfpLgIOKkWGHSC8Q3dUc6fnlwqQrXh3DUtzu2k4OKKdmk0tmLsVYP9s1mnFv7v7V9mGkaZG9rZ36Ij5aKEe7KQLhvz8jxMCwUWgOwsIv4S0FZZRsuivRpGthAfOHY1zpcHlIXuOM_Ql0EecTDnObzU_gATkrPi7LIpKGlWB40qplHdz4EHb7r6dsU70Lldeb6XACSc2aht3O9H9byBvYOeDTnOT6S0TV5Mv18XhzlPOGRK1uh_sP8ume4qRh9iaJrWmqMYc2qdLCNYU7kGgEXboq8vOcRAr6vVE5XiY4vrW0g5ZQ5sgIGH3HopXtCuF2D0CS-C7mVKgukTX3eKwMbRXGO3h1uGP9xpjNOrxhzuUIviLHwSElkgbMpCPaI420TkkKWeNvhETl9IaKNS6sdVO4oFHAswPsMuw=w177-h72-no']"-->
+  <!--alt="Icon" class="image">-->
+  <!--</div>-->
+
+  <!--<div class="input-group mb-3">-->
+
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon1">Usuario</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example@example.com" aria-label="Username"-->
+  <!--aria-describedby="basic-addon1">-->
+
+  <!--</div>-->
+
+  <!--<div class="input-group mb-3">-->
+
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon2">Contraseña</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example1234" aria-label="Contraseña"-->
+  <!--aria-describedby="basic-addon2">-->
+
+  <!--</div>-->
+
+
+  <!--<div align="center">-->
+  <!--<a class="account-a" [routerLink]="['/new-user']">No poseo cuenta</a>-->
+  <!--</div>-->
+
+
+  <!--<div class="access-button" align="center">-->
+  <!--<button type="button" class="btn btn-light">INGRESAR</button>-->
+  <!--</div>-->
+
+  <!--</div>-->
+
+  <!--</div>-->
 
 </div>
+
