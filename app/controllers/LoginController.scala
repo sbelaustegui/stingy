@@ -47,7 +47,7 @@ class LoginController @Inject()(cc: ControllerComponents) extends AbstractContro
       }
   }
 
-  def logout() = AuthenticatedAction {
+  def logout() = Action {
     request =>
       request.jwtSession -- "user"
       Ok(

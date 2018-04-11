@@ -6,10 +6,10 @@ import play.api.libs.json.{Json, OFormat}
 case class CategoryCreate(name: String)
 
 object CategoryCreate extends CategoryCreateJsonFormat{
-  def apply(user: ECategory): Category = {
+  def apply(category: ECategory): Category = {
     Category(
-      Option(user.getId),
-      user.getName,
+      Option(category.getId),
+      category.getName
     )
   }
 }

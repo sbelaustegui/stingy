@@ -9,6 +9,12 @@ create table category (
   constraint pk_category primary key (id)
 );
 
+create table sub_category (
+  id                            bigint auto_increment not null,
+  name                          varchar(255) not null,
+  constraint pk_sub_category primary key (id)
+);
+
 create table user (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
@@ -25,6 +31,8 @@ create table user (
 # --- !Downs
 
 drop table if exists category;
+
+drop table if exists sub_category;
 
 drop table if exists user;
 

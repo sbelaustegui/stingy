@@ -16,6 +16,13 @@ GET         /api/category/id/:id                                controllers.Cate
 PUT         /api/category                                       controllers.CategoryController.update()
 DELETE      /api/category/:id                                   controllers.CategoryController.delete(id: Long)
 
+# SubCategory
+POST        /api/subcategory                                    controllers.SubcategoryController.register()
+GET         /api/subcategory/all                                controllers.SubcategoryController.getAll
+GET         /api/subcategory/id/:id                             controllers.SubcategoryController.getById(id: Long)
+PUT         /api/subcategory                                    controllers.SubcategoryController.update()
+DELETE      /api/subcategory/:id                                controllers.SubcategoryController.delete(id: Long)
+
 # Login
 POST        /api/login                                          controllers.LoginController.login
 GET         /api/logout                                         controllers.LoginController.logout

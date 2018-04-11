@@ -3,8 +3,11 @@ import {Injectable} from '@angular/core';
 
 /*
 User routes
-  POST /api/user Json(username: String, password: String, name: String)
-  GET  /api/user/all
+  POST        /api/user                                           controllers.UserController.register()
+  GET         /api/user/all                                       controllers.UserController.getAll
+  GET         /api/user/id/:id                                    controllers.UserController.getById(id: Long)
+  PUT         /api/user                                           controllers.UserController.update()
+  DELETE      /api/user/:id                                       controllers.UserController.delete(id: Long)
 */
 
 @Injectable()
