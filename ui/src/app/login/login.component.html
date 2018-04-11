@@ -1,3 +1,47 @@
-<p>
-  login works!
-</p>
+<div class="login">
+
+    <div class="image">
+      <!--​<img src="ui/src/app/login/stingy-Icon.png" alt="Icon">-->
+    </div>
+
+    <div class="row">
+
+      <div class="offset-4 col-4 center">
+
+        <div>
+          <h1 align="center">{{ title }}</h1>
+        </div>
+
+        <div class="input-group mb-3">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Usuario</span>
+          </div>
+          <input type="text" class="form-control" placeholder="example@example.com" aria-label="Username"
+                 aria-describedby="basic-addon1">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">Contraseña</span>
+          </div>
+
+          <input type="text" class="form-control" placeholder="example1234" aria-label="Contraseña"
+                 aria-describedby="basic-addon2">
+        </div>
+
+
+        <div align="center">
+          <a class="account-a" [routerLink]="['/new-user']">No poseo cuenta</a>
+        </div>
+
+
+        <div class="access-button" align="center">
+          <button type="button" class="btn btn-light">INGRESAR</button>
+        </div>
+
+      </div>
+
+    </div>
+
+</div>
