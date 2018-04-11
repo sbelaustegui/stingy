@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {PasswordValidation} from "../validators/equal-validator.directive";
+import {EmailValidation, PasswordValidation} from "../validators/equal-validator.directive";
 import {UserService} from "../shared/services/user.service";
 import {Title} from "@angular/platform-browser";
 
@@ -47,7 +47,8 @@ export class NewUserComponent implements OnInit {
         confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
       },
       {
-        validator: PasswordValidation.MatchPassword
+        validatorPassword: PasswordValidation.MatchPassword,
+        validatorEmail: EmailValidation.MatchEmail
       })
   }
 

@@ -139,7 +139,7 @@
             <div class="form-control-feedback"
                  *ngIf="formGroup.controls.confirmPassword.errors && (formGroup.controls.confirmPassword.dirty || formGroup.controls.confirmPassword.touched)">
               <p *ngIf="formGroup.controls.confirmPassword.errors.required">Es requerido</p>
-              <p *ngIf="formGroup.controls.confirmPassword.errors?.MatchEmails">Los emails no coinciden.</p>
+              <p *ngIf="formGroup.controls.confirmPassword.errors?.MatchEmail">Los emails no coinciden.</p>
             </div>
 
           </div>
