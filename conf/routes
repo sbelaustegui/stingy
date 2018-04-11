@@ -6,7 +6,15 @@
 POST        /api/user                                           controllers.UserController.register()
 GET         /api/user/all                                       controllers.UserController.getAll
 GET         /api/user/id/:id                                    controllers.UserController.getById(id: Long)
+PUT         /api/user                                           controllers.UserController.update()
 DELETE      /api/user/:id                                       controllers.UserController.delete(id: Long)
+
+# Category
+POST        /api/category                                       controllers.CategoryController.register()
+GET         /api/category/all                                   controllers.CategoryController.getAll
+GET         /api/category/id/:id                                controllers.CategoryController.getById(id: Long)
+PUT         /api/category                                       controllers.CategoryController.update()
+DELETE      /api/category/:id                                   controllers.CategoryController.delete(id: Long)
 
 # Login
 POST        /api/login                                          controllers.LoginController.login
