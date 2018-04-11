@@ -27,7 +27,7 @@
                      class="form-control"
                      formControlName="username"
                      [formGroup]="formGroup"
-                     placeholder="usuario"
+                     placeholder="example"
                      aria-label="Username"
                      aria-describedby="basic-addon1"
                      [(ngModel)]="loginUser.username"
@@ -64,8 +64,9 @@
                      required>
 
               <div class="form-control-feedback"
-                   *ngIf="formGroup.controls.name.errors && (formGroup.controls.name.dirty || formGroup.controls.name.touched)">
-                <p *ngIf="formGroup.controls.name.errors.required">Es requerido</p>
+                   *ngIf="formGroup.controls.confirmPassword.errors && (formGroup.controls.confirmPassword.dirty || formGroup.controls.confirmPassword.touched)">
+                <p *ngIf="formGroup.controls.confirmPassword.errors.required">Es requerido</p>
+                <p *ngIf="formGroup.controls.confirmPassword.errors.minlength">Mínimo de 8 caracteres</p>
               </div>
 
             </div>
@@ -82,7 +83,7 @@
         </div>
 
         <div align="center">
-          <a class="account-a" [routerLink]="['new-user']">No poseo cuenta</a>
+            <a class="account-a" (click)="goRegister()">No poseo cuenta</a>
         </div>
 
         <div class="access-button" align="center">

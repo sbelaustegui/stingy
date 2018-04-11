@@ -26,8 +26,12 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authUserService.login(this.loginUser).then(res => {
+      this.loginUserError = false;
       this.router.navigate(['user','home'])
     }).catch(err => this.loginUserError = true);
+  }
+  goRegister(){
+    this.router.navigate(['new-user']);
   }
 
   private createFormGroup() {

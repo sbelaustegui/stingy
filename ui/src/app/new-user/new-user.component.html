@@ -1,75 +1,297 @@
 <div class="new-user">
 
+  <form [formGroup]="formGroup" (ngSubmit)="registerUser()">
+    <div class="row">
+      <div class="offset-4 col-4 center">
 
-  <div class="image">
-    <!--​<img src="ui/src/app/login/stingy-Icon.png" alt="Icon">-->
-  </div>
+        <fieldset>
+          <div class="form-group">
 
-  <div class="row">
+            <!--INPUT NAME-->
+            <div class="input-group mb-3 ">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Nombre</span>
+              </div>
 
-    <div class="offset-4 col-4 center">
+              <input type="text"
+                     class="form-control"
+                     formControlName="name"
+                     [formGroup]="formGroup"
+                     placeholder="example-name"
+                     aria-label="Name"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newUser.name"
+                     required>
+            </div>
 
-      <div>
-        <h1 align="center">{{ title }}</h1>
-      </div>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.name.errors && (formGroup.controls.name.dirty || formGroup.controls.name.touched)">
+              <p *ngIf="formGroup.controls.name.errors.required">Es requerido</p>
+            </div>
 
+          </div>
+        </fieldset>
 
-      <!--INPUT USERNAME-->
-      <div class="input-group mb-3 ">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">Usuario</span>
+        <fieldset>
+        <div class="form-group">
+
+          <!--INPUT LASTNAME-->
+          <div class="input-group mb-3 ">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon2">Apellido</span>
+            </div>
+
+            <input type="text"
+                   class="form-control"
+                   formControlName="lastname"
+                   [formGroup]="formGroup"
+                   placeholder="example-lastname"
+                   aria-label="LastName"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newUser.lastName"
+                   required>
+          </div>
+
+          <div class="form-control-feedback"
+               *ngIf="formGroup.controls.lastname.errors && (formGroup.controls.lastname.dirty || formGroup.controls.lastname.touched)">
+            <p *ngIf="formGroup.controls.lastname.errors.required">Es requerido</p>
+          </div>
+
+        </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="form-group">
+
+            <!--INPUT USERNAME-->
+            <div class="input-group mb-3 ">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Usuario</span>
+              </div>
+
+              <input type="text"
+                     class="form-control"
+                     formControlName="name"
+                     [formGroup]="formGroup"
+                     placeholder="example-name"
+                     aria-label="UserName"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newUser.username"
+                     required>
+            </div>
+
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.username.errors && (formGroup.controls.username.dirty || formGroup.controls.username.touched)">
+              <p *ngIf="formGroup.controls.username.errors.required">Es requerido</p>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="form-group">
+
+            <!--INPUT EMAIL-->
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon4">@Email</span>
+              </div>
+
+              <input type="text"
+                     class="form-control"
+                     formControlName="email"
+                     [formGroup]="formGroup"
+                     placeholder="example@example.com"
+                     aria-label="Email"
+                     aria-describedby="basic-addon2"
+                     [(ngModel)]="newUser.email"
+                     required>
+            </div>
+
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.email.errors && (formGroup.controls.email.dirty || formGroup.controls.email.touched)">
+              <p *ngIf="formGroup.controls.email.errors.required">Es requerido</p>
+              <p *ngIf="formGroup.controls.email.errors.email">Email Inválido</p>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="form-group">
+
+            <!--INPUT CONFIRMED EMAIL-->
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon5">Confirmar @Email</span>
+              </div>
+
+              <input type="text"
+                     class="form-control"
+                     formControlName="confirmEmail"
+                     [formGroup]="formGroup"
+                     placeholder="example@example.com"
+                     aria-label="Confirmed Email"
+                     aria-describedby="basic-addon3"
+                     required>
+            </div>
+
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.confirmPassword.errors && (formGroup.controls.confirmPassword.dirty || formGroup.controls.confirmPassword.touched)">
+              <p *ngIf="formGroup.controls.confirmPassword.errors.required">Es requerido</p>
+              <p *ngIf="formGroup.controls.confirmPassword.errors?.MatchEmails">Los emails no coinciden.</p>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="form-group">
+
+            <!--INPUT PASSWORD-->
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon6">Contraseña</span>
+              </div>
+
+              <input type="password"
+                     class="form-control"
+                     formControlName="password"
+                     [formGroup]="formGroup"
+                     placeholder="example1234"
+                     aria-label="Password"
+                     aria-describedby="basic-addon4"
+                     [(ngModel)]="newUser.password"
+                     required>
+            </div>
+
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.password.errors && (formGroup.controls.password.dirty || formGroup.controls.password.touched)">
+              <p *ngIf="formGroup.controls.password.errors.required">Es requerido</p>
+              <p *ngIf="formGroup.controls.password.errors.minlength">Minimo de 8 caracteres</p>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <div class="form-group">
+
+            <!--INPUT CONFIRMED PASSWORD-->
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon7">Confirmar Contraseña</span>
+              </div>
+
+              <input type="password"
+                     class="form-control"
+                     formControlName="confirmPassword"
+                     [formGroup]="formGroup"
+                     placeholder="example1234"
+                     aria-label="Confirmed Password"
+                     aria-describedby="basic-addon5"
+                     required>
+            </div>
+
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls.confirmPassword.errors && (formGroup.controls.confirmPassword.dirty || formGroup.controls.confirmPassword.touched)">
+              <p *ngIf="formGroup.controls.confirmPassword.errors.required">Es requerido</p>
+              <p *ngIf="formGroup.controls.confirmPassword.errors.minlength">Mínimo de 8 caracteres</p>
+              <p *ngIf="formGroup.controls.confirmPassword.errors?.MatchPassword">Las contraseñas no coinciden.</p>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <div class="alert alert-danger text-center" *ngIf="registerUserError">
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <p>Hubo un error al agregar el usuario. Revise los datos e inténtelo nuevamente.</p>
+            </blockquote>
+          </div>
         </div>
 
-        <input type="text" class="form-control" placeholder="example-name" aria-label="UserName"
-               aria-describedby="basic-addon1">
-      </div>
-
-      <!--INPUT EMAIL-->
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon2">@Email</span>
+        <div class="register-button" align="center">
+        <button type="submit" class="btn btn-light">REGISTRARME</button>
         </div>
 
-        <input type="text" class="form-control" placeholder="example@example.com" aria-label="Email"
-               aria-describedby="basic-addon2">
-      </div>
-
-      <!--INPUT CONFIRMED EMAIL-->
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon3">Confirmar @Email</span>
-        </div>
-
-        <input type="text" class="form-control" placeholder="example@example.com" aria-label="Confirmed Email"
-               aria-describedby="basic-addon3">
-      </div>
-
-      <!--INPUT PASSWORD-->
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon4">Contraseña</span>
-        </div>
-
-        <input type="text" class="form-control" placeholder="example1234" aria-label="Password"
-               aria-describedby="basic-addon4">
-      </div>
-
-      <!--INPUT CONFIRMED PASSWORD-->
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon5">Confirmar Contraseña</span>
-        </div>
-
-        <input type="text" class="form-control" placeholder="example1234" aria-label="Confirmed Password"
-               aria-describedby="basic-addon5">
-      </div>
 
 
-      <div class="register-button" align="center">
-        <button type="button" class="btn btn-light">REGISTRARME</button>
       </div>
 
     </div>
+  </form>
 
-  </div>
+
+  <!--<div class="image">-->
+  <!--&lt;!&ndash;​<img src="ui/src/app/login/stingy-Icon.png" alt="Icon">&ndash;&gt;-->
+  <!--</div>-->
+
+  <!--<div class="row">-->
+
+  <!--<div class="offset-4 col-4 center">-->
+
+  <!--<div>-->
+  <!--<h1 align="center">{{ title }}</h1>-->
+  <!--</div>-->
+
+
+  <!--&lt;!&ndash;INPUT USERNAME&ndash;&gt;-->
+  <!--<div class="input-group mb-3 ">-->
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon1">Usuario</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example-name" aria-label="UserName"-->
+  <!--aria-describedby="basic-addon1">-->
+  <!--</div>-->
+
+  <!--&lt;!&ndash;INPUT EMAIL&ndash;&gt;-->
+  <!--<div class="input-group mb-3">-->
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon2">@Email</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example@example.com" aria-label="Email"-->
+  <!--aria-describedby="basic-addon2">-->
+  <!--</div>-->
+
+  <!--&lt;!&ndash;INPUT CONFIRMED EMAIL&ndash;&gt;-->
+  <!--<div class="input-group mb-3">-->
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon3">Confirmar @Email</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example@example.com" aria-label="Confirmed Email"-->
+  <!--aria-describedby="basic-addon3">-->
+  <!--</div>-->
+
+  <!--&lt;!&ndash;INPUT PASSWORD&ndash;&gt;-->
+  <!--<div class="input-group mb-3">-->
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon4">Contraseña</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example1234" aria-label="Password"-->
+  <!--aria-describedby="basic-addon4">-->
+  <!--</div>-->
+
+  <!--&lt;!&ndash;INPUT CONFIRMED PASSWORD&ndash;&gt;-->
+  <!--<div class="input-group mb-3">-->
+  <!--<div class="input-group-prepend">-->
+  <!--<span class="input-group-text" id="basic-addon5">Confirmar Contraseña</span>-->
+  <!--</div>-->
+
+  <!--<input type="text" class="form-control" placeholder="example1234" aria-label="Confirmed Password"-->
+  <!--aria-describedby="basic-addon5">-->
+  <!--</div>-->
+
+
+  <!--<div class="register-button" align="center">-->
+  <!--<button type="button" class="btn btn-light">REGISTRARME</button>-->
+  <!--</div>-->
+
+  <!--</div>-->
+
+  <!--</div>-->
 </div>
