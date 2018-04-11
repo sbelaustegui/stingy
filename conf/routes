@@ -3,9 +3,16 @@
 # ~~~~
 
 # User
-POST    /api/user                                           controllers.UserController.register()
-GET     /api/user/all                                       controllers.UserController.getAll
-GET     /api/user/id/:id                                    controllers.UserController.getById(id: Long)
+POST        /api/user                                           controllers.UserController.register()
+GET         /api/user/all                                       controllers.UserController.getAll
+GET         /api/user/id/:id                                    controllers.UserController.getById(id: Long)
+DELETE      /api/user/:id                                       controllers.UserController.delete(id: Long)
+
+# Login
+POST        /api/login                                          controllers.LoginController.login
+GET         /api/logout                                         controllers.LoginController.logout
+GET         /api/data                                           controllers.LoginController.loggedData
+
 
 # Serve index page from public directory
 GET     /                                                   controllers.FrontendController.index()

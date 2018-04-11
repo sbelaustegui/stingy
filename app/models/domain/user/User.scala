@@ -1,6 +1,7 @@
 package models.domain.user
 
 import models.dao.UserDAO
+import models.domain.authentication.UserLogin
 import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
 
@@ -37,6 +38,10 @@ object User extends UserJsonFormat {
 
   def saveOrUpdate(user: User): Option[User] = {
     UserDAO.saveOrUpdate(user)
+  }
+
+  def authenticate(userLogin: UserLogin): Option[User] = {
+    UserDAO.authenticate(userLogin.username, userLogin.password)
   }
 
   def getById(id : Long) : Option[User] = {

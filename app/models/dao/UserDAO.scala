@@ -55,6 +55,10 @@ object UserDAO {
     }
   }
 
+  def authenticate(username: String, password: String): Option[User] = {
+    toScalaOption[EUser](EUser.authenticateUser(username,password)).map(User.apply)
+  }
+
   def getAllUsers: List[User] = {
     EUser.getAllUsers.map(User.apply).toList
   }

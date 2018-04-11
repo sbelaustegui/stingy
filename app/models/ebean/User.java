@@ -77,6 +77,10 @@ public class User extends Model {
         return Optional.empty();
     }
 
+    public static Optional<User> authenticateUser(String username, String clearPassword) {
+        return getUserByUserName(username).filter((user) -> Encrypter.checkEncrypted(clearPassword, user.password));
+    }
+
     public Long getId() {
         return id;
     }
