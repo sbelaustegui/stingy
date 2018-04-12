@@ -10,15 +10,14 @@ import {UserComponent} from "./user/user.component";
 
 const routes: Routes =[
   {
-    path: '',
-    component: AppComponent,
+    path: '',                                               component: AppComponent,
     children: [
       {path: '', pathMatch: 'full', redirectTo: 'login'},
-      {path: 'login', canActivate: [ReverseUserAuthGuard], component: LoginComponent},
-      {path: 'new-user',  component: NewUserComponent},
-      {path: 'user', component: UserComponent, canActivate: [UserAuthGuard],
+      {path: 'login', canActivate: [ReverseUserAuthGuard],  component: LoginComponent},
+      {path: 'new-user',                                    component: NewUserComponent},
+      {path: 'user', canActivate: [UserAuthGuard],          component: UserComponent,
         children: [
-          {path: 'home', component: HomeComponent},
+          {path: 'home',                                    component: HomeComponent},
         ]
       }
     ]

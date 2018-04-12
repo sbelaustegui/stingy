@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {EmailValidation, PasswordValidation} from "../validators/equal-validator.directive";
 import {UserService} from "../shared/services/user.service";
 import {Title} from "@angular/platform-browser";
 import {User} from "../shared/models/user.model";
+import {EmailValidation, PasswordValidation} from "../shared/validators/equal-validator.directive";
 
 @Component({
   selector: 'app-new-user',
@@ -34,23 +34,25 @@ export class NewUserComponent implements OnInit {
     this.userService.addUser(this.newUser).then( () => {
       this.addingUser = false;
       this.registerUserError = false;
-      this.router.navigate(['users']);
-    }).catch(() => this.registerUserError = true)
+      this.router.navigate(['login']);
+    }).catch(() => {
+      this.registerUserError = true;
+      this.addingUser = false;
+    })
 
   }
 
   private createFormControls() {
     this.formGroup = this.fb.group({
         name: ['', Validators.required],
-        lastName: ['', Validators.required],
+        lastname: ['', Validators.required],
         username: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
+        confirmEmail: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
-      },
-      {
-        validatorPassword: PasswordValidation.MatchPassword,
-        validatorEmail: EmailValidation.MatchEmail
+      }, {
+        validator: Validators.compose([PasswordValidation.MatchPassword, EmailValidation.MatchEmail])
       })
   }
 

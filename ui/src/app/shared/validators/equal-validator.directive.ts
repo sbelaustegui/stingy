@@ -11,5 +11,17 @@ export class PasswordValidation {
       return null
     }
   }
+}
 
+export class EmailValidation {
+
+  static MatchEmail(AC: AbstractControl) {
+    let email = AC.get('email').value;
+    let confirmEmail = AC.get('confirmEmail').value;
+    if(email != confirmEmail) {
+      AC.get('confirmEmail').setErrors( {MatchEmail: true} )
+    } else {
+      return null
+    }
+  }
 }

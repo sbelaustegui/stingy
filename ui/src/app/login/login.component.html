@@ -18,8 +18,8 @@
                      [(ngModel)]="loginUser.username"
                      required>
               <div class="form-control-feedback"
-                   *ngIf="formGroup.controls.username.errors && (formGroup.controls.username.dirty || formGroup.controls.username.touched)">
-                <p class="error" *ngIf="formGroup.controls.username.errors.required">Es requerido</p>
+                   *ngIf="formGroup.controls['username'].errors && (formGroup.controls['username'].dirty || formGroup.controls['username'].touched)">
+                <p class="error" *ngIf="formGroup.controls['username'].errors.required">Es requerido</p>
               </div>
             </div>
           </div>
@@ -37,8 +37,8 @@
                      [(ngModel)]="loginUser.password"
                      required>
               <div class="form-control-feedback"
-                   *ngIf="formGroup.controls.password.errors && (formGroup.controls.password.dirty || formGroup.controls.password.touched)">
-                <p class="error" *ngIf="formGroup.controls.password.errors.required">Es requerido</p>
+                   *ngIf="formGroup.controls['password'].errors && (formGroup.controls['password'].dirty || formGroup.controls['password'].touched)">
+                <p class="error" *ngIf="formGroup.controls['password'].errors.required">Es requerido</p>
               </div>
             </div>
           </div>
@@ -50,7 +50,10 @@
             <a class="account-a" (click)="goRegister()">No poseo cuenta</a>
         </div>
         <div class="access-button" align="center">
-          <button type="submit" class="btn btn-light" [disabled]="formGroup.invalid">INGRESAR</button>
+          <button type="submit" class="btn btn-light" [disabled]="formGroup.invalid">
+            <span *ngIf="!loginLoading">INGRESAR</span>
+            <span *ngIf="loginLoading"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+          </button>
         </div>
       </div>
     </div>
