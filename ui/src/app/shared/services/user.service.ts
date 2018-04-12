@@ -1,5 +1,6 @@
 import {HttpService} from "./http.service";
 import {Injectable} from '@angular/core';
+import {User} from "../models/user.model";
 
 /*
 User routes

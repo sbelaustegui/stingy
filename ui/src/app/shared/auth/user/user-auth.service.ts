@@ -3,6 +3,8 @@ import 'rxjs/add/operator/toPromise';
 import {ResponseData} from '../../response-data';
 import {HttpService} from '../../services/http.service';
 import {CookieService} from 'angular2-cookie/core';
+import {User} from "../../models/user.model";
+import {LoginUser} from "../../models/login-user.model";
 
 @Injectable()
 export class UserAuthService {

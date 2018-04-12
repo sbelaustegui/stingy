@@ -4,22 +4,27 @@
     padding-top: 7%;
   }
 
-  .row{
-    margin: 2.5%;
-  }
-
-  .center {
-    text-align: center;
-  }
-
-  .account-a {
-    margin: 10%;
-    color: white;
-    font-style: italic;
-  }
-
-  .access-button {
-    margin: 5%;
-    font-weight: bold;
+  .login-form{
+    .row{
+      margin: 2.5%;
+      .center {
+        text-align: center;
+      }
+    }
+    .account-a {
+      margin: 10%;
+      color: white;
+      cursor: pointer;
+      font-style: italic;
+    }
+    .access-button {
+      margin: 5%;
+      font-weight: bold;
+    }
+    .alert{
+      p{
+        margin-bottom: 0;
+      }
+    }
   }
 }

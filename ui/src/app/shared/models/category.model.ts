@@ -1,4 +1,4 @@
-class Category{
+export class Category{
 
   static empty(): Category{
     return new Category('')

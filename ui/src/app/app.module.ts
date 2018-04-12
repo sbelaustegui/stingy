@@ -28,7 +28,7 @@ import {CookieService} from "angular2-cookie/core";
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
   ],
   providers : [
     CookieService,

@@ -1,145 +1,59 @@
 <div class="login">
-
   <div class="image" align="center">
-
-    ​<img
-    src="https://lh3.googleusercontent.com/ICSSAPt50ekhvI6HpRfTnR96OT3TB3lZUdMb6wDW6MbnsU2n2NKzfuVgmOsZdV5-KYf89SgRdCsiZRhBQSlLUwpoHxFKc01OAxuPTucQSsQwKvpUt26vZp6R_xWokp_YZ4-17YNM-9v3Wa28ImEEXA4XPBrKGjy99sZLXucXXV43k1ZGu-8bCEOKpVvBQCAkWfZhfpLgIOKkWGHSC8Q3dUc6fnlwqQrXh3DUtzu2k4OKKdmk0tmLsVYP9s1mnFv7v7V9mGkaZG9rZ36Ij5aKEe7KQLhvz8jxMCwUWgOwsIv4S0FZZRsuivRpGthAfOHY1zpcHlIXuOM_Ql0EecTDnObzU_gATkrPi7LIpKGlWB40qplHdz4EHb7r6dsU70Lldeb6XACSc2aht3O9H9byBvYOeDTnOT6S0TV5Mv18XhzlPOGRK1uh_sP8ume4qRh9iaJrWmqMYc2qdLCNYU7kGgEXboq8vOcRAr6vVE5XiY4vrW0g5ZQ5sgIGH3HopXtCuF2D0CS-C7mVKgukTX3eKwMbRXGO3h1uGP9xpjNOrxhzuUIviLHwSElkgbMpCPaI420TkkKWeNvhETl9IaKNS6sdVO4oFHAswPsMuw=w177-h72-no"
-    alt="Icon">
-
+    <img [src]="imgSource" alt="Icon">
   </div>
-
-  <form [formGroup]="formGroup" (ngSubmit)="login()">
+  <form class="login-form" [formGroup]="formGroup" (ngSubmit)="login()">
     <div class="row">
-
       <div class="offset-4 col-4 center">
-
-
         <fieldset>
-
           <div class="form-group">
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Usuario</span>
-              </div>
-
+            <div class="mb-3">
               <input type="text"
                      class="form-control"
                      formControlName="username"
                      [formGroup]="formGroup"
-                     placeholder="example"
+                     placeholder="Usuario"
                      aria-label="Username"
                      aria-describedby="basic-addon1"
                      [(ngModel)]="loginUser.username"
                      required>
-
               <div class="form-control-feedback"
-                   *ngIf="formGroup.controls.name.errors && (formGroup.controls.name.dirty || formGroup.controls.name.touched)">
-                <p *ngIf="formGroup.controls.name.errors.required">Es requerido</p>
+                   *ngIf="formGroup.controls.username.errors && (formGroup.controls.username.dirty || formGroup.controls.username.touched)">
+                <p class="error" *ngIf="formGroup.controls.username.errors.required">Es requerido</p>
               </div>
-
             </div>
           </div>
-
         </fieldset>
-
         <fieldset>
-
           <div class="form-group">
-
-            <div class="input-group mb-3">
-
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2">Contraseña</span>
-              </div>
-
+            <div class="mb-3">
               <input type="password"
                      class="form-control"
                      formControlName="password"
                      [formGroup]="formGroup"
-                     placeholder="example1234"
+                     placeholder="Contraseña"
                      aria-label="Contraseña"
                      aria-describedby="basic-addon1"
                      [(ngModel)]="loginUser.password"
                      required>
-
               <div class="form-control-feedback"
-                   *ngIf="formGroup.controls.confirmPassword.errors && (formGroup.controls.confirmPassword.dirty || formGroup.controls.confirmPassword.touched)">
-                <p *ngIf="formGroup.controls.confirmPassword.errors.required">Es requerido</p>
-                <p *ngIf="formGroup.controls.confirmPassword.errors.minlength">Mínimo de 8 caracteres</p>
+                   *ngIf="formGroup.controls.password.errors && (formGroup.controls.password.dirty || formGroup.controls.password.touched)">
+                <p class="error" *ngIf="formGroup.controls.password.errors.required">Es requerido</p>
               </div>
-
             </div>
           </div>
-
         </fieldset>
-
         <div class="alert alert-danger text-center" *ngIf="loginUserError">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>Error. Revise los datos e inténtelo nuevamente.</p>
-            </blockquote>
-          </div>
+          <p>Error. Revise los datos e inténtelo nuevamente.</p>
         </div>
-
         <div align="center">
             <a class="account-a" (click)="goRegister()">No poseo cuenta</a>
         </div>
-
         <div class="access-button" align="center">
           <button type="submit" class="btn btn-light" [disabled]="formGroup.invalid">INGRESAR</button>
         </div>
-
       </div>
-
     </div>
   </form>
-
-  <!--<div class="row">-->
-
-  <!--<div class="offset-4 col-4 center">-->
-  <!---->
-  <!--<div class="image" align="center">-->
-  <!--​<img-->
-  <!--[src]="['https://lh3.googleusercontent.com/ICSSAPt50ekhvI6HpRfTnR96OT3TB3lZUdMb6wDW6MbnsU2n2NKzfuVgmOsZdV5-KYf89SgRdCsiZRhBQSlLUwpoHxFKc01OAxuPTucQSsQwKvpUt26vZp6R_xWokp_YZ4-17YNM-9v3Wa28ImEEXA4XPBrKGjy99sZLXucXXV43k1ZGu-8bCEOKpVvBQCAkWfZhfpLgIOKkWGHSC8Q3dUc6fnlwqQrXh3DUtzu2k4OKKdmk0tmLsVYP9s1mnFv7v7V9mGkaZG9rZ36Ij5aKEe7KQLhvz8jxMCwUWgOwsIv4S0FZZRsuivRpGthAfOHY1zpcHlIXuOM_Ql0EecTDnObzU_gATkrPi7LIpKGlWB40qplHdz4EHb7r6dsU70Lldeb6XACSc2aht3O9H9byBvYOeDTnOT6S0TV5Mv18XhzlPOGRK1uh_sP8ume4qRh9iaJrWmqMYc2qdLCNYU7kGgEXboq8vOcRAr6vVE5XiY4vrW0g5ZQ5sgIGH3HopXtCuF2D0CS-C7mVKgukTX3eKwMbRXGO3h1uGP9xpjNOrxhzuUIviLHwSElkgbMpCPaI420TkkKWeNvhETl9IaKNS6sdVO4oFHAswPsMuw=w177-h72-no']"-->
-  <!--alt="Icon" class="image">-->
-  <!--</div>-->
-
-  <!--<div class="input-group mb-3">-->
-
-  <!--<div class="input-group-prepend">-->
-  <!--<span class="input-group-text" id="basic-addon1">Usuario</span>-->
-  <!--</div>-->
-
-  <!--<input type="text" class="form-control" placeholder="example@example.com" aria-label="Username"-->
-  <!--aria-describedby="basic-addon1">-->
-
-  <!--</div>-->
-
-  <!--<div class="input-group mb-3">-->
-
-  <!--<div class="input-group-prepend">-->
-  <!--<span class="input-group-text" id="basic-addon2">Contraseña</span>-->
-  <!--</div>-->
-
-  <!--<input type="text" class="form-control" placeholder="example1234" aria-label="Contraseña"-->
-  <!--aria-describedby="basic-addon2">-->
-
-  <!--</div>-->
-
-
-  <!--<div align="center">-->
-  <!--<a class="account-a" [routerLink]="['/new-user']">No poseo cuenta</a>-->
-  <!--</div>-->
-
-
-  <!--<div class="access-button" align="center">-->
-  <!--<button type="button" class="btn btn-light">INGRESAR</button>-->
-  <!--</div>-->
-
-  <!--</div>-->
-
-  <!--</div>-->
-
 </div>
 

@@ -4,11 +4,13 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EmailValidation, PasswordValidation} from "../validators/equal-validator.directive";
 import {UserService} from "../shared/services/user.service";
 import {Title} from "@angular/platform-browser";
+import {User} from "../shared/models/user.model";
 
 @Component({
   selector: 'app-new-user',
   templateUrl: './new-user.component.html',
-  styleUrls: ['./new-user.component.scss']
+  styleUrls: ['./new-user.component.scss'],
+  providers: [UserService]
 })
 export class NewUserComponent implements OnInit {
   title = "Nuevo Usuario";
@@ -20,7 +22,7 @@ export class NewUserComponent implements OnInit {
   constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title) {}
 
   ngOnInit() {
-    this.titleService.setTitle('Nuevo Usuario | Softies');
+    this.titleService.setTitle('Nuevo Usuario | Stingy');
     this.newUser = User.empty();
     this.addingUser = false;
     this.registerUserError = false;

@@ -1,4 +1,4 @@
-class User{
+export class User{
 
   static empty(): User{
     return new User('', '', '', '', '')

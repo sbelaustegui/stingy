@@ -15,7 +15,7 @@ export class ReverseUserAuthGuard implements CanActivate {
 
     public checkLogin(url: string): boolean {
       if (!this.authService.isLoggedIn) { return true; }
-      this.router.navigate(['user', 'profile']);
+      this.router.navigate(['user', 'home']);
       return false;
     }
 }

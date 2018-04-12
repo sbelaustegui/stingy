@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UserAuthService} from "../shared/auth/user/user-auth.service";
 import {Router} from "@angular/router";
+import {LoginUser} from "../shared/models/login-user.model";
+
+declare var require: any;
 
 @Component({
   selector: 'app-login',
@@ -12,9 +15,9 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
 
   public formGroup: FormGroup;
-  public loginUser;
+  public loginUser: LoginUser;
   public loginUserError: boolean;
-
+  public imgSource = require('../../assets/img/stingy-Icon.png');
 
   constructor(public formBuilder: FormBuilder, public authUserService: UserAuthService, public router: Router) {}
 
@@ -25,10 +28,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authUserService.login(this.loginUser).then(res => {
+    this.authUserService.login(this.loginUser).then(() => {
       this.loginUserError = false;
-      this.router.navigate(['user','home'])
-    }).catch(err => this.loginUserError = true);
+      this.router.navigate(['user', 'home'])
+    }).catch(() => this.loginUserError = true);
   }
   goRegister(){
     this.router.navigate(['new-user']);
@@ -38,7 +41,7 @@ export class LoginComponent implements OnInit {
     return this.formBuilder.group(
       {
         username: ['', Validators.required],
-        password: ['', Validators.required, Validators.minLength(8)],
+        password: ['', Validators.required],
       }
     );
   }
