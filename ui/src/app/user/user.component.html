@@ -1,3 +1,21 @@
-Aca iria la navbar de User
-<button class="btn" (click)="logout()">Logout</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img [src]="imgSource" width="30" height="30" class="d-inline-block align-top" alt="">
+    Stingy
+  </a>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><i class="fa fa-search" aria-hidden="true"></i> Buscar un producto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i> Cargar un producto</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito</a>
+      </li>
+    </ul>
+    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" (click)="logout()">Salir <i class="fa fa-sign-out" aria-hidden="true"></i></button>
+  </div>
+</nav>
 <router-outlet></router-outlet>
