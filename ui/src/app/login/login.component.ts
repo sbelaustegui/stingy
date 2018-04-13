@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   public loginUser: LoginUser;
   public loginUserError: boolean;
   public loginLoading: boolean;
-  public imgSource = require('../../assets/img/stingy-Icon.png');
+  public imgSource = require('../../assets/img/stingy-logo2.png');
 
   constructor(public formBuilder: FormBuilder, public authUserService: UserAuthService, public router: Router) {}
 
