@@ -6,6 +6,8 @@ import {Title} from "@angular/platform-browser";
 import {User} from "../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../shared/validators/equal-validator.directive";
 
+declare var require: any;
+
 @Component({
   selector: 'app-new-user',
   templateUrl: './new-user.component.html',
@@ -13,11 +15,12 @@ import {EmailValidation, PasswordValidation} from "../shared/validators/equal-va
   providers: [UserService]
 })
 export class NewUserComponent implements OnInit {
-  title = "Nuevo Usuario";
   public formGroup: FormGroup;
   public newUser: User;
   public registerUserError: boolean;
   public addingUser: boolean;
+
+  public imgSource = require('../../assets/img/stingy-logo2.png');
 
   constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title) {}
 
@@ -54,6 +57,10 @@ export class NewUserComponent implements OnInit {
       }, {
         validator: Validators.compose([PasswordValidation.MatchPassword, EmailValidation.MatchEmail])
       })
+  }
+
+  goLogin(){
+    this.router.navigate(['login'])
   }
 
 }

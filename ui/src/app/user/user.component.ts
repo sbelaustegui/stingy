@@ -11,7 +11,7 @@ declare var require: any;
 })
 export class UserComponent implements OnInit {
 
-  public imgSource = require('../../assets/bootstrap-solid.svg');
+  public imgSource = require('../../assets/stingy-icon.svg');
 
   constructor(public authService: UserAuthService, public router: Router) { }
 

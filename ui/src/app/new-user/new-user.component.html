@@ -1,8 +1,10 @@
 <div class="new-user">
-  <h1 align="center">Stingy - Registro</h1>
+  <div class="image" align="center">
+    <img [src]="imgSource" alt="Icon">
+  </div>
   <form [formGroup]="formGroup" (ngSubmit)="registerUser()">
     <div class="row">
-      <div class="offset-4 col-4 center">
+      <div class="col-md-3 offset-3 align-content-end">
         <!--INPUT NAME-->
         <fieldset>
           <div class="form-group">
@@ -23,25 +25,25 @@
         </fieldset>
         <!--INPUT LASTNAME-->
         <fieldset>
-        <div class="form-group">
-          <input type="text"
-                 class="form-control"
-                 formControlName="lastname"
-                 [formGroup]="formGroup"
-                 placeholder="Apellido"
-                 aria-label="LastName"
-                 aria-describedby="basic-addon1"
-                 [(ngModel)]="newUser.lastName"
-                 required>
-          <div class="form-control-feedback"
-               *ngIf="formGroup.controls['lastname'].errors && (formGroup.controls['lastname'].dirty || formGroup.controls['lastname'].touched)">
-            <p class="error" *ngIf="formGroup.controls['lastname'].errors.required">Es requerido</p>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="lastname"
+                   [formGroup]="formGroup"
+                   placeholder="Apellido"
+                   aria-label="LastName"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newUser.lastName"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['lastname'].errors && (formGroup.controls['lastname'].dirty || formGroup.controls['lastname'].touched)">
+              <p class="error" *ngIf="formGroup.controls['lastname'].errors.required">Es requerido</p>
+            </div>
           </div>
-        </div>
         </fieldset>
+        <!--INPUT USERNAME-->
         <fieldset>
           <div class="form-group">
-            <!--INPUT USERNAME-->
             <input type="text"
                    class="form-control"
                    formControlName="username"
@@ -57,9 +59,24 @@
             </div>
           </div>
         </fieldset>
+        <div class="alert alert-danger text-center" *ngIf="registerUserError">
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <p>Hubo un error al agregar el usuario. Revise los datos e inténtelo nuevamente.</p>
+            </blockquote>
+          </div>
+        </div>
+        <div class="register-button" align="center">
+          <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid">
+            <span *ngIf="!addingUser">REGISTRARME</span>
+            <span *ngIf="addingUser"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!--INPUT EMAIL-->
         <fieldset>
           <div class="form-group">
-            <!--INPUT EMAIL-->
             <input type="text"
                    class="form-control"
                    formControlName="email"
@@ -76,9 +93,9 @@
             </div>
           </div>
         </fieldset>
+        <!--INPUT CONFIRMED EMAIL-->
         <fieldset>
           <div class="form-group">
-            <!--INPUT CONFIRMED EMAIL-->
             <input type="text"
                    class="form-control"
                    formControlName="confirmEmail"
@@ -90,13 +107,14 @@
             <div class="form-control-feedback"
                  *ngIf="formGroup.controls['confirmEmail'].errors && (formGroup.controls['confirmEmail'].dirty || formGroup.controls['confirmEmail'].touched)">
               <p class="error" *ngIf="formGroup.controls['confirmEmail'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="formGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no coinciden.</p>
+              <p class="error" *ngIf="formGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no
+                coinciden.</p>
             </div>
           </div>
         </fieldset>
+        <!--INPUT PASSWORD-->
         <fieldset>
           <div class="form-group">
-            <!--INPUT PASSWORD-->
             <input type="password"
                    class="form-control"
                    formControlName="password"
@@ -113,9 +131,9 @@
             </div>
           </div>
         </fieldset>
+        <!--INPUT CONFIRMED PASSWORD-->
         <fieldset>
           <div class="form-group">
-            <!--INPUT CONFIRMED PASSWORD-->
             <input type="password"
                    class="form-control"
                    formControlName="confirmPassword"
@@ -128,22 +146,15 @@
                  *ngIf="formGroup.controls['confirmPassword'].errors && (formGroup.controls['confirmPassword'].dirty || formGroup.controls['confirmPassword'].touched)">
               <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.required">Es requerido</p>
               <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8 caracteres</p>
-              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no coinciden.</p>
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no
+                coinciden.</p>
             </div>
           </div>
         </fieldset>
-        <div class="alert alert-danger text-center" *ngIf="registerUserError">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>Hubo un error al agregar el usuario. Revise los datos e inténtelo nuevamente.</p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="register-button" align="center">
-          <button type="submit" class="btn btn-light" [disabled]="formGroup.invalid">
-            <span *ngIf="!addingUser">REGISTRARME</span>
-            <span *ngIf="addingUser"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-          </button>
+      </div>
+      <div class="col-4 offset-4">
+        <div class="back-button" align="center">
+          <button type="button" class="btn btn-light" id="back-button" (click)="goLogin()">VOLVER</button>
         </div>
       </div>
     </div>
