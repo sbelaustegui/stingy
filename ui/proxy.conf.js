@@ -7,6 +7,10 @@ const PROXY_CONFIG = {
         console.log("Skipping proxy for browser request.");
         return "/index.html";
       }
+    },
+    "/api": {
+      "target": "http://localhost:9000",
+      "secure": false
     }
   }
 };

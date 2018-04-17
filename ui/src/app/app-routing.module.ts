@@ -13,11 +13,9 @@ const routes: Routes =[
     path: '',                                               component: AppComponent,
     children: [
       {path: '', pathMatch: 'full', redirectTo: 'login'},
-      // {path: 'login', canActivate: [ReverseUserAuthGuard],  component: LoginComponent},
-      {path: 'login',  component: LoginComponent},
+      {path: 'login', canActivate: [ReverseUserAuthGuard],  component: LoginComponent},
       {path: 'new-user',                                    component: NewUserComponent},
-      // {path: 'user', canActivate: [UserAuthGuard],          component: UserComponent,
-      {path: 'user',         component: UserComponent,
+      {path: 'user', canActivate: [UserAuthGuard],          component: UserComponent,
         children: [
           {path: 'home',                                    component: HomeComponent},
         ]
