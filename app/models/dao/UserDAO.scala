@@ -20,7 +20,8 @@ object UserDAO {
       user.lastName,
       user.email,
       user.username,
-      user.password
+      user.password,
+      if(user.userId.isDefined) user.userId.get else null
     )
   }
 
@@ -38,16 +39,7 @@ object UserDAO {
   }
 
   def getById(id: Long) : Option[User] = {
-    toScalaOption(EUser.getUserById(id)) match {
-      case Some(user) =>
-        Some(User(user))
-      case None =>
-        None
-    }
-  }
-
-  def getByUsername(username: String): Option[User] = {
-    toScalaOption(EUser.getUserByUserName(username)) match {
+    toScalaOption(EUser.getById(id)) match {
       case Some(user) =>
         Some(User(user))
       case None =>
@@ -56,11 +48,11 @@ object UserDAO {
   }
 
   def authenticate(username: String, password: String): Option[User] = {
-    toScalaOption[EUser](EUser.authenticateUser(username,password)).map(User.apply)
+    toScalaOption[EUser](EUser.authenticate(username,password)).map(User.apply)
   }
 
   def getAllUsers: List[User] = {
-    EUser.getAllUsers.map(User.apply).toList
+    EUser.getAll.map(User.apply).toList
   }
 
   def delete(user: User): Option[Boolean] = {
@@ -75,7 +67,16 @@ object UserDAO {
   }
 
   def getByEmail(email: String): Option[User] = {
-    toScalaOption(EUser.getUserByEmail(email)) match {
+    toScalaOption(EUser.getByEmail(email)) match {
+      case Some(eUser) =>
+        Some(User(eUser))
+      case None =>
+        None
+    }
+  }
+
+  def getByUsername(username: String): Option[User] = {
+    toScalaOption(EUser.getByUsername(username)) match {
       case Some(eUser) =>
         Some(User(eUser))
       case None =>

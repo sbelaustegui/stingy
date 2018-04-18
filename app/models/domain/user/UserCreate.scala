@@ -13,7 +13,8 @@ object UserCreate extends UserCreateJsonFormat{
       user.getLastName,
       user.getEmail,
       user.getUsername,
-      user.getPassword
+      user.getPassword,
+      Option(user.getUserId)
     )
   }
 }

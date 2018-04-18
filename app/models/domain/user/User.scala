@@ -5,7 +5,7 @@ import models.domain.authentication.UserLogin
 import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
 
-case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String) {
+case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String, userId: Option[String]) {
   def equals(user: User): Boolean = {
     if(user.id.isDefined && id.isDefined) id.get.equals(user.id.get)
     else false
@@ -22,6 +22,7 @@ object User extends UserJsonFormat {
       user.getEmail,
       user.getUsername,
       user.getPassword,
+      Option(user.getUserId)
     )
   }
 
@@ -32,7 +33,8 @@ object User extends UserJsonFormat {
       userCreate.lastName,
       userCreate.email,
       userCreate.username,
-      userCreate.password
+      userCreate.password,
+      None
     )
   }
 

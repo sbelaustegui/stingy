@@ -25,6 +25,7 @@ DELETE      /api/subcategory/:id                                controllers.Subc
 
 # Login
 POST        /api/login                                          controllers.LoginController.login
+POST        /api/login/admin                                    controllers.LoginController.adminLogin
 GET         /api/logout                                         controllers.LoginController.logout
 GET         /api/data                                           controllers.LoginController.loggedData
 

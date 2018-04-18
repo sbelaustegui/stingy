@@ -1,107 +1,61 @@
 package models.ebean;
 
 import io.ebean.Ebean;
-import io.ebean.Finder;
-import io.ebean.Model;
-import io.ebean.annotation.NotNull;
 import utils.Encrypter;
+import io.ebean.Finder;
 
-import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.List;
 import java.util.Optional;
 
 @Entity
-public class User extends Model {
+@DiscriminatorValue("User")
+public class User extends AbstractUser{
 
-    @Id
-    @NotNull
-    private Long id;
-    @NotNull
-    private String name;
-    @NotNull
-    private String lastName;
-    @NotNull
-    @Column(unique = true)
-    private String email;
-    @NotNull
-    @Column(unique = true)
-    private String username;
-    @NotNull
-    private String password;
+    private String userId;
 
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(Long id, String name, String lastName, String email,
-                String username, String password) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, String userId) {
+        super(id, name, lastName, email, username, password);
+        this.userId = userId;
     }
 
-    @Override
-    public void save(){
-        password = Encrypter.encrypt(password);
-        super.save();
-    }
-
-    public static Optional<User> getUserById(Long id){
-        User user = finder.byId(id);
-        if(user != null){
-            return Optional.of(user);
+    public static Optional<User> getById(Long id){
+        User admin = finder.byId(id);
+        if(admin!= null){
+            return Optional.of(admin);
         }
         return Optional.empty();
     }
 
-    public static List<User> getAllUsers() {
+    public static Optional<User> getByEmail(String email){
+        return Optional.ofNullable(Ebean.find(User.class).where().eq("email", email).findOne());
+    }
+
+    public static Optional<User> getByUsername(String username){
+        return Optional.ofNullable(Ebean.find(User.class).where().eq("username", username).findOne());
+    }
+
+    public static Optional<User> getByUserId(Long userId){
+        return Optional.ofNullable(Ebean.find(User.class).where().eq("userId", userId).findOne());
+    }
+
+    public static Optional<User> authenticate(String email, String clearPassword) {
+        Optional<User> user = getByEmail(email);
+        if (user.isPresent() &&  (user.get().getPassword() != null) && Encrypter.checkEncrypted(clearPassword, user.get().getPassword())) {
+            return user;
+        }
+        return Optional.empty();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public static List<User> getAll() {
         return finder.all();
-    }
-
-    public static Optional<User> getUserByUserName(String username){
-        User user = Ebean.find(User.class).where().eq("username", username).findOne();
-        if(user != null) {
-            return Optional.of(user);
-        }
-        return Optional.empty();
-    }
-
-    public static Optional<User> getUserByEmail(String email){
-        User user = Ebean.find(User.class).where().eq("email", email).findOne();
-        if(user != null) {
-            return Optional.of(user);
-        }
-        return Optional.empty();
-    }
-
-    public static Optional<User> authenticateUser(String username, String clearPassword) {
-        return getUserByUserName(username).filter((user) -> Encrypter.checkEncrypted(clearPassword, user.password));
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }
