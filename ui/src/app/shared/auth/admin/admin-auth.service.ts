@@ -37,7 +37,7 @@ export class AdminAuthService {
     }
 
     public login(credentials: LoginUser): Promise<ResponseData> {
-        return this.http.defaultHttp.post('/api/login', credentials.asJsonString(), this.http.defaultOptions).toPromise()
+        return this.http.defaultHttp.post('/api/login/admin', credentials.asJsonString(), this.http.defaultOptions).toPromise()
           .then(res => {
             const data: ResponseData = res.json() as ResponseData;
             this._token = res.headers.get('authorization') || '';
