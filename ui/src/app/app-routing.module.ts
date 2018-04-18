@@ -7,17 +7,28 @@ import {ReverseUserAuthGuard} from "./shared/auth/user/reverse-user-auth-guard.s
 import {UserAuthGuard} from "./shared/auth/user/user-auth-guard.service";
 import {HomeComponent} from "./user/home/home.component";
 import {UserComponent} from "./user/user.component";
+import {AdminComponent} from "./admin/admin.component";
+import {AdminLoginComponent} from "./admin/login/login.component";
+import {ReverseAdminAuthGuard} from "./shared/auth/admin/reverse-admin-auth-guard.service";
+import {AdminAuthGuard} from "./shared/auth/admin/admin-auth-guard.service";
+import {AdminHomeComponent} from "./admin/home/home.component";
 
 const routes: Routes =[
   {
-    path: '',                                               component: AppComponent,
+    path: '',                                                         component: AppComponent,
     children: [
       {path: '', pathMatch: 'full', redirectTo: 'login'},
-      {path: 'login', canActivate: [ReverseUserAuthGuard],  component: LoginComponent},
-      {path: 'new-user',                                    component: NewUserComponent},
-      {path: 'user', canActivate: [UserAuthGuard],          component: UserComponent,
+      {path: 'login', canActivate: [ReverseUserAuthGuard],            component: LoginComponent},
+      {path: 'new-user',                                              component: NewUserComponent},
+      {path: 'user', canActivate: [UserAuthGuard],                    component: UserComponent,
         children: [
-          {path: 'home',                                    component: HomeComponent},
+          {path: 'home',                                              component: HomeComponent},
+        ]
+      },
+      {path: 'admin',                                                 component: AdminComponent,
+        children: [
+          {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
+          {path: 'home',  canActivate:  [AdminAuthGuard],             component: AdminHomeComponent},
         ]
       }
     ]
@@ -33,7 +44,9 @@ const routes: Routes =[
   ],
   providers : [
     ReverseUserAuthGuard,
-    UserAuthGuard
+    UserAuthGuard,
+    ReverseAdminAuthGuard,
+    AdminAuthGuard
   ]
 })
 export class AppRoutingModule { }

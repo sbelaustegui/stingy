@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import {AppRoutingModule} from "./app-routing.module";
@@ -13,6 +12,9 @@ import {UserComponent} from "./user/user.component";
 import {UserAuthService} from "./shared/auth/user/user-auth.service";
 import {HttpService} from "./shared/services/http.service";
 import {CookieService} from "angular2-cookie/core";
+import { AdminComponent } from './admin/admin.component';
+import {AdminLoginComponent} from "./admin/login/login.component";
+import {AdminHomeComponent} from "./admin/home/home.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +23,9 @@ import {CookieService} from "angular2-cookie/core";
     NewUserComponent,
     UserComponent,
     HomeComponent,
+    AdminComponent,
+    AdminLoginComponent,
+    AdminHomeComponent,
   ],
   imports: [
     BrowserModule,

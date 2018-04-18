@@ -1,6 +1,5 @@
 package controllers
 
-import controllers.authentication.AuthenticatedAction
 import models.domain.authentication.{CaseUser, UserLogged, UserLogin}
 import models.domain.user.User
 import play.api.libs.json.Json
