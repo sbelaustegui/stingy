@@ -2,11 +2,12 @@ package models.domain.subcategory
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SubcategoryUpdate(id: Long, name: Option[String]) {
+case class SubcategoryUpdate(id: Long, name: Option[String], categoryId: Option[Long]) {
   def toSubcategory(category: Subcategory): Subcategory = {
     Subcategory(
       Option(id),
-      name.getOrElse(category.name)
+      name.getOrElse(category.name),
+      categoryId.getOrElse(category.categoryId)
     )
   }
 }

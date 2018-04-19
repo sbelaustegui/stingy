@@ -4,7 +4,7 @@ import models.dao.SubcategoryDAO
 import models.ebean.{SubCategory => ESubcategory}
 import play.api.libs.json.{Json, OFormat}
 
-case class Subcategory(id: Option[Long], name: String) {
+case class Subcategory(id: Option[Long], name: String, categoryId: Long) {
   def equals(subcategory: Subcategory): Boolean = {
     if(subcategory.id.isDefined && id.isDefined) id.get.equals(subcategory.id.get)
     else false
@@ -17,6 +17,7 @@ object Subcategory extends SubcategoryJsonFormat {
     Subcategory(
       Option(subcategory.getId),
       subcategory.getName,
+      subcategory.getCategoryId
     )
   }
 
@@ -24,6 +25,7 @@ object Subcategory extends SubcategoryJsonFormat {
     Subcategory(
       None,
       subcategoryCreate.name,
+      subcategoryCreate.categoryId
     )
   }
 
@@ -33,6 +35,10 @@ object Subcategory extends SubcategoryJsonFormat {
 
   def getById(id : Long) : Option[Subcategory] = {
     SubcategoryDAO.getById(id)
+  }
+
+  def getByCategoryId(id : Long) : List[Subcategory] = {
+    SubcategoryDAO.getByCategoryId(id)
   }
 
   def getAll: List[Subcategory] = {

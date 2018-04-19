@@ -1,8 +1,7 @@
 package controllers
 
 import javax.inject.Inject
-import models.domain.category.Category
-import models.domain.subcategory._
+import models.domain.supplier._
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -12,18 +11,18 @@ import utils._
   * Created by sebasbelaustegui on 27/03/18.
   */
 
-class SubcategoryController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class SupplierController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def register = Action{
     request =>
-      request.body.asJson.get.asOpt[SubcategoryCreate] match {
-        case Some(subcategoryCreate) =>
-          Subcategory.saveOrUpdate(Subcategory(subcategoryCreate)) match {
-            case Some(savedSubcategory) =>
+      request.body.asJson.get.asOpt[SupplierCreate] match {
+        case Some(supplierCreate) =>
+          Supplier.saveOrUpdate(Supplier(supplierCreate)) match {
+            case Some(savedSupplier) =>
               Ok(
                 Json.toJson(
                   ResponseGenerated(
-                    OK, "Ok",  Json.toJson(savedSubcategory)
+                    OK, "Ok",  Json.toJson(savedSupplier)
                   )
                 )
               )
@@ -31,7 +30,7 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
              BadRequest(
                 Json.toJson(
                   ResponseGenerated(
-                    BAD_REQUEST, "Subcategory Name already in use"
+                    BAD_REQUEST, "Supplier Name already in use"
                   )
                 )
               )
@@ -48,12 +47,12 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
   }
 
   def getById(id: Long) = Action {
-    Subcategory.getById(id) match {
-      case Some(subcategory) =>
+    Supplier.getById(id) match {
+      case Some(supplier) =>
         Ok(
           Json.toJson(
             ResponseGenerated(
-              OK, "Subcategory found", Json.toJson(subcategory)
+              OK, "Supplier found", Json.toJson(supplier)
             )
           )
         )
@@ -61,7 +60,7 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
         BadRequest(
           Json.toJson(
             ResponseGenerated(
-              BAD_REQUEST, "No subcategory for that id"
+              BAD_REQUEST, "No supplier for that id"
             )
           )
         )
@@ -72,42 +71,21 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
     Ok(
       Json.toJson(
         ResponseGenerated(
-          OK, "All categories", Json.toJson(Subcategory.getAll)
+          OK, "All suppliers", Json.toJson(Supplier.getAll)
         )
       )
     )
   }
 
-  def getByCategoryId(categoryId: Long) = Action{
-    Category.getById(categoryId) match {
-      case Some(category) =>
-        Ok(
-          Json.toJson(
-            ResponseGenerated(
-              OK, "Subcategories of category -> id: " + categoryId, Json.toJson(Subcategory.getByCategoryId(categoryId))
-            )
-          )
-        )
-      case None =>
-        BadRequest(
-          Json.toJson(
-            ResponseGenerated(
-              BAD_REQUEST, "No category for that id"
-            )
-          )
-        )
-    }
-  }
-
   def delete(id: Long) = Action {
-    Subcategory.getById(id) match {
-      case Some(subcategory) =>
-        Subcategory.delete(subcategory) match {
+    Supplier.getById(id) match {
+      case Some(supplier) =>
+        Supplier.delete(supplier) match {
           case Some(true) =>
             Ok(
               Json.toJson(
                 ResponseGenerated(
-                  OK, "Subcategory deleted"
+                  OK, "Supplier deleted"
                 )
               )
             )
@@ -124,7 +102,7 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
         BadRequest(
           Json.toJson(
             ResponseGenerated(
-              BAD_REQUEST, "No subcategory for that id"
+              BAD_REQUEST, "No supplier for that id"
             )
           )
         )
@@ -133,21 +111,21 @@ class SubcategoryController @Inject()(cc: ControllerComponents) extends Abstract
 
   def update = Action {
     request =>
-      request.body.asJson.get.asOpt[SubcategoryUpdate] match {
+      request.body.asJson.get.asOpt[SupplierUpdate] match {
         case Some(update) =>
-          Subcategory.getById(update.id) match {
-            case Some(subcategory) =>
-              val updatedSubcategory = update.toSubcategory(subcategory)
-              Subcategory.saveOrUpdate(updatedSubcategory)
+          Supplier.getById(update.id) match {
+            case Some(supplier) =>
+              val updatedSupplier = update.toSupplier(supplier)
+              Supplier.saveOrUpdate(updatedSupplier)
               Ok(
                 Json.toJson(
-                  ResponseGenerated(OK, "Update successful", Json.toJson(updatedSubcategory))
+                  ResponseGenerated(OK, "Supplier update successful", Json.toJson(updatedSupplier))
                 )
               )
             case None =>
               BadRequest(
                 Json.toJson(
-                  ResponseGenerated(BAD_REQUEST, "No subcategory found")
+                  ResponseGenerated(BAD_REQUEST, "No supplier found")
                 )
               )
           }

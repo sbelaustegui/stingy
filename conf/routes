@@ -9,6 +9,13 @@ GET         /api/user/id/:id                                    controllers.User
 PUT         /api/user                                           controllers.UserController.update()
 DELETE      /api/user/:id                                       controllers.UserController.delete(id: Long)
 
+# Admin
+POST        /api/admin                                          controllers.AdminController.register
+GET         /api/admin/id/:id                                   controllers.AdminController.getById(id: Long)
+GET         /api/admin/all                                      controllers.AdminController.getAll
+PUT         /api/admin                                          controllers.AdminController.update
+DELETE      /api/admin/:id                                      controllers.AdminController.delete(id: Long)
+
 # Category
 POST        /api/category                                       controllers.CategoryController.register()
 GET         /api/category/all                                   controllers.CategoryController.getAll
@@ -19,9 +26,24 @@ DELETE      /api/category/:id                                   controllers.Cate
 # SubCategory
 POST        /api/subcategory                                    controllers.SubcategoryController.register()
 GET         /api/subcategory/all                                controllers.SubcategoryController.getAll
+GET         /api/subcategory/categoryId/:categoryId             controllers.SubcategoryController.getByCategoryId(categoryId: Long)
 GET         /api/subcategory/id/:id                             controllers.SubcategoryController.getById(id: Long)
 PUT         /api/subcategory                                    controllers.SubcategoryController.update()
 DELETE      /api/subcategory/:id                                controllers.SubcategoryController.delete(id: Long)
+
+# Supplier
+POST        /api/supplier                                       controllers.SupplierController.register()
+GET         /api/supplier/all                                   controllers.SupplierController.getAll
+GET         /api/supplier/id/:id                                controllers.SupplierController.getById(id: Long)
+PUT         /api/supplier                                       controllers.SupplierController.update()
+DELETE      /api/supplier/:id                                   controllers.SupplierController.delete(id: Long)
+
+# Product
+POST        /api/product                                        controllers.ProductController.register()
+GET         /api/product/all                                    controllers.ProductController.getAll
+GET         /api/product/id/:id                                 controllers.ProductController.getById(id: Long)
+PUT         /api/product                                        controllers.ProductController.update()
+DELETE      /api/product/:id                                    controllers.ProductController.delete(id: Long)
 
 # Login
 POST        /api/login                                          controllers.LoginController.login

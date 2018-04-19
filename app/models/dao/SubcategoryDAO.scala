@@ -16,7 +16,8 @@ object SubcategoryDAO {
   def toEbean(category: Subcategory): ESubcategory = {
     new ESubcategory(
       if(category.id.isDefined) category.id.get else null,
-      category.name
+      category.name,
+      category.categoryId
     )
   }
 
@@ -40,6 +41,10 @@ object SubcategoryDAO {
       case None =>
         None
     }
+  }
+
+  def getByCategoryId(id: Long) : List[Subcategory] = {
+    ESubcategory.getSubCategoryByCategoryId(id).map(Subcategory.apply).toList
   }
 
   def getAllCategories: List[Subcategory] = {

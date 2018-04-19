@@ -46,6 +46,16 @@ object User extends UserJsonFormat {
     UserDAO.authenticate(userLogin.username, userLogin.password)
   }
 
+  def checkEmail(id: Long, email: String): Boolean = {
+    getByEmail(email) match {
+      case Some(user) =>
+        if(id == user.id.get) {
+          true
+        } else false
+      case None => true
+    }
+  }
+
   def getById(id : Long) : Option[User] = {
     UserDAO.getById(id)
   }

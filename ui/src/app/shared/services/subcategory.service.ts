@@ -7,6 +7,7 @@ Subcategory routes
   POST        /api/subcategory                                    controllers.SubcategoryController.register()
   GET         /api/subcategory/all                                controllers.SubcategoryController.getAll
   GET         /api/subcategory/id/:id                             controllers.SubcategoryController.getById(id: Long)
+  GET         /api/subcategory/categoryId/:categoryId             controllers.SubcategoryController.getByCategoryId(categoryId: Long)
   PUT         /api/subcategory                                    controllers.SubcategoryController.update()
   DELETE      /api/subcategory/:id                                controllers.SubcategoryController.delete(id: Long)
 */
@@ -80,6 +81,15 @@ export class SubcategoryService {
       .get('/api/subcategory/id/' + id)
       .then(res => {
         this._SubcategoriesById.set(id,res.data);
+        return res.data;
+      });
+  }
+
+  public getSubcategoryByCategoryId(categoryId: number): Promise<Subcategory> {
+    return this.http
+      .get('/api/subcategory/categoryId/' + categoryId)
+      .then(res => {
+        this._SubcategoriesById.set(res.data.id, res.data);
         return res.data;
       });
   }
