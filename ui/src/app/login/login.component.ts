@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {UserAuthService} from "../shared/auth/user/user-auth.service";
 import {Router} from "@angular/router";
 import {LoginUser} from "../shared/models/login-user.model";
+import {Title} from "@angular/platform-browser";
 
 declare var require: any;
 
@@ -20,9 +21,10 @@ export class LoginComponent implements OnInit {
   public loginLoading: boolean;
   public imgSource = require('../../assets/img/stingy-logo2.png');
 
-  constructor(public formBuilder: FormBuilder, public authUserService: UserAuthService, public router: Router) {}
+  constructor(public formBuilder: FormBuilder, public authUserService: UserAuthService, public router: Router, private titleService: Title) {}
 
   ngOnInit() {
+    this.titleService.setTitle('Login | Stingy');
     this.loginUser = LoginUser.empty();
     this.formGroup = this.createFormGroup();
     this.loginUserError = false;

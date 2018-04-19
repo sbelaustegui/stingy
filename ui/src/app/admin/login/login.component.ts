@@ -19,7 +19,7 @@ export class AdminLoginComponent implements OnInit {
   public loginUser: LoginUser; // CHANGE TO LOGINADMINUSER
   public loginUserError: boolean;
   public loginLoading: boolean;
-  // public imgSource = require('../../assets/img/stingy-logo2.png');
+  public imgSource = require('../../../assets/img/stingy-logo2.png');
 
   constructor(public formBuilder: FormBuilder, public adminAuthService: AdminAuthService, public router: Router) {}
 
