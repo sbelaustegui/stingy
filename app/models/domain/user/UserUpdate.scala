@@ -11,8 +11,7 @@ case class UserUpdate(id: Long, name: Option[String], username: Option[String], 
       lastName.getOrElse(user.lastName),
       email.getOrElse(user.email),
       username.getOrElse(user.username),
-      verifyPassword(user.password),
-      user.userId
+      verifyPassword(user.password)
     )
   }
 
