@@ -15,6 +15,7 @@ import {CookieService} from "angular2-cookie/core";
 import { AdminComponent } from './admin/admin.component';
 import {AdminLoginComponent} from "./admin/login/login.component";
 import {AdminHomeComponent} from "./admin/home/home.component";
+import { ProfileComponent } from './user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {AdminHomeComponent} from "./admin/home/home.component";
     AdminComponent,
     AdminLoginComponent,
     AdminHomeComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
