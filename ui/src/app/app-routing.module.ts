@@ -12,6 +12,7 @@ import {AdminLoginComponent} from "./admin/login/login.component";
 import {ReverseAdminAuthGuard} from "./shared/auth/admin/reverse-admin-auth-guard.service";
 import {AdminAuthGuard} from "./shared/auth/admin/admin-auth-guard.service";
 import {AdminHomeComponent} from "./admin/home/home.component";
+import {ProfileComponent} from "./user/profile/profile.component";
 
 const routes: Routes =[
   {
@@ -23,6 +24,7 @@ const routes: Routes =[
       {path: 'user', canActivate: [UserAuthGuard],                    component: UserComponent,
         children: [
           {path: 'home',                                              component: HomeComponent},
+          {path: 'profile',                                           component: ProfileComponent},
         ]
       },
       {path: 'admin',                                                 component: AdminComponent,

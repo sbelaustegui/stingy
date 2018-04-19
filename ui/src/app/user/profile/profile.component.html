@@ -1,0 +1,176 @@
+<div class="profile">
+  <div class="row">
+    <span *ngIf="alerts.getting.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+    <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.getting.error">
+      <div class="card-block">
+        <blockquote class="card-blockquote">
+          <p>Hubo un error al obtener los datos del usuario.</p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="formGroup" (ngSubmit)="updateUser()" *ngIf="!alerts.getting.loading && !alerts.getting.error">
+    <div class="row">
+      <div class="col-md-4 offset-md-2 align-content-end">
+        <h3 class="text" align="center">Modifique sus datos:</h3>
+        <!--INPUT NAME-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="name"
+                   [formGroup]="formGroup"
+                   placeholder="Nombre"
+                   aria-label="Name"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="user.name"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['name'].errors && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)">
+              <p class="error" *ngIf="formGroup.controls['name'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT LASTNAME-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="lastname"
+                   [formGroup]="formGroup"
+                   placeholder="Apellido"
+                   aria-label="LastName"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="user.lastName"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['lastname'].errors && (formGroup.controls['lastname'].dirty || formGroup.controls['lastname'].touched)">
+              <p class="error" *ngIf="formGroup.controls['lastname'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT USERNAME-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="username"
+                   [formGroup]="formGroup"
+                   placeholder="Usuario"
+                   aria-label="UserName"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="user.username"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['username'].errors && (formGroup.controls['username'].dirty || formGroup.controls['username'].touched)">
+              <p class="error" *ngIf="formGroup.controls['username'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-4">
+        <!--INPUT EMAIL-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="email"
+                   [formGroup]="formGroup"
+                   placeholder="Correo Electrónico"
+                   aria-label="Email"
+                   aria-describedby="basic-addon2"
+                   [(ngModel)]="user.email"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['email'].errors && (formGroup.controls['email'].dirty || formGroup.controls['email'].touched)">
+              <p class="error" *ngIf="formGroup.controls['email'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['email'].errors.email">Email Inválido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED EMAIL-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="confirmEmail"
+                   [formGroup]="formGroup"
+                   placeholder="Confirmar Correo Electrónico"
+                   aria-label="Confirmed Email"
+                   aria-describedby="basic-addon3"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['confirmEmail'].errors && (formGroup.controls['confirmEmail'].dirty || formGroup.controls['confirmEmail'].touched)">
+              <p class="error" *ngIf="formGroup.controls['confirmEmail'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no
+                coinciden.</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="password"
+                   [formGroup]="formGroup"
+                   placeholder="Contraseña"
+                   aria-label="Password"
+                   aria-describedby="basic-addon4"
+                   [(ngModel)]="user.password"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['password'].errors && (formGroup.controls['password'].dirty || formGroup.controls['password'].touched)">
+              <p class="error" *ngIf="formGroup.controls['password'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['password'].errors.minlength">Minimo de 8 caracteres</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="confirmPassword"
+                   [formGroup]="formGroup"
+                   placeholder="Confirmar Contraseña"
+                   aria-label="Confirmed Password"
+                   aria-describedby="basic-addon5"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['confirmPassword'].errors && (formGroup.controls['confirmPassword'].dirty || formGroup.controls['confirmPassword'].touched)">
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8 caracteres</p>
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no
+                coinciden.</p>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.updating.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al actualizar el usuario. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center mx-auto" *ngIf="alerts.updating.success">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>El usuario se actualizo correctamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+        <div class="row">
+          <div class="register-button offset-md-6 offset-4 col-8 col-md-6" align="center">
+            <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid">
+              <span *ngIf="!alerts.updating.loading">Guardar</span>
+              <span *ngIf="alerts.updating.loading"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -16,6 +16,7 @@ import { AdminComponent } from './admin/admin.component';
 import {AdminLoginComponent} from "./admin/login/login.component";
 import {AdminHomeComponent} from "./admin/home/home.component";
 import {AdminAuthService} from "./shared/auth/admin/admin-auth.service";
+import { ProfileComponent } from './user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {AdminAuthService} from "./shared/auth/admin/admin-auth.service";
     AdminComponent,
     AdminLoginComponent,
     AdminHomeComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

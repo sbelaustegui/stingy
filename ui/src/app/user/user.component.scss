@@ -1,8 +1,15 @@
 .navbar{
   .navbar-nav{
-    .nav-link{
-      padding-left: 25px;
-      padding-right: 25px;
+    .nav-item{
+      .nav-link{
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+      cursor: pointer;
     }
+  }
+  .profile{
+    margin-right: 30px;
+    cursor: pointer;
   }
 }
