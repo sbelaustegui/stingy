@@ -1,0 +1,26 @@
+.login {
+
+  .image {
+    padding-top: 7%;
+  }
+
+  .login-form{
+    .row{
+      margin: 2.5%;
+      .center {
+        text-align: center;
+      }
+    }
+    .access-button {
+      margin: 5%;
+      #access-button{
+        font-weight: bold;
+      }
+    }
+    .alert{
+      p{
+        margin-bottom: 0;
+      }
+    }
+  }
+}

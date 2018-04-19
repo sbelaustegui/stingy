@@ -27,8 +27,10 @@ const routes: Routes =[
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
-          {path: 'home',  canActivate:  [AdminAuthGuard],             component: AdminHomeComponent},
+          {path: 'login',      component: AdminLoginComponent},
+          // {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
+          {path: 'home',             component: AdminHomeComponent},
+          // {path: 'home',  canActivate:  [AdminAuthGuard],             component: AdminHomeComponent},
         ]
       }
     ]

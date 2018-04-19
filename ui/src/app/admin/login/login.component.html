@@ -1,3 +1,59 @@
-<p>
-  login works!
-</p>
+<div class="login">
+  <div class="image" align="center">
+    <!--<img [src]="imgSource" alt="Icon">-->
+  </div>
+  <form class="login-form" [formGroup]="formGroup" (ngSubmit)="login()">
+    <div class="row">
+      <div class="offset-md-3 col-lg-4 offset-lg-4 col-md-6 center">
+        <fieldset>
+          <div class="form-group">
+            <div class="mb-3">
+              <input type="text"
+                     class="form-control"
+                     formControlName="username"
+                     [formGroup]="formGroup"
+                     placeholder="Usuario"
+                     aria-label="Username"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="loginUser.username"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="formGroup.controls['username'].errors && (formGroup.controls['username'].dirty || formGroup.controls['username'].touched)">
+                <p class="error" *ngIf="formGroup.controls['username'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <div class="form-group">
+            <div class="mb-3">
+              <input type="password"
+                     class="form-control"
+                     formControlName="password"
+                     [formGroup]="formGroup"
+                     placeholder="Contraseña"
+                     aria-label="Contraseña"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="loginUser.password"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="formGroup.controls['password'].errors && (formGroup.controls['password'].dirty || formGroup.controls['password'].touched)">
+                <p class="error" *ngIf="formGroup.controls['password'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="alert alert-danger text-center" *ngIf="loginUserError">
+          <p>Error. Revise los datos e inténtelo nuevamente.</p>
+        </div>
+        <div class="access-button" align="center">
+          <button type="submit" class="btn btn-light" id="access-button" [disabled]="formGroup.invalid">
+            <span *ngIf="!loginLoading">INGRESAR</span>
+            <span *ngIf="loginLoading"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+

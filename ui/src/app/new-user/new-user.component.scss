@@ -3,8 +3,13 @@
   .image{
     padding-top: 7%;
   }
+  .login-form{
+    background-color: #8BC4FF;
+  }
   .row{
-    margin: 4%;
+    margin-top: 4%;
+    margin-left: 4%;
+    margin-right: 4%;
     .input-group{
       width: 150%;
     }
@@ -24,19 +29,11 @@
       }
     }
   }
-
-  h1 {
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 50px;
-    padding-top: 2.5%;
-  }
-
   h3{
     color:white;
     font-family: Open-Sans, "Lilita One", sans-serif;
-    margin: 0;
-    height: 54px;
+    margin: 2px;
+    height: 50px;
     align-items: center;
 
   }
