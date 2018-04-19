@@ -4,8 +4,9 @@ import models.dao.UserDAO
 import models.domain.authentication.UserLogin
 import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
+import utils.Encrypter
 
-case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String, userId: Option[String]) {
+case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String) {
   def equals(user: User): Boolean = {
     if(user.id.isDefined && id.isDefined) id.get.equals(user.id.get)
     else false
@@ -21,8 +22,7 @@ object User extends UserJsonFormat {
       user.getLastName,
       user.getEmail,
       user.getUsername,
-      user.getPassword,
-      Option(user.getUserId)
+      user.getPassword
     )
   }
 
@@ -33,8 +33,7 @@ object User extends UserJsonFormat {
       userCreate.lastName,
       userCreate.email,
       userCreate.username,
-      userCreate.password,
-      None
+      Encrypter.encrypt(userCreate.password)
     )
   }
 

@@ -11,7 +11,6 @@ create table abstract_user (
   email                         varchar(255) not null,
   username                      varchar(255) not null,
   password                      varchar(255) not null,
-  user_id                       varchar(255),
   constraint uq_abstract_user_email unique (email),
   constraint uq_abstract_user_username unique (username),
   constraint pk_abstract_user primary key (id)

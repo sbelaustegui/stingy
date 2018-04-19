@@ -2,6 +2,7 @@ package models.domain.user
 
 import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
+import utils.Encrypter
 
 case class UserCreate(name: String, lastName: String, email: String, username: String, password: String)
 
@@ -13,8 +14,7 @@ object UserCreate extends UserCreateJsonFormat{
       user.getLastName,
       user.getEmail,
       user.getUsername,
-      user.getPassword,
-      Option(user.getUserId)
+      Encrypter.encrypt(user.getPassword)
     )
   }
 }

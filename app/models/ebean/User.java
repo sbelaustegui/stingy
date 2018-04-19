@@ -14,13 +14,10 @@ import java.util.Optional;
 @DiscriminatorValue("User")
 public class User extends AbstractUser{
 
-    private String userId;
-
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, String userId) {
+    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password) {
         super(id, name, lastName, email, username, password);
-        this.userId = userId;
     }
 
     public static Optional<User> getById(Long id){
@@ -39,20 +36,12 @@ public class User extends AbstractUser{
         return Optional.ofNullable(Ebean.find(User.class).where().eq("username", username).findOne());
     }
 
-    public static Optional<User> getByUserId(Long userId){
-        return Optional.ofNullable(Ebean.find(User.class).where().eq("userId", userId).findOne());
-    }
-
-    public static Optional<User> authenticate(String email, String clearPassword) {
-        Optional<User> user = getByEmail(email);
+    public static Optional<User> authenticate(String username, String clearPassword) {
+        Optional<User> user = getByUsername(username);
         if (user.isPresent() &&  (user.get().getPassword() != null) && Encrypter.checkEncrypted(clearPassword, user.get().getPassword())) {
             return user;
         }
         return Optional.empty();
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public static List<User> getAll() {

@@ -20,8 +20,7 @@ object UserDAO {
       user.lastName,
       user.email,
       user.username,
-      user.password,
-      if(user.userId.isDefined) user.userId.get else null
+      user.password
     )
   }
 
