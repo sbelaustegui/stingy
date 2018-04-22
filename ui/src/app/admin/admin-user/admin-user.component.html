@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand">
+  <a class="navbar-brand" href="#">
     <img [src]="imgSource" width="30" height="30" class="d-inline-block align-top" alt="">
     Stingy
   </a>
@@ -9,13 +9,13 @@
   <div class="collapse navbar-collapse" id="navbarToggler">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item" routerLink="/user/seeker" routerLinkActive="active">
-        <a class="nav-link"><i class="fa fa-search" aria-hidden="true"></i> Buscar un producto</a>
+        <a class="nav-link"><i class="fa fa-search" aria-hidden="true"></i> ABM Categorias</a>
       </li>
       <li class="nav-item" routerLink="/user/upload-product" routerLinkActive="active">
-        <a class="nav-link"><i class="fa fa-plus-circle" aria-hidden="true"></i> Cargar un producto</a>
+        <a class="nav-link"><i class="fa fa-plus-circle" aria-hidden="true"></i> ABM Producto</a>
       </li>
       <li class="nav-item" routerLink="/user/cart" routerLinkActive="active">
-        <a class="nav-link"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Carrito</a>
+        <a class="nav-link"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Usuarios</a>
       </li>
     </ul>
     <span class="profile" routerLink="/user/profile" routerLinkActive="active"><i class="fa fa-user"></i> {{user.name}}</span>
@@ -23,3 +23,4 @@
   </div>
 </nav>
 <router-outlet></router-outlet>
+
