@@ -16,7 +16,7 @@ export class AdminLoginComponent implements OnInit {
 
 
   public formGroup: FormGroup;
-  public loginUser: LoginUser; // CHANGE TO LOGINADMINUSER
+  public loginUser: LoginUser; //TODO CHANGE TO LOGINADMINUSER
   public loginUserError: boolean;
   public loginLoading: boolean;
   public imgSource = require('../../../assets/img/stingy-logo2.png');
@@ -35,7 +35,7 @@ export class AdminLoginComponent implements OnInit {
     this.adminAuthService.login(this.loginUser).then(() => {
       this.loginUserError = false;
       this.loginLoading = false;
-      this.router.navigate(['home'])
+      this.router.navigate(['admin', 'admin-user'])
     }).catch(() => {
       this.loginUserError = true;
       this.loginLoading = false;

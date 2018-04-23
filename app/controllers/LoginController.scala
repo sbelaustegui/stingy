@@ -110,20 +110,40 @@ class LoginController @Inject()(cc: ControllerComponents) extends AbstractContro
                 )
               )
             case None=>
-              InternalServerError(
-                Json.toJson(
-                  ResponseGenerated(
-                    INTERNAL_SERVER_ERROR,
-                    "Server Error",
+              Admin.getById(user.id) match {
+                case Some(userAux) =>
+                  Ok(
                     Json.toJson(
-                      UserLogged(
-                        None,
-                        isLogged = false
+                      ResponseGenerated(
+                        OK,
+                        "Logged",
+                        Json.toJson(
+                          UserLogged(
+                            Some(
+                              CaseUser.toCaseUser(userAux)
+                            ),
+                            isLogged = true
+                          )
+                        )
                       )
                     )
                   )
-                )
-              )
+                case None =>
+                  InternalServerError(
+                    Json.toJson(
+                      ResponseGenerated(
+                        INTERNAL_SERVER_ERROR,
+                        "Server Error",
+                        Json.toJson(
+                          UserLogged(
+                            None,
+                            isLogged = false
+                          )
+                        )
+                      )
+                    )
+                  )
+              }
           }
         case _ =>
           BadRequest(

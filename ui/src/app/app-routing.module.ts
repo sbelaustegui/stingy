@@ -25,8 +25,7 @@ const routes: Routes =[
       {path: '', pathMatch: 'full', redirectTo: 'login'},
       {path: 'login', canActivate: [ReverseUserAuthGuard],            component: LoginComponent},
       {path: 'new-user',                                              component: NewUserComponent},
-      {path: 'user',                    component: UserComponent,
-      // {path: 'user', canActivate: [UserAuthGuard],                    component: UserAdminComponent,
+      {path: 'user', canActivate: [UserAuthGuard],                    component: UserComponent,
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'home'},
           {path: 'home',                                              component: HomeComponent},
@@ -37,16 +36,11 @@ const routes: Routes =[
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          // {path: '', pathMatch: 'full', redirectTo: 'login'},
-          {path: 'login',                                             component: AdminLoginComponent},
-          // {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
-          {
-            path: 'admin-user',                                       component: AdminUserComponent,
-            // path: 'admin-user', canActivate: [AdminAuthGuard], component: AdminHomeComponent,
+          {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
+          {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
             children: [
-              // {path: 'home',  canActivate:  [AdminAuthGuard],             component: AdminHomeComponent},
-              {path: 'home',                                           component: AdminHomeComponent},
-              {path: 'categories',                                     component: CategoriesComponent},
+              {path: 'home',                                          component: AdminHomeComponent},
+              {path: 'categories',                                    component: CategoriesComponent},
             ]
           }
         ]
