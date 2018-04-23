@@ -19,7 +19,6 @@ import {AdminAuthService} from "./shared/auth/admin/admin-auth.service";
 import { ProfileComponent } from './user/profile/profile.component';
 import { CartComponent } from './user/cart/cart.component';
 import { UploadProductComponent } from './user/upload-product/upload-product.component';
-import { SeekerComponent } from './user/seeker/seeker.component';
 import { AdminUserComponent } from './admin/admin-user/admin-user.component';
 import { CategoriesComponent } from './admin/admin-user/categories/categories.component';
 
@@ -36,7 +35,6 @@ import { CategoriesComponent } from './admin/admin-user/categories/categories.co
     ProfileComponent,
     CartComponent,
     UploadProductComponent,
-    SeekerComponent,
     AdminUserComponent,
     CategoriesComponent,
   ],

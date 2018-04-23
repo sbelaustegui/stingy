@@ -8,17 +8,17 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarToggler">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item" routerLink="/user/seeker" routerLinkActive="active">
+      <li class="nav-item" routerLink="/categories" routerLinkActive="active">
         <a class="nav-link"><i class="fa fa-search" aria-hidden="true"></i> ABM Categorias</a>
       </li>
-      <li class="nav-item" routerLink="/user/upload-product" routerLinkActive="active">
+      <li class="nav-item" routerLink="/home" routerLinkActive="active">
         <a class="nav-link"><i class="fa fa-plus-circle" aria-hidden="true"></i> ABM Producto</a>
       </li>
-      <li class="nav-item" routerLink="/user/cart" routerLinkActive="active">
+      <li class="nav-item" routerLink="/home" routerLinkActive="active">
         <a class="nav-link"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Usuarios</a>
       </li>
     </ul>
-    <span class="profile" routerLink="/user/profile" routerLinkActive="active"><i class="fa fa-user"></i> {{user.name}}</span>
+    <span class="profile" routerLink="/home" routerLinkActive="active"><i class="fa fa-user"></i> {{user.name}}</span>
     <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" (click)="logout()">Salir <i class="fa fa-sign-out" aria-hidden="true"></i></button>
   </div>
 </nav>

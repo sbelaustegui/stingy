@@ -15,7 +15,6 @@ import {AdminHomeComponent} from "./admin/admin-user/home/home.component";
 import {ProfileComponent} from "./user/profile/profile.component";
 import {CartComponent} from "./user/cart/cart.component";
 import {UploadProductComponent} from "./user/upload-product/upload-product.component";
-import {SeekerComponent} from "./user/seeker/seeker.component";
 import {CategoriesComponent} from "./admin/admin-user/categories/categories.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 
@@ -32,14 +31,13 @@ const routes: Routes =[
           {path: '', pathMatch: 'full', redirectTo: 'home'},
           {path: 'home',                                              component: HomeComponent},
           {path: 'profile',                                           component: ProfileComponent},
-          {path: 'seeker',                                            component: SeekerComponent},
           {path: 'cart',                                              component: CartComponent},
           {path: 'upload-product',                                    component: UploadProductComponent},
         ]
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          {path: '', pathMatch: 'full', redirectTo: 'login'},
+          // {path: '', pathMatch: 'full', redirectTo: 'login'},
           {path: 'login',                                             component: AdminLoginComponent},
           // {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
           {
