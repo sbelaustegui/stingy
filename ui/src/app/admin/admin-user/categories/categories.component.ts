@@ -60,6 +60,7 @@ export class CategoriesComponent implements OnInit {
         loading: true,
       },
     };
+    //MANZA PUTO
     this.categories = new Map<number, Category>();
     this.createCategoryFormControls();
     this.createSubcategoryFormControls();
