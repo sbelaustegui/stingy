@@ -22,6 +22,7 @@ import { CategoriesComponent } from './admin/admin-user/categories/categories.co
 import {AdminProductComponent} from "./admin/admin-user/products/products.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
     AdminProductComponent,
     CategoriesComponent,
     AdminUserComponent,
-    AdminsComponent
+    AdminsComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +48,7 @@ import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    ModalModule.forRoot(),
   ],
   providers : [
     CookieService,

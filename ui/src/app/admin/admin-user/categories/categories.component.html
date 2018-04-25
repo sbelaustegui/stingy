@@ -1,63 +1,122 @@
-<div>
-<ul class="nav nav-tabs">
-<li class="nav-item">
-<a class="nav-link active">Vista</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" >Alta</a>
-</li>
-<li class="nav-item">
-<a class="nav-link " >Baja</a>
-</li>
-<li class="nav-item">
-<a class="nav-link ">Modificacion</a>
-</li>
-</ul>
-</div>
+<!--TODO Cambiarlo por un icono '+'-->
+<button type="button" class="btn btn-primary" (click)="openModal(newCategoryModal)">Agregar categoria</button>
 
+<h2>Categorias</h2>
+<table class="table" *ngIf="!alerts.categories.loading">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Nombre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let category of categoriesArray">
+      <th scope="row">{{category.id}}</th>
+      <td>{{category.name}}</td>
+    </tr>
+  </tbody>
+</table>
 
-<!--<div class="upload-categories">-->
-  <!--<form class="new-user-form" [formGroup]="formGroup" (ngSubmit)="uploadCategory()">-->
-    <!--<div class="row">-->
-      <!--<div class="col-md-4 offset-md-2 align-content-end">-->
-        <!--<h3 class="text" align="center">Complete sus datos:</h3>-->
-        <!--&lt;!&ndash;INPUT NAME CATEGORY&ndash;&gt;-->
-        <!--<fieldset>-->
-          <!--<div class="form-group">-->
-            <!--<input type="text"-->
-                   <!--class="form-control"-->
-                   <!--formControlName="name"-->
-                   <!--[formGroup]="formGroup"-->
-                   <!--placeholder="Nombre"-->
-                   <!--aria-label="Name"-->
-                   <!--aria-describedby="basic-addon1"-->
-                   <!--[(ngModel)]="category.name"-->
-                   <!--required>-->
-            <!--<div class="form-control-feedback"-->
-                 <!--*ngIf="formGroup.controls['name'].errors && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)">-->
-              <!--<p class="error" *ngIf="formGroup.controls['name'].errors.required">Es requerido</p>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</fieldset>-->
-        <!--&lt;!&ndash;&lt;!&ndash;INPUT ID CATEGORY&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;<fieldset>&ndash;&gt;-->
-          <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-            <!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
-                   <!--&lt;!&ndash;class="form-control"&ndash;&gt;-->
-                   <!--&lt;!&ndash;formControlName="id"&ndash;&gt;-->
-                   <!--&lt;!&ndash;[formGroup]="formGroup"&ndash;&gt;-->
-                   <!--&lt;!&ndash;placeholder="ID"&ndash;&gt;-->
-                   <!--&lt;!&ndash;aria-label="id"&ndash;&gt;-->
-                   <!--&lt;!&ndash;aria-describedby="basic-addon1"&ndash;&gt;-->
-                   <!--&lt;!&ndash;[(ngModel)]="category.id"&ndash;&gt;-->
-                   <!--&lt;!&ndash;required>&ndash;&gt;-->
-            <!--&lt;!&ndash;<div class="form-control-feedback"&ndash;&gt;-->
-                 <!--&lt;!&ndash;*ngIf="formGroup.controls['id'].errors && (formGroup.controls['id'].dirty || formGroup.controls['id'].touched)">&ndash;&gt;-->
-              <!--&lt;!&ndash;<p class="error" *ngIf="formGroup.controls['id'].errors.required">Es requerido</p>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--&lt;!&ndash;</fieldset>&ndash;&gt;-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</form>-->
-<!--</div>-->
+<!--TODO Cambiarlo por un icono '+'-->
+<button type="button" class="btn btn-primary" (click)="openModal(newSubcategoryModal)">Agregar subcategoria</button>
+
+<h2>SubCategorias</h2>
+<table class="table" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Categoria</th>
+    <th scope="col">Nombre</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let subcategory of subcategories">
+    <th scope="row">{{subcategory.id}}</th>
+    <td>{{categories.get(subcategory.categoryId).name}}</td>
+    <td>{{subcategory.name}}</td>
+  </tr>
+  </tbody>
+</table>
+
+<!--New category Modal-->
+<ng-template #newCategoryModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva categoría</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="categoryFormGroup" (ngSubmit)="uploadCategory()">
+      <fieldset>
+        <div class="form-group">
+          <input type="text"
+                 class="form-control"
+                 formControlName="name"
+                 [formGroup]=""
+                 placeholder="Nombre"
+                 aria-label="Name"
+                 aria-describedby="basic-addon1"
+                 [(ngModel)]="newCategory.name"
+                 required>
+          <div class="form-control-feedback"
+               *ngIf="categoryFormGroup.controls['name'].errors && (categoryFormGroup.controls['name'].dirty || categoryFormGroup.controls['name'].touched)">
+            <p class="error" *ngIf="categoryFormGroup.controls['name'].errors.required">Es requerido</p>
+          </div>
+        </div>
+      </fieldset>
+      <!--TODO agregar algun boton de añadir-->
+    </form>
+  </div>
+</ng-template>
+
+<!--New subcategory Modal-->
+<ng-template #newSubcategoryModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nueva subcategoría</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="subcategoryFormGroup" (ngSubmit)="uploadSubcategory()">
+      <fieldset>
+        <div class="form-group">
+          <input type="text"
+                 class="form-control"
+                 formControlName="name"
+                 [formGroup]=""
+                 placeholder="Nombre"
+                 aria-label="Name"
+                 aria-describedby="basic-addon1"
+                 [(ngModel)]="newSubcategory.name"
+                 required>
+          <div class="form-control-feedback"
+               *ngIf="subcategoryFormGroup.controls['name'].errors && (subcategoryFormGroup.controls['name'].dirty || subcategoryFormGroup.controls['name'].touched)">
+            <p class="error" *ngIf="subcategoryFormGroup.controls['name'].errors.required">Es requerido</p>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <div class="form-group">
+          <select
+            class="form-control"
+            formControlName="categoryId"
+            [(ngModel)]="newSubcategory.categoryId"
+            placeholder="Categoría"
+            [formGroup]="subcategoryFormGroup"
+            required>
+            <option [value]="" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let category of categoriesArray" [value]="category.id">{{category.name}}</option>
+          </select>
+          <div class="form-control-feedback"
+               *ngIf="subcategoryFormGroup.controls['categoryId'].errors && (subcategoryFormGroup.controls['categoryId'].dirty || subcategoryFormGroup.controls['categoryId'].touched)">
+            <p *ngIf="subcategoryFormGroup.controls['categoryId'].errors.required">Es requerido</p>
+          </div>
+        </div>
+      </fieldset>
+      <!--TODO agregar algun boton de añadir-->
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+  </div>
+</ng-template>

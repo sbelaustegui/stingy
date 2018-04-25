@@ -1,7 +1,7 @@
 export class Subcategory{
 
   static empty(): Subcategory{
-    return new Subcategory('')
+    return new Subcategory('', undefined)
   }
-  constructor(public name: string, public id?: number) {}
+  constructor(public name: string, public categoryId: number, public id?: number) {}
 }
