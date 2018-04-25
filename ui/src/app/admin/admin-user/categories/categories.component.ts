@@ -11,7 +11,8 @@ declare var require: any;
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss']
+  styleUrls: ['./categories.component.scss'],
+  providers: [CategoryService]
 })
 export class CategoriesComponent implements OnInit {
   // public formGroup: FormGroup;

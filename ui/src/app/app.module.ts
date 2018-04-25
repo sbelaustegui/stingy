@@ -14,13 +14,14 @@ import {HttpService} from "./shared/services/http.service";
 import {CookieService} from "angular2-cookie/core";
 import { AdminComponent } from './admin/admin.component';
 import {AdminLoginComponent} from "./admin/login/login.component";
-import {AdminHomeComponent} from "./admin/admin-user/home/home.component";
 import {AdminAuthService} from "./shared/auth/admin/admin-auth.service";
 import { ProfileComponent } from './user/profile/profile.component';
 import { CartComponent } from './user/cart/cart.component';
 import { UploadProductComponent } from './user/upload-product/upload-product.component';
-import { AdminUserComponent } from './admin/admin-user/admin-user.component';
 import { CategoriesComponent } from './admin/admin-user/categories/categories.component';
+import {AdminProductComponent} from "./admin/admin-user/products/products.component";
+import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
+import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 
 @NgModule({
   declarations: [
@@ -31,12 +32,13 @@ import { CategoriesComponent } from './admin/admin-user/categories/categories.co
     HomeComponent,
     AdminComponent,
     AdminLoginComponent,
-    AdminHomeComponent,
     ProfileComponent,
     CartComponent,
     UploadProductComponent,
-    AdminUserComponent,
+    AdminProductComponent,
     CategoriesComponent,
+    AdminUserComponent,
+    AdminsComponent
   ],
   imports: [
     BrowserModule,

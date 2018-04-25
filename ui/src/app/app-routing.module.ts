@@ -11,12 +11,13 @@ import {AdminComponent} from "./admin/admin.component";
 import {AdminLoginComponent} from "./admin/login/login.component";
 import {ReverseAdminAuthGuard} from "./shared/auth/admin/reverse-admin-auth-guard.service";
 import {AdminAuthGuard} from "./shared/auth/admin/admin-auth-guard.service";
-import {AdminHomeComponent} from "./admin/admin-user/home/home.component";
+import {AdminProductComponent} from "./admin/admin-user/products/products.component";
 import {ProfileComponent} from "./user/profile/profile.component";
 import {CartComponent} from "./user/cart/cart.component";
 import {UploadProductComponent} from "./user/upload-product/upload-product.component";
 import {CategoriesComponent} from "./admin/admin-user/categories/categories.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
+import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 
 const routes: Routes =[
   {
@@ -39,8 +40,9 @@ const routes: Routes =[
           {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
           {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
             children: [
-              {path: 'home',                                          component: AdminHomeComponent},
+              {path: 'products',                                      component: AdminProductComponent},
               {path: 'categories',                                    component: CategoriesComponent},
+              {path: 'users',                                         component: AdminsComponent},
             ]
           }
         ]
