@@ -22,6 +22,7 @@ import { CategoriesComponent } from './admin/admin-user/categories/categories.co
 import {AdminProductComponent} from "./admin/admin-user/products/products.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
+import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     CategoriesComponent,
     AdminUserComponent,
     AdminsComponent,
+    AdminProfileComponent
   ],
   imports: [
     BrowserModule,

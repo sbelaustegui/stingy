@@ -1,3 +1,29 @@
-table{
-  background-color: white;
+.admin-categories {
+  .row {
+    padding-top: 5%;
+    background-color: #8BC4FF;
+    .add-button {
+      button {
+        background-color: #58bee0;
+        color: white;
+      }
+    }
+    h2 {
+      color: white;
+      font-family: Open-Sans, "Lilita One", sans-serif;
+      //margin: 0;
+      //height: 54px;
+      //align-items: center;
+    }
+    table {
+      background-color: white;
+      .upload-button {
+        button {
+          background-color: #00c409;
+          color: white;
+        }
+
+      }
+    }
+  }
 }

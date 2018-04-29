@@ -18,6 +18,7 @@ import {UploadProductComponent} from "./user/upload-product/upload-product.compo
 import {CategoriesComponent} from "./admin/admin-user/categories/categories.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
+import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 
 const routes: Routes =[
   {
@@ -43,6 +44,7 @@ const routes: Routes =[
               {path: 'products',                                      component: AdminProductComponent},
               {path: 'categories',                                    component: CategoriesComponent},
               {path: 'users',                                         component: AdminsComponent},
+              {path: 'profile',                                       component: AdminProfileComponent},
             ]
           }
         ]

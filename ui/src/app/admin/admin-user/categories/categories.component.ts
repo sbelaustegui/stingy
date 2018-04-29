@@ -6,8 +6,9 @@ import {Category} from "../../../shared/models/category.model";
 import {Subcategory} from "../../../shared/models/subcategory.model";
 import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-categories',
@@ -40,7 +41,8 @@ export class CategoriesComponent implements OnInit {
   public newSubcategory: Subcategory;
   modalRef: BsModalRef;
 
-  constructor(public fb: FormBuilder, public categoryService: CategoryService, public subcategoryService: SubcategoryService, public router: Router, private titleService: Title, private modalService: BsModalService) {}
+  constructor(public fb: FormBuilder, public categoryService: CategoryService, public subcategoryService: SubcategoryService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  }
 
   ngOnInit() {
     this.titleService.setTitle('ABM Categorias | Stingy');
@@ -60,7 +62,6 @@ export class CategoriesComponent implements OnInit {
         loading: true,
       },
     };
-    //MANZA PUTO
     this.categories = new Map<number, Category>();
     this.createCategoryFormControls();
     this.createSubcategoryFormControls();
@@ -68,7 +69,7 @@ export class CategoriesComponent implements OnInit {
     this.getSubcategories();
   }
 
-  getSubcategories(){
+  getSubcategories() {
     this.subcategoryService.subcategories.then(res => {
       this.subcategories = res;
       this.alerts.subcategories.error = false;
@@ -80,7 +81,7 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  getCategories(){
+  getCategories() {
     this.categoryService.categories.then(res => {
       this.categoriesArray = res;
       this.categoriesArray.forEach(c => {
@@ -97,7 +98,7 @@ export class CategoriesComponent implements OnInit {
 
   uploadCategory() {
     this.alerts.addCategory.loading = true;
-    this.categoryService.addCategory(this.newCategory).then( res => {
+    this.categoryService.addCategory(this.newCategory).then(res => {
       this.categoriesArray.push(res);
       this.categories.set(res.id, res);
       this.alerts.addCategory.loading = false;
@@ -115,7 +116,7 @@ export class CategoriesComponent implements OnInit {
   uploadSubcategory() {
     this.alerts.addCategory.loading = true;
     this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
-    this.subcategoryService.addSubcategory(this.newSubcategory).then( res => {
+    this.subcategoryService.addSubcategory(this.newSubcategory).then(res => {
       this.subcategories.push(res);
       this.alerts.addCategory.loading = false;
       this.alerts.addCategory.error = false;
@@ -126,17 +127,57 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
+  deleteCategory(idCategory: number) {
+    for (let i = 0; i < this.subcategories.length; i++) {
+      if (this.subcategories[i].categoryId == idCategory) {
+        this.removeArrayElement(this.subcategories, i)
+      }
+    }
+    this.categories.delete(idCategory);
+    for (let i = 0; i < this.categoriesArray.length; i++) {
+      if (this.categoriesArray[i].id == idCategory) {
+        this.removeArrayElement(this.categoriesArray, i);
+      }
+    }
+    this.categoryService.deleteCategory(idCategory)
+
+  }
+
+  deleteSubCategory(idSubcategory) {
+    for (let i = 0; i < this.subcategories.length; i++) {
+      if (this.subcategories[i].id == idSubcategory) {
+        this.removeArrayElement(this.subcategories, i)
+      }
+    }
+    this.subcategoryService.deleteSubcategory(idSubcategory)
+  }
+
   private createCategoryFormControls() {
     this.categoryFormGroup = this.fb.group({
       name: ['', Validators.required],
     })
   }
+
   private createSubcategoryFormControls() {
     this.subcategoryFormGroup = this.fb.group({
       name: ['', Validators.required],
       categoryId: [Number, Validators.required],
     })
   }
+
+  private removeArrayElement<T>(array: T[], index: number) {
+    // const index = array.indexOf(key, 0);
+    // if (index > -1) {
+    //   array.splice(index, 1);
+    // }
+    if (index < 0 || index > array.length - 1) return;
+    let i = index;
+    while (i < array.length - 1) {
+      array[i] = array[i + 1]
+
+    }
+  }
+
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
