@@ -24,6 +24,7 @@ import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ReactiveFormsModule,
     HttpModule,
     ModalModule.forRoot(),
+    NgxPaginationModule
   ],
   providers : [
     CookieService,

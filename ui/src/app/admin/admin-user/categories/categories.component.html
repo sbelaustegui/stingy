@@ -21,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let category of categoriesArray; let i=index">
+        <tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">
           <th scope="row">{{category.id}}</th>
           <td>{{category.name}}</td>
           <td>
@@ -33,7 +33,7 @@
           </td>
           <td>
             <div class="remove-button">
-            <button type="submit" class="btn btn-danger" (ngSubmit)="openCategoryModal(deleteModal, category)">
+            <button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">
               <i class="fa fa-trash"></i>
             </button>
           </div>
@@ -41,6 +41,13 @@
         </tr>
         </tbody>
       </table>
+      <pagination-controls id="categories"
+                           class="paginator"
+                           (pageChange)="categoriesPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
     </div>
     <!--SUB-CATEGORY TABLE-->
     <div class="col-12">
@@ -49,7 +56,7 @@
           <h2>SubCategorias</h2>
         </div>
         <div class="add-button col-4">
-          <button type="button" class="btn btn-light" (click)="openSubcategoryModal(newSubcategoryModal)">
+          <button type="button" class="btn btn-light" (click)="openSubcategoryModal(newSubcategoryModal, -1)">
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
@@ -64,20 +71,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let subcategory of subcategories; let i=index">
+        <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'subcategories' }); let i=index">
           <th scope="row">{{subcategory.id}}</th>
           <td>{{subcategory.name}}</td>
           <td>{{categories.get(subcategory.categoryId).name}}</td>
           <td>
             <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, subcategory)">
+              <button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">
                 <i class="fa fa-pencil"></i>
               </button>
             </div>
           </td>
           <td>
             <div class="remove-button">
-              <button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory)">
+              <button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">
                 <i class="fa fa-trash"></i>
               </button>
             </div>
@@ -85,6 +92,13 @@
         </tr>
         </tbody>
       </table>
+      <pagination-controls id="subcategories"
+                           class="paginator"
+                           (pageChange)="subcategoriesPage = $event"
+                          autoHide="true"
+                          previousLabel="Anterior"
+                          nextLabel="Siguiente">
+      </pagination-controls>
     </div>
 
     <!--New category Modal-->
@@ -99,13 +113,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="categoryFormGroup" (ngSubmit)="uploadCategory()">
+        <form [formGroup]="categoryFormGroup">
           <fieldset>
             <div class="form-group">
               <input type="text"
                      class="form-control"
                      formControlName="name"
-                     [formGroup]=""
+                     [formGroup]="categoryFormGroup"
                      placeholder="Nombre"
                      aria-label="Name"
                      aria-describedby="basic-addon1"
@@ -117,8 +131,10 @@
               </div>
             </div>
           </fieldset>
-          <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}" (click)="uploadCategory()">Guardar</button>
       </div>
     </ng-template>
 
@@ -134,13 +150,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="subcategoryFormGroup" (ngSubmit)="uploadSubcategory()">
+        <form [formGroup]="subcategoryFormGroup">
           <fieldset>
             <div class="form-group">
               <input type="text"
                      class="form-control"
                      formControlName="name"
-                     [formGroup]=""
+                     [formGroup]="subcategoryFormGroup"
                      placeholder="Nombre"
                      aria-label="Name"
                      aria-describedby="basic-addon1"
@@ -158,10 +174,9 @@
                 class="form-control"
                 formControlName="categoryId"
                 [(ngModel)]="newSubcategory.categoryId"
-                placeholder="Categoría"
                 [formGroup]="subcategoryFormGroup"
                 required>
-                <option [value]="" disabled selected>Seleccione una opción</option>
+                <option [value]="undefined" selected>Seleccione una opción</option>
                 <option *ngFor="let category of categoriesArray" [value]="category.id">{{category.name}}</option>
               </select>
               <div class="form-control-feedback"
@@ -170,28 +185,30 @@
               </div>
             </div>
           </fieldset>
-          <button type="submit" class="btn btn-light">Agregar</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': subcategoryFormGroup.invalid}" (click)="uploadSubcategory()">Guardar</button>
       </div>
     </ng-template>
 
     <!--Delete confirmation modal-->
     <ng-template #deleteModal>
-      <div class="modal-header">
+      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
         <h4 class="modal-title pull-left">Eliminar
           <span *ngIf="categoryToDelete">Categoria {{categoryToDelete.name}}</span>
           <span *ngIf="subcategoryToDelete">Subcategoria {{subcategoryToDelete.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ¿Está seguro que desea eliminar la <span *ngIf="categoryToDelete">categoría</span> <span *ngIf="subcategoryToDelete">subcategoría</span>?
+        ¿Está seguro que desea eliminar la <span *ngIf="categoryToDelete">categoría</span><span *ngIf="subcategoryToDelete">subcategoría</span>?
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-danger" (click)="this.deleteSubCategory()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal()">Cancelar</button>
+        <button type="submit" class="btn btn-danger" (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
       </div>
     </ng-template>
 

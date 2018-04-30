@@ -5,3 +5,7 @@
   margin-left: 5px;
   float: left!important;
 }
+
+.disabled{
+  pointer-events: none;
+}

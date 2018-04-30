@@ -8,6 +8,7 @@ import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {PageChangedEvent} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-categories',
@@ -21,14 +22,21 @@ export class CategoriesComponent implements OnInit {
   public subcategoryFormGroup: FormGroup;
   public newCategory: Category;
   public categoryToDelete: Category;
+  public categoryIndexToDelete: number;
   public subcategoryToDelete: Subcategory;
+  public subcategoryIndexToDelete: number;
+  public subcategoryIndexUpdate: number;
   public categories: Map<number, Category>;
   public categoriesArray: Category[];
   public subcategories: Subcategory[];
+  public categoriesPage: number = 1;
+  public subcategoriesPage: number = 1;
   public alerts: {
     categories: {
       error: boolean,
       loading: boolean,
+      deleting: boolean,
+      deletingError: boolean,
     },
     addCategory: {
       error: boolean,
@@ -55,6 +63,8 @@ export class CategoriesComponent implements OnInit {
       categories: {
         error: false,
         loading: true,
+        deleting: false,
+        deletingError: false,
       },
       addCategory: {
         error: false,
@@ -108,6 +118,7 @@ export class CategoriesComponent implements OnInit {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
+        this.categoryFormGroup.reset();
         this.modalRef.hide();
         //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
       }).catch(() => {
@@ -122,6 +133,7 @@ export class CategoriesComponent implements OnInit {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
+        this.categoryFormGroup.reset();
         this.modalRef.hide();
         //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
         // this.router.navigate(['categories']);
@@ -135,11 +147,14 @@ export class CategoriesComponent implements OnInit {
 
   uploadSubcategory() {
     this.alerts.addCategory.loading = true;
-    if(this.newCategory.id) {
+    if(this.newSubcategory.id) {
+      this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
       this.subcategoryService.updateSubcategory(this.newSubcategory).then(res => {
+        this.subcategories[this.subcategoryIndexUpdate] = res;
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newSubcategory = Subcategory.empty();
+        this.subcategoryFormGroup.reset();
         this.modalRef.hide();
       }).catch(() => {
         this.alerts.addCategory.loading = false;
@@ -152,6 +167,7 @@ export class CategoriesComponent implements OnInit {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newSubcategory = Subcategory.empty();
+        this.subcategoryFormGroup.reset();
         this.modalRef.hide();
       }).catch(() => {
         this.alerts.addCategory.loading = false;
@@ -160,22 +176,25 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  deleteCategory(category: Category, index) {
-    for (let i = 0; i < this.subcategories.length; i++) {
-      if (this.subcategories[i].categoryId == category.id) {
-        this.deleteSubCategory(this.subcategories[i],i)
-      }
-    }
-    this.categories.delete(category.id);
-    this.categoriesArray.slice(index,1);
-    this.categoryService.deleteCategory(category.id)
-
+  deleteCategory() {
+    this.alerts.categories.deleting = true;
+    this.categoryService.deleteCategory(this.categoryToDelete.id).then(res => {
+      this.categoriesArray.splice(this.categoryIndexToDelete,1);
+      this.categories.delete(this.categoryToDelete.id);
+      //TODO mostrar mensajes de error/success/ y loader
+      this.alerts.categories.deleting = false;
+      this.alerts.categories.deletingError = false;
+      this.modalRef.hide();
+    }).catch(() => {
+      this.alerts.categories.deleting = false;
+      this.alerts.categories.deletingError = true;
+    })
   }
 
-  deleteSubCategory(subCategory: Subcategory, index) {
+  deleteSubCategory() {
     this.alerts.subcategories.deleting = true;
-    this.subcategoryService.deleteSubcategory(subCategory.id).then(res => {
-      this.subcategories = this.subcategories.slice(index-1);
+    this.subcategoryService.deleteSubcategory(this.subcategoryToDelete.id).then(res => {
+      this.subcategories.splice(this.subcategoryIndexToDelete,1);
       //TODO mostrar mensajes de error/success/ y loader
       this.alerts.subcategories.deleting = false;
       this.alerts.subcategories.deletingError = false;
@@ -204,24 +223,30 @@ export class CategoriesComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  openSubcategoryModal(template: TemplateRef<any>, subcategory?) {
-    if(subcategory) this.newSubcategory = subcategory;
+  openSubcategoryModal(template: TemplateRef<any>, i, subcategory?) {
+    if(subcategory) this.newSubcategory = Object.assign({}, subcategory);
+    this.subcategoryIndexUpdate = i;
     this.modalRef = this.modalService.show(template);
   }
 
   openCategoryDeleteModal(template: TemplateRef<any>, category, i) {
+    this.subcategoryToDelete = undefined;
     this.categoryToDelete = category;
-    this.deleteCategory(category, i);
+    this.categoryIndexToDelete = i;
     this.modalRef = this.modalService.show(template);
   }
 
-  openSubcategoryDeleteModal(template: TemplateRef<any>, subcategory) {
-    this.categoryToDelete = subcategory;
+  openSubcategoryDeleteModal(template: TemplateRef<any>, subcategory, i) {
+    this.categoryToDelete = undefined;
+    this.subcategoryToDelete = subcategory;
+    this.subcategoryIndexToDelete = i;
     this.modalRef = this.modalService.show(template);
   }
 
   resetDeleteModal(){
     this.categoryToDelete = undefined;
+    this.categoryIndexToDelete = -1;
+    this.subcategoryIndexToDelete = -1;
     this.subcategoryToDelete = undefined;
   }
 

@@ -38,5 +38,29 @@
         }
       }
     }
+    .paginator /deep/ .ngx-pagination {
+      text-align: center;
+      li{
+        color: white;
+        &.current{
+          background-color: white;
+          color: black;
+        }
+        & :hover(:not(.disabled)){
+          background-color: white;
+          color: black;
+        }
+        &.disabled{
+          cursor: not-allowed;
+        }
+        a{
+          color: white;
+          & :hover{
+            background-color: white;
+            color: black;
+          }
+        }
+      }
+    }
   }
 }
