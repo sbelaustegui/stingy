@@ -127,29 +127,21 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  deleteCategory(idCategory: number) {
+  deleteCategory(category: Category, index) {
     for (let i = 0; i < this.subcategories.length; i++) {
-      if (this.subcategories[i].categoryId == idCategory) {
-        this.removeArrayElement(this.subcategories, i)
+      if (this.subcategories[i].categoryId == category.id) {
+        this.deleteSubCategory(this.subcategories[i],i)
       }
     }
-    this.categories.delete(idCategory);
-    for (let i = 0; i < this.categoriesArray.length; i++) {
-      if (this.categoriesArray[i].id == idCategory) {
-        this.removeArrayElement(this.categoriesArray, i);
-      }
-    }
-    this.categoryService.deleteCategory(idCategory)
+    this.categories.delete(category.id)
+    this.categoriesArray.slice(index,1);
+    this.categoryService.deleteCategory(category.id)
 
   }
 
-  deleteSubCategory(idSubcategory) {
-    for (let i = 0; i < this.subcategories.length; i++) {
-      if (this.subcategories[i].id == idSubcategory) {
-        this.removeArrayElement(this.subcategories, i)
-      }
-    }
-    this.subcategoryService.deleteSubcategory(idSubcategory)
+  deleteSubCategory(subCategory: Subcategory, index) {
+    this.subcategories.slice(index); //remove element from array by index
+    this.subcategoryService.deleteSubcategory(subCategory.id)
   }
 
   private createCategoryFormControls() {
@@ -164,20 +156,6 @@ export class CategoriesComponent implements OnInit {
       categoryId: [Number, Validators.required],
     })
   }
-
-  private removeArrayElement<T>(array: T[], index: number) {
-    // const index = array.indexOf(key, 0);
-    // if (index > -1) {
-    //   array.splice(index, 1);
-    // }
-    if (index < 0 || index > array.length - 1) return;
-    let i = index;
-    while (i < array.length - 1) {
-      array[i] = array[i + 1]
-
-    }
-  }
-
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);

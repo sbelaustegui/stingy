@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let category of categoriesArray">
+        <tr *ngFor="let category of categoriesArray; let i=index">
           <th scope="row">{{category.id}}</th>
           <td>{{category.name}}</td>
           <td>
@@ -27,7 +27,7 @@
           </td>
           <td>
             <div class="remove-button">
-            <button type="submit" class="btn btn-danger" (ngSubmit)="deleteCategory(category.id)">
+            <button type="submit" class="btn btn-danger" (ngSubmit)="deleteCategory(category,i)">
               <i class="fa fa-remove" aria-hidden="true"></i></button>
           </div>
           </td>
@@ -51,7 +51,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let subcategory of subcategories">
+        <tr *ngFor="let subcategory of subcategories; let i=index">
           <th scope="row">{{subcategory.id}}</th>
           <td>{{categories.get(subcategory.categoryId).name}}</td>
           <td>{{subcategory.name}}</td>
@@ -63,7 +63,7 @@
           </td>
           <td>
             <div class="remove-button">
-              <button type="submit" class="btn btn-danger" (ngSubmit)="deleteSubCategory(subcategory.id)">
+              <button  type="submit" class="btn btn-danger" (click)=[deleteSubCategory(subcategory,i)]>
                 <i class="fa fa-remove" aria-hidden="true"></i></button>
             </div>
           </td>
@@ -149,8 +149,7 @@
               </div>
             </div>
           </fieldset>
-          <!--TODO agregar algun boton de añadir-->
-          <button type="submit" class="btn btn-primary">Agregar</button>
+          <button type="submit" class="btn btn-light">Agregar</button>
         </form>
       </div>
     </ng-template>
