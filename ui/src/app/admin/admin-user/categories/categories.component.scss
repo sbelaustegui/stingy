@@ -1,11 +1,14 @@
 .admin-categories {
+  padding-right: 50px;
+  padding-left: 50px;
   .row {
-    padding-top: 5%;
+    padding-top: 2%;
     background-color: #8BC4FF;
     .add-button {
+      text-align: right;
       button {
-        background-color: #58bee0;
-        color: white;
+        background-color: white;
+        color: black;
       }
     }
     h2 {
@@ -16,13 +19,23 @@
       //align-items: center;
     }
     table {
+      text-align: center;
       background-color: white;
-      .upload-button {
-        button {
-          background-color: #00c409;
-          color: white;
+      tr{
+        th{
+          vertical-align: middle;
         }
-
+        td{
+          vertical-align: middle;
+          .upload-button, .remove-button{
+            button {
+              font-size: 26px;
+              background-color: transparent;
+              color: black;
+              border: none;
+            }
+          }
+        }
       }
     }
   }

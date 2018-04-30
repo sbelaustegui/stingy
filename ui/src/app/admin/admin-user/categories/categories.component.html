@@ -1,18 +1,23 @@
 <div class="admin-categories">
   <div class="row">
     <!--CATEGORY TABLE-->
-    <div class="col-md-4 offset-md-2 col">
-      <div class="add-button">
-        <button type="button" class="btn btn-light" (click)="openModal(newCategoryModal)">
-          <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-8">
+          <h2>Categorias</h2>
+        </div>
+        <div class="add-button col-4">
+          <button type="button" class="btn btn-light" (click)="openModal(newCategoryModal)">
+            <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
       </div>
-      <h2>Categorias</h2>
-
-      <table class="table" *ngIf="!alerts.categories.loading">
+      <table class="table table-striped" *ngIf="!alerts.categories.loading">
         <thead>
         <tr>
-          <th scope="col">ID</th>
+          <th scope="col">Id</th>
           <th scope="col">Nombre</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
         </tr>
         </thead>
         <tbody>
@@ -21,14 +26,16 @@
           <td>{{category.name}}</td>
           <td>
             <div class="upload-button">
-            <button type="button" class="btn btn-light"  (click)="openModal(newCategoryModal)">
-              <i class="fa fa-upload" aria-hidden="true"></i></button>
+              <button type="button" class="btn btn-light"  (click)="openModal(newCategoryModal)">
+                <i class="fa fa-pencil"></i>
+              </button>
             </div>
           </td>
           <td>
             <div class="remove-button">
             <button type="submit" class="btn btn-danger" (ngSubmit)="deleteCategory(category,i)">
-              <i class="fa fa-remove" aria-hidden="true"></i></button>
+              <i class="fa fa-trash"></i>
+            </button>
           </div>
           </td>
         </tr>
@@ -36,18 +43,24 @@
       </table>
     </div>
     <!--SUB-CATEGORY TABLE-->
-    <div class="col-md-4 col">
-      <div class="add-button">
-        <button type="button" class="btn btn-light" (click)="openModal(newSubcategoryModal)">
-          <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-8">
+          <h2>SubCategorias</h2>
+        </div>
+        <div class="add-button col-4">
+          <button type="button" class="btn btn-light" (click)="openModal(newSubcategoryModal)">
+            <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
       </div>
-      <h2>SubCategorias</h2>
-      <table class="table" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
+      <table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
         <thead>
         <tr>
-          <th scope="col">ID</th>
+          <th scope="col">Id</th>
           <th scope="col">Categoria</th>
           <th scope="col">Nombre</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
         </tr>
         </thead>
         <tbody>
@@ -58,13 +71,15 @@
           <td>
             <div class="upload-button">
               <button type="button" class="btn btn-light"  (click)="openModal(newSubcategoryModal)">
-                <i class="fa fa-upload" aria-hidden="true"></i></button>
+                <i class="fa fa-pencil"></i>
+              </button>
             </div>
           </td>
           <td>
             <div class="remove-button">
               <button  type="submit" class="btn btn-danger" (click)=[deleteSubCategory(subcategory,i)]>
-                <i class="fa fa-remove" aria-hidden="true"></i></button>
+                <i class="fa fa-trash"></i>
+              </button>
             </div>
           </td>
         </tr>
