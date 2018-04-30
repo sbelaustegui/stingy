@@ -8,7 +8,6 @@ import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-categories',
@@ -21,6 +20,8 @@ export class CategoriesComponent implements OnInit {
   public categoryFormGroup: FormGroup;
   public subcategoryFormGroup: FormGroup;
   public newCategory: Category;
+  public categoryToDelete: Category;
+  public subcategoryToDelete: Subcategory;
   public categories: Map<number, Category>;
   public categoriesArray: Category[];
   public subcategories: Subcategory[];
@@ -36,6 +37,8 @@ export class CategoriesComponent implements OnInit {
     subcategories: {
       error: boolean,
       loading: boolean,
+      deleting: boolean,
+      deletingError: boolean,
     },
   };
   public newSubcategory: Subcategory;
@@ -60,6 +63,8 @@ export class CategoriesComponent implements OnInit {
       subcategories: {
         error: false,
         loading: true,
+        deleting: false,
+        deletingError: false
       },
     };
     this.categories = new Map<number, Category>();
@@ -98,33 +103,61 @@ export class CategoriesComponent implements OnInit {
 
   uploadCategory() {
     this.alerts.addCategory.loading = true;
-    this.categoryService.addCategory(this.newCategory).then(res => {
-      this.categoriesArray.push(res);
-      this.categories.set(res.id, res);
-      this.alerts.addCategory.loading = false;
-      this.alerts.addCategory.error = false;
-      this.newCategory = Category.empty();
-      //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
-      // this.router.navigate(['categories']);
-    }).catch(() => {
-      //TODO mostrar en el front mensaje de error
-      this.alerts.addCategory.loading = false;
-      this.alerts.addCategory.error = true;
-    })
+    if(this.newCategory.id) {
+      this.categoryService.updateCategory(this.newCategory).then(res => {
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = false;
+        this.newCategory = Category.empty();
+        this.modalRef.hide();
+        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+      }).catch(() => {
+        //TODO mostrar en el front mensaje de error
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = true;
+      })
+    } else {
+      this.categoryService.addCategory(this.newCategory).then(res => {
+        this.categoriesArray.push(res);
+        this.categories.set(res.id, res);
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = false;
+        this.newCategory = Category.empty();
+        this.modalRef.hide();
+        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+        // this.router.navigate(['categories']);
+      }).catch(() => {
+        //TODO mostrar en el front mensaje de error
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = true;
+      })
+    }
   }
 
   uploadSubcategory() {
     this.alerts.addCategory.loading = true;
-    this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
-    this.subcategoryService.addSubcategory(this.newSubcategory).then(res => {
-      this.subcategories.push(res);
-      this.alerts.addCategory.loading = false;
-      this.alerts.addCategory.error = false;
-      this.newSubcategory = Subcategory.empty();
-    }).catch(() => {
-      this.alerts.addCategory.loading = false;
-      this.alerts.addCategory.error = true;
-    })
+    if(this.newCategory.id) {
+      this.subcategoryService.updateSubcategory(this.newSubcategory).then(res => {
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = false;
+        this.newSubcategory = Subcategory.empty();
+        this.modalRef.hide();
+      }).catch(() => {
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = true;
+      })
+    } else {
+      this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
+      this.subcategoryService.addSubcategory(this.newSubcategory).then(res => {
+        this.subcategories.push(res);
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = false;
+        this.newSubcategory = Subcategory.empty();
+        this.modalRef.hide();
+      }).catch(() => {
+        this.alerts.addCategory.loading = false;
+        this.alerts.addCategory.error = true;
+      })
+    }
   }
 
   deleteCategory(category: Category, index) {
@@ -133,15 +166,24 @@ export class CategoriesComponent implements OnInit {
         this.deleteSubCategory(this.subcategories[i],i)
       }
     }
-    this.categories.delete(category.id)
+    this.categories.delete(category.id);
     this.categoriesArray.slice(index,1);
     this.categoryService.deleteCategory(category.id)
 
   }
 
   deleteSubCategory(subCategory: Subcategory, index) {
-    this.subcategories.slice(index); //remove element from array by index
-    this.subcategoryService.deleteSubcategory(subCategory.id)
+    this.alerts.subcategories.deleting = true;
+    this.subcategoryService.deleteSubcategory(subCategory.id).then(res => {
+      this.subcategories = this.subcategories.slice(index-1);
+      //TODO mostrar mensajes de error/success/ y loader
+      this.alerts.subcategories.deleting = false;
+      this.alerts.subcategories.deletingError = false;
+      this.modalRef.hide();
+    }).catch(() => {
+      this.alerts.subcategories.deleting = false;
+      this.alerts.subcategories.deletingError = true;
+    })
   }
 
   private createCategoryFormControls() {
@@ -157,8 +199,30 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  openModal(template: TemplateRef<any>) {
+  openCategoryModal(template: TemplateRef<any>, category?) {
+    if(category) this.newCategory = category;
     this.modalRef = this.modalService.show(template);
+  }
+
+  openSubcategoryModal(template: TemplateRef<any>, subcategory?) {
+    if(subcategory) this.newSubcategory = subcategory;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openCategoryDeleteModal(template: TemplateRef<any>, category, i) {
+    this.categoryToDelete = category;
+    this.deleteCategory(category, i);
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openSubcategoryDeleteModal(template: TemplateRef<any>, subcategory) {
+    this.categoryToDelete = subcategory;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetDeleteModal(){
+    this.categoryToDelete = undefined;
+    this.subcategoryToDelete = undefined;
   }
 
 }
