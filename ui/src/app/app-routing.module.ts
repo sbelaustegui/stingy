@@ -11,7 +11,6 @@ import {AdminComponent} from "./admin/admin.component";
 import {AdminLoginComponent} from "./admin/login/login.component";
 import {ReverseAdminAuthGuard} from "./shared/auth/admin/reverse-admin-auth-guard.service";
 import {AdminAuthGuard} from "./shared/auth/admin/admin-auth-guard.service";
-import {AdminProductComponent} from "./admin/admin-user/products/products.component";
 import {ProfileComponent} from "./user/profile/profile.component";
 import {CartComponent} from "./user/cart/cart.component";
 import {UploadProductComponent} from "./user/upload-product/upload-product.component";
@@ -19,6 +18,7 @@ import {CategoriesComponent} from "./admin/admin-user/categories/categories.comp
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
+import {ProductsComponent} from "./admin/admin-user/products/products.component";
 
 const routes: Routes =[
   {
@@ -38,13 +38,15 @@ const routes: Routes =[
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
-          {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
+          {path: 'login',                                                 component: AdminLoginComponent},
+          // {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
+          {path: 'admin-user',                           component: AdminUserComponent,
+          // {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
             children: [
-              {path: 'products',                                      component: AdminProductComponent},
               {path: 'categories',                                    component: CategoriesComponent},
               {path: 'users',                                         component: AdminsComponent},
-              {path: 'profile',                                       component: AdminProfileComponent},
+              {path: 'admin-profile',                                       component: AdminProfileComponent},
+              {path: 'products',                                      component: ProductsComponent},
             ]
           }
         ]

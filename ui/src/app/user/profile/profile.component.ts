@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../../shared/validators/equal-validator.directive";
@@ -6,6 +6,8 @@ import {UserService} from "../../shared/services/user.service";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {UserAuthService} from "../../shared/auth/user/user-auth.service";
+import {BsModalService} from "ngx-bootstrap/modal";
+import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 
 @Component({
   selector: 'app-profile',
@@ -27,9 +29,17 @@ export class ProfileComponent implements OnInit {
       loading: boolean,
       error: boolean,
     }
-  };
+    delete:{
+      loading: boolean;
+      error: boolean;
+      success: boolean;
 
-  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService) {}
+    }
+  };
+  modalRef: BsModalRef;
+
+
+  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService, private modalService: BsModalService) {}
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');
@@ -43,6 +53,12 @@ export class ProfileComponent implements OnInit {
       getting: {
         loading: true,
           error: false,
+      },
+      delete:{
+        loading: false,
+        error: false,
+        success: false,
+
       }
     };
     this.createFormControls();
@@ -92,5 +108,30 @@ export class ProfileComponent implements OnInit {
       validator: Validators.compose([PasswordValidation.MatchPassword, EmailValidation.MatchEmail])
     })
   }
+
+  deleteUser(){
+    this.alerts.delete.success = true;
+    this.userService.deleteUser(this.user.id)
+    if(this.authService.isLoggedIn && this.alerts.delete.success) {
+      this.alerts.delete.success= false;
+      this.alerts.delete.loading = false;
+      this.authService.logout().then(() => {
+        this.router.navigate(['login']);
+      })
+    }
+
+  }
+
+  openDeleteModal(template: TemplateRef<any>) {
+    this.alerts.delete.loading = true;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetDeleteModal(){
+    this.alerts.delete.success = false;
+    this.alerts.delete.loading = false;
+  }
+
+
 
 }

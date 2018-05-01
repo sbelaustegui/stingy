@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../../../shared/validators/equal-validator.directive";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
-import {AdminService} from "../../../shared/services/admin.service";
+import {UserService} from "../../../shared/services/user.service";
+import {UserAuthService} from "../../../shared/auth/user/user-auth.service";
+import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
+import {BsModalService} from "ngx-bootstrap/modal";
 
 @Component({
   selector: 'app-admin-profile',
-  templateUrl: 'admin-profile.component.html',
-  styleUrls: ['admin-profile.component.scss'],
-  providers: [AdminService]
+  templateUrl: './admin-profile.component.html',
+  styleUrls: ['./admin-profile.component.scss'],
+  providers: [UserService]
 })
 export class AdminProfileComponent implements OnInit {
 
@@ -27,9 +30,17 @@ export class AdminProfileComponent implements OnInit {
       loading: boolean,
       error: boolean,
     }
-  };
+    delete:{
+      loading: boolean;
+      error: boolean;
+      success: boolean;
 
-  constructor(public fb: FormBuilder, public adminService: AdminService, public router: Router, private titleService: Title, public adminAuthService: AdminAuthService) {}
+    }
+  };
+  modalRef: BsModalRef;
+
+
+  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: AdminAuthService, private modalService: BsModalService) {}
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');
@@ -43,6 +54,12 @@ export class AdminProfileComponent implements OnInit {
       getting: {
         loading: true,
         error: false,
+      },
+      delete:{
+        loading: false,
+        error: false,
+        success: false,
+
       }
     };
     this.createFormControls();
@@ -50,8 +67,8 @@ export class AdminProfileComponent implements OnInit {
   }
 
   getUser(){
-    this.adminAuthService.loggedUser.then(res => {
-      this.adminService.getUserById(res.id).then(user => {
+    this.authService.loggedUser.then(res => {
+      this.userService.getUserById(res.id).then(user => {
         this.user = user;
         this.user.password = '';
         this.alerts.getting.loading = false;
@@ -66,7 +83,7 @@ export class AdminProfileComponent implements OnInit {
 
   updateUser() {
     this.alerts.updating.loading = true;
-    this.adminService.updateUser(this.user).then( () => {
+    this.userService.updateUser(this.user).then( () => {
       this.alerts.updating.loading = false;
       this.alerts.updating.error = false;
       this.alerts.updating.success = true;
@@ -92,5 +109,29 @@ export class AdminProfileComponent implements OnInit {
       validator: Validators.compose([PasswordValidation.MatchPassword, EmailValidation.MatchEmail])
     })
   }
+
+  deleteUser(){
+    this.alerts.delete.success = true;
+    this.userService.deleteUser(this.user.id)
+    if(this.authService.isLoggedIn && this.alerts.delete.success) {
+      this.alerts.delete.success= false;
+      this.alerts.delete.loading = false;
+      this.authService.logout().then(() => {
+        this.router.navigate(['login']);
+      })
+    }
+
+  }
+
+  openDeleteModal(template: TemplateRef<any>) {
+    this.alerts.delete.loading = true;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetDeleteModal(){
+    this.alerts.delete.success = false;
+    this.alerts.delete.loading = false;
+  }
+
 
 }

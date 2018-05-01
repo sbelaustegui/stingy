@@ -1,7 +1,7 @@
 <div class="admin-categories">
   <div class="row">
     <!--CATEGORY TABLE-->
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <div class="row">
         <div class="col-8">
           <h2>Categorias</h2>
@@ -50,7 +50,7 @@
       </pagination-controls>
     </div>
     <!--SUB-CATEGORY TABLE-->
-    <div class="col-12">
+    <div class="col-12 col-md-6">
       <div class="row">
         <div class="col-8">
           <h2>SubCategorias</h2>
@@ -71,7 +71,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'subcategories' }); let i=index">
+        <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">
           <th scope="row">{{subcategory.id}}</th>
           <td>{{subcategory.name}}</td>
           <td>{{categories.get(subcategory.categoryId).name}}</td>
@@ -135,6 +135,13 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}" (click)="uploadCategory()">Guardar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.categories.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
+          </blockquote>
+        </div>
       </div>
     </ng-template>
 
@@ -209,6 +216,13 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.categories.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar al Eliminar Categoria.</p>
+          </blockquote>
+        </div>
       </div>
     </ng-template>
 

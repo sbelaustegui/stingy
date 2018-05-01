@@ -1,3 +1,263 @@
-<p>
-  upload-product works!
-</p>
+<div class="upload-product">
+  <form class="new-user-form" [formGroup]="formGroup" (ngSubmit)="uploadProduct()">
+    <div class="row">
+      <div class="col-md-4 offset-md-2 align-content-end">
+        <h3 class="text" align="center">Complete sus datos:</h3>
+        <!--INPUT NAME-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="name"
+                   [formGroup]="formGroup"
+                   placeholder="Nombre"
+                   aria-label="Name"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newProduct.name"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['name'].errors && (formGroup.controls['name'].dirty || formGroup.controls['name'].touched)">
+              <p class="error" *ngIf="formGroup.controls['name'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT PRICE-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="price"
+                   [formGroup]="formGroup"
+                   placeholder="Precio"
+                   aria-label="Price"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newProduct.price"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['price'].errors && (formGroup.controls['price'].dirty || formGroup.controls['price'].touched)">
+              <p class="error" *ngIf="formGroup.controls['price'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT DESCRIPTION-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="description"
+                   [formGroup]="formGroup"
+                   placeholder="Descripción"
+                   aria-label="Description"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newProduct.description"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['description'].errors && (formGroup.controls['description'].dirty || formGroup.controls['description'].touched)">
+              <p class="error" *ngIf="formGroup.controls['description'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-4">
+        <!--INPUT UPLOAD DATE-->
+        <fieldset>
+          <div class="form-group">
+            <input data-date-format="mm/dd/yyyy"
+                   class="bs-datepicker-buttons form-control"
+                   formControlName="uploadDate"
+                   [formGroup]="formGroup"
+                   placeholder="Fecha"
+                   aria-label="UploadDate"
+                   aria-describedby="basic-addon2"
+                   [(ngModel)]="newProduct.uploadDate"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['uploadDate'].errors && (formGroup.controls['uploadDate'].dirty || formGroup.controls['uploadDate'].touched)">
+              <p class="error" *ngIf="formGroup.controls['uploadDate'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['uploadDate'].errors.uploadDate">UploadDate Inválido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED UploadDate-->
+        <fieldset>
+          <div class="form-group">
+
+            <input class="datepicker" data-date-format="mm/dd/yyyy">
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['confirmUploadDate'].errors && (formGroup.controls['confirmUploadDate'].dirty || formGroup.controls['confirmUploadDate'].touched)">
+              <p class="error" *ngIf="formGroup.controls['confirmUploadDate'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="password"
+                   [formGroup]="formGroup"
+                   placeholder="Contraseña"
+                   aria-label="Password"
+                   aria-describedby="basic-addon4"
+                   [(ngModel)]="newProduct.password"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['password'].errors && (formGroup.controls['password'].dirty || formGroup.controls['password'].touched)">
+              <p class="error" *ngIf="formGroup.controls['password'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['password'].errors.minlength">Minimo de 8 caracteres</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="confirmPassword"
+                   [formGroup]="formGroup"
+                   placeholder="Confirmar Contraseña"
+                   aria-label="Confirmed Password"
+                   aria-describedby="basic-addon5"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['confirmPassword'].errors && (formGroup.controls['confirmPassword'].dirty || formGroup.controls['confirmPassword'].touched)">
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8 caracteres</p>
+              <p class="error" *ngIf="formGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no
+                coinciden.</p>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="registerUserError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar el descripción. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+        <div class="row">
+          <div class="back-button col-4 col-md-6" align="right">
+            <button type="button" class="btn btn-light" id="back-button" (click)="goLogin()">VOLVER</button>
+          </div>
+          <div class="register-button col-8 col-md-6" align="center">
+            <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid">
+              <span *ngIf="!addingUser">REGISTRARME</span>
+              <span *ngIf="addingUser"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--<div class="upload-product">-->
+  <!--<div class="row">-->
+
+    <!--&lt;!&ndash;PRODUCTS TABLE&ndash;&gt;-->
+    <!--<div class="col-12">-->
+      <!--<div class="row">-->
+        <!--<div class="col-8">-->
+          <!--<h2>Productos</h2>-->
+        <!--</div>-->
+        <!--<div class="add-button col-4">-->
+          <!--<button type="button" class="btn btn-light" (click)="openProductModal(newProductModal)">-->
+            <!--<i class="fa fa-plus" aria-hidden="true"></i></button>-->
+        <!--</div>-->
+
+      <!--</div>-->
+      <!--<table class="table table-striped" *ngIf="!alerts.products.loading">-->
+        <!--<thead>-->
+        <!--<tr>-->
+          <!--<th scope="col">Id</th>-->
+          <!--<th scope="col">Nombre</th>-->
+          <!--<th scope="col">Imagen</th>-->
+          <!--<th scope="col">Description</th>-->
+          <!--<th scope="col">Precio</th>-->
+          <!--<th scope="col">Ultima Modificación</th>-->
+          <!--<th scope="col">Creación</th>-->
+          <!--<th scope="col">Modificar</th>-->
+
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr-->
+          <!--*ngFor="let product of (products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">-->
+          <!--<th scope="row">{{product.id}}</th>-->
+          <!--<td>{{product.id}}</td>-->
+          <!--<td>{{product.name}}</td>-->
+          <!--<td>{{product.imageUrl}}</td>-->
+          <!--<td>{{product.description}}</td>-->
+          <!--<td>{{product.price}}</td>-->
+          <!--<td>{{product.updateDate}}</td>-->
+          <!--<td>{{product.uploadDate}}</td>-->
+          <!--<td>-->
+            <!--<div class="upload-button">-->
+              <!--<button type="button" class="btn btn-light" (click)="openProductModal(newProduct, product)">-->
+                <!--<i class="fa fa-pencil"></i>-->
+              <!--</button>-->
+            <!--</div>-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+      <!--</table>-->
+      <!--<pagination-controls id="products"-->
+                           <!--class="paginator"-->
+                           <!--(pageChange)="productsPage = $event"-->
+                           <!--autoHide="true"-->
+                           <!--previousLabel="Anterior"-->
+                           <!--nextLabel="Siguiente">-->
+      <!--</pagination-controls>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;new Product Modal&ndash;&gt;-->
+    <!--<ng-template #newProductModal>-->
+      <!--<div class="modal-header">-->
+        <!--<h4 class="modal-title pull-left">-->
+          <!--<span *ngIf="!newProduct.id">Nueva categoría</span>-->
+          <!--<span *ngIf="newProduct.id">Editar categoría {{newProduct.name}}</span>-->
+        <!--</h4>-->
+        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+      <!--</div>-->
+      <!--<div class="modal-body">-->
+        <!--<form [formGroup]="productFormGroup">-->
+          <!--<fieldset>-->
+            <!--<div class="form-group">-->
+              <!--<input type="text"-->
+                     <!--class="form-control"-->
+                     <!--formControlName="name"-->
+                     <!--[formGroup]="productFormGroup"-->
+                     <!--placeholder="Nombre"-->
+                     <!--aria-label="Name"-->
+                     <!--aria-describedby="basic-addon1"-->
+                     <!--[(ngModel)]="newProduct.name"-->
+                     <!--required>-->
+              <!--<div class="form-control-feedback"-->
+                   <!--*ngIf="productFormGroup.controls['name'].errors && (productFormGroup.controls['name'].dirty || productFormGroup.controls['name'].touched)">-->
+                <!--<p class="error" *ngIf="productFormGroup.controls['name'].errors.required">Es requerido</p>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</fieldset>-->
+        <!--</form>-->
+      <!--</div>-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="submit" class="btn btn-primary" [ngClass]="{'disabled': productFormGroup.invalid}"-->
+                <!--(click)="uploadProduct()">Guardar-->
+        <!--</button>-->
+      <!--</div>-->
+      <!--<div class="alert alert-danger text-center" *ngIf="alerts.products.error">-->
+        <!--<div class="card-block">-->
+          <!--<blockquote class="card-blockquote">-->
+            <!--<p>Hubo un error al agregar una Producto. Revise que el nombre sea valido y no se encuentre repetido.</p>-->
+          <!--</blockquote>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</ng-template>-->
+
+
+  <!--</div>-->
+<!--</div>-->

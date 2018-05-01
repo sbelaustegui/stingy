@@ -11,5 +11,4 @@ export class AdminsComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

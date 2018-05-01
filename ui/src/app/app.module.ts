@@ -19,7 +19,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { CartComponent } from './user/cart/cart.component';
 import { UploadProductComponent } from './user/upload-product/upload-product.component';
 import { CategoriesComponent } from './admin/admin-user/categories/categories.component';
-import {AdminProductComponent} from "./admin/admin-user/products/products.component";
+import { ProductsComponent} from "./admin/admin-user/products/products.component";
 import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
@@ -42,7 +42,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     CategoriesComponent,
     AdminUserComponent,
     AdminsComponent,
-    AdminProfileComponent
+    AdminProfileComponent,
+    ProductsComponent,
   ],
   imports: [
     BrowserModule,

@@ -181,6 +181,7 @@ export class CategoriesComponent implements OnInit {
     this.categoryService.deleteCategory(this.categoryToDelete.id).then(res => {
       this.categoriesArray.splice(this.categoryIndexToDelete,1);
       this.categories.delete(this.categoryToDelete.id);
+      // this.deleteSubCategories();
       //TODO mostrar mensajes de error/success/ y loader
       this.alerts.categories.deleting = false;
       this.alerts.categories.deletingError = false;
@@ -250,4 +251,16 @@ export class CategoriesComponent implements OnInit {
     this.subcategoryToDelete = undefined;
   }
 
+  /**
+   * Private method to delete all products that match with the category deleted.
+   */
+  private deleteSubCategories() {
+    for (let i = 0; i < this.subcategories.length; i++) {
+      if(this.subcategories[i].id == this.categoryToDelete.id){
+        this.subcategoryIndexToDelete=i;
+        this.subcategoryToDelete=this.subcategories[i];
+        this.deleteSubCategory();
+      }
+    }
+  }
 }

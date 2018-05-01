@@ -1,82 +1,130 @@
-<div class="container">
+<div class="admin-products">
   <div class="row">
-    <div class="col-md-8">
-      <h1>{{title}}</h1>
-    </div>
-    <div class="col-md-4">
-      <div class="alert alert-success alert-dismissable" *ngIf="msg">
-        <a href="#" class="close" (click)="clickMe()">&times;</a>
-        {{msg}}
+    <!--PRODUCTS TABLE-->
+    <div class="col-12">
+      <div class="row">
+        <div class="col-8">
+          <h2>Productos</h2>
+        </div>
       </div>
+      <table class="table table-striped" *ngIf="!alerts.products.loading">
+        <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Imagen</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Ultima Modificación</th>
+          <th scope="col">Creación</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of (productsArray | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">
+          <th scope="row">{{product.id}}</th>
+          <td>{{product.id}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.imageUrl}}</td>
+          <td>{{product.description}}</td>
+          <td>{{product.price}}</td>
+          <td>{{product.updateDate}}</td>
+          <td>{{product.uploadDate}}</td>
+          <td>
+            <div class="upload-button">
+              <button type="button" class="btn btn-light"  (click)="openProductModal(validateProduct, product)">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="remove-button">
+              <button type="submit" class="btn btn-danger" (click)="openProductDeleteModal(deleteModal, product, i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="products"
+                           class="paginator"
+                           (pageChange)="productsPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
     </div>
+
+    <!--validate Product Modal-->
+    <ng-template #validateProduct>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          <span *ngIf="!newProduct.id">Nueva categoría</span>
+          <span *ngIf="newProduct.id">Editar categoría {{newProduct.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="productFormGroup">
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="name"
+                     [formGroup]="productFormGroup"
+                     placeholder="Nombre"
+                     aria-label="Name"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newProduct.name"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="productFormGroup.controls['name'].errors && (productFormGroup.controls['name'].dirty || productFormGroup.controls['name'].touched)">
+                <p class="error" *ngIf="productFormGroup.controls['name'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': productFormGroup.invalid}" (click)="uploadProduct()">Guardar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.products.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+    <!--Delete confirmation modal-->
+    <ng-template #deleteModal>
+      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
+        <h4 class="modal-title pull-left">Eliminar
+          <span *ngIf="productToDelete">Categoria {{productToDelete.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro que desea eliminar la <span *ngIf="productToDelete">categoría</span>?
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.products.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar al Eliminar Categoria.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
   </div>
-  <div class="clearfix"></div>
-  <hr>
-  <h2>Create data:</h2>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="name">Name:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="name"
-               name="name" [(ngModel)]="model.name" placeholder="Enter your name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="position">Position:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="position"
-               name="position" [(ngModel)]="model.position" placeholder="Enter your position">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-default" (click)="addEmployee()">Save</button>
-      </div>
-    </div>
-  </form>
-  <h2>Read data & (Delete data):</h2>
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th width=400>Name</th>
-      <th width=400>Position</th>
-      <th width=250>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let employee of employees; let i=index">
-      <td>{{employee.name}}</td>
-      <td>{{employee.position}}</td>
-      <td>
-        <a class="btn btn-success" (click)="editEmployee(i)">Edit</a>
-        <a class="btn btn-danger" (click)="deleteEmployee(i)">Delete</a>
-      </td>
-    </tr>
-
-    </tbody>
-  </table>
-  <h2>Update data:</h2>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="name">Name:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="name"
-               name="name" [(ngModel)]="model2.name" placeholder="Enter your name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="position">Position:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="position"
-               name="position" [(ngModel)]="model2.position" placeholder="Enter your position">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-default" (click)="updateEmployee()">Update</button>
-      </div>
-    </div>
-  </form>
 </div>
