@@ -25,7 +25,7 @@
         <tr *ngFor="let product of (productsArray | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">
           <th scope="row">{{product.id}}</th>
           <td>{{product.name}}</td>
-          <td class="product-image">{{product.imageUrl}}</td>
+          <td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>
           <td>{{product.description}}</td>
           <td>{{product.price}}</td>
           <td><span *ngIf="product.updateDate">{{product.updateDate.toStringDate()}}</span><span *ngIf="!product.updateDate">Nunca</span></td>
