@@ -57,11 +57,13 @@ export class ProductsComponent implements OnInit {
 
   getProducts() {
     this.productService.products.then(res => {
-      this.productsArray = res;
-      this.productsArray.map(p => Product.from(p));
+      this.productsArray = res.map(p => {
+        return Product.from(p)
+      });
       this.alerts.products.error = false;
       this.alerts.products.loading = false;
     }).catch(err => {
+      console.log(err);
       //TODO mostrar en el front mensaje de error
       this.alerts.products.error = true;
       this.alerts.products.loading = false;
