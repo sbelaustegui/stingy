@@ -89,20 +89,25 @@ export class HomeComponent implements OnInit {
   }
 
   search(){
-    this.productService.searchProduct({name: this.productName, subcategoryId: this.selectedSubcategoryId ? this.selectedSubcategoryId : 0}).then(res => {
-      this.searchedProducts = res;
-      this.searched = true;
-      this.searchedProducts.forEach(p => {
-        this.getProductSupplier(p.id, p.supplierId)
-      });
-      //TODO agregar loader y mensaje de error
-      this.alerts.search.error = false;
-      this.alerts.search.loading = false;
-    }).catch(err => {
-      console.log(err);
-      this.alerts.search.error = true;
-      this.alerts.search.loading = false;
-    })
+    if(this.productName && this.productName !== '' && this.selectedSubcategoryId) {
+      this.productService.searchProduct({
+        name: this.productName,
+        subcategoryId: this.selectedSubcategoryId ? this.selectedSubcategoryId : 0
+      }).then(res => {
+        this.searchedProducts = res;
+        this.searched = true;
+        this.searchedProducts.forEach(p => {
+          this.getProductSupplier(p.id, p.supplierId)
+        });
+        //TODO agregar loader y mensaje de error
+        this.alerts.search.error = false;
+        this.alerts.search.loading = false;
+      }).catch(err => {
+        console.log(err);
+        this.alerts.search.error = true;
+        this.alerts.search.loading = false;
+      })
+    }
   }
 
   getProductSupplier(productId: number, supplierId: number){

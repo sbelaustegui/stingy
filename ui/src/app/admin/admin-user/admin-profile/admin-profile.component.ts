@@ -111,15 +111,16 @@ export class AdminProfileComponent implements OnInit {
 
   deleteUser(){
     this.alerts.delete.success = true;
-    this.userService.deleteUser(this.user.id)
-    if(this.authService.isLoggedIn && this.alerts.delete.success) {
-      this.alerts.delete.success= false;
+    this.userService.deleteUser(this.user.id).then(res => {
+      this.alerts.delete.success= true;
       this.alerts.delete.loading = false;
       this.authService.logout().then(() => {
-        this.router.navigate(['login']);
+        this.router.navigate(['admin', 'login']);
       })
-    }
-
+    }).catch(() => {
+      this.alerts.delete.error = true;
+      this.alerts.delete.loading = true;
+    })
   }
 
   openDeleteModal(template: TemplateRef<any>) {
