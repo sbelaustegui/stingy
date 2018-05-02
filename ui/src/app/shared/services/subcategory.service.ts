@@ -85,11 +85,10 @@ export class SubcategoryService {
       });
   }
 
-  public getSubcategoryByCategoryId(categoryId: number): Promise<Subcategory> {
+  public getSubcategoryByCategoryId(categoryId: number): Promise<Subcategory[]> {
     return this.http
       .get('/api/subcategory/categoryId/' + categoryId)
       .then(res => {
-        this._SubcategoriesById.set(res.data.id, res.data);
         return res.data;
       });
   }

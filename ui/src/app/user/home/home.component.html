@@ -5,30 +5,21 @@
         <div class="webHomeTitle">
           <h1 class="helpr-title">Buscá un producto para conseguir el mejor precio.</h1>
         </div>
-        <div class="home-service clearfix">
-            <div class="wrapper-demo1">
-              <div id="dd1" class="wrapper-dropdown-3">
-                <span class="active" (click)="showDropdown1 = !showDropdown1">Categoría</span>
-                <ul class="dropdown" *ngIf="showDropdown1 && !alerts.categories.loading">
-                  <li *ngFor="let category of categories">
-                    <a class="icon-menu">{{category.name}}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="wrapper-demo">
-              <div id="dd" class="wrapper-dropdown-2">
-                <span (click)="showDropdown2 = !showDropdown2">Subcategoría</span>
-                <ul class="dropdown" *ngIf="showDropdown2 && !alerts.subcategories.loading">
-                  <li *ngFor="let subcategory of subcategories; let i = index">
-                    <a class="icon-{{i}} icon-menu">{{subcategory.name}}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="clearfix"></div>
-          </div>
+        <form class="form-inline my-2 my-lg-0" *ngIf="!alerts.categories.loading">
+          <input class="form-control mr-sm-2" type="search" [(ngModel)]="productName" [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
+          <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
+            <option selected>Seleccione una categoría</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+          </select>
+          <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId" [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
+            <option selected disabled>Seleccione una subcategoría</option>
+            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+          </select>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" (click)="search()">Search</button>
+        </form>
       </div>
     </div>
   </div>
 </section>
+<span *ngIf="searchedProducts.length <= 0">La busqueda no obtuvo resultados</span>
+<div *ngIf="searchedProducts.length > 0"> <span *ngFor="let product of searchedProducts">{{product.name}}</span></div>
