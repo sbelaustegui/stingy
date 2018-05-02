@@ -17,24 +17,25 @@
           <th scope="col">Precio</th>
           <th scope="col">Ultima Modificación</th>
           <th scope="col">Creación</th>
-
+          <th scope="col">Validar</th>
+          <th scope="col">Eliminar</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let product of (productsArray | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">
           <th scope="row">{{product.id}}</th>
-          <td>{{product.id}}</td>
           <td>{{product.name}}</td>
-          <td>{{product.imageUrl}}</td>
+          <td class="product-image">{{product.imageUrl}}</td>
           <td>{{product.description}}</td>
           <td>{{product.price}}</td>
           <td>{{product.updateDate}}</td>
           <td>{{product.uploadDate}}</td>
           <td>
             <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openProductModal(validateProduct, product)">
-                <i class="fa fa-pencil"></i>
+              <button type="button" class="btn btn-light" *ngIf="!product.isValidated" (click)="openProductModal(validateProduct, product)">
+                <i class="fa fa-check"></i>
               </button>
+              <span *ngIf="product.isValidated">Validado</span>
             </div>
           </td>
           <td>
@@ -60,41 +61,22 @@
     <ng-template #validateProduct>
       <div class="modal-header">
         <h4 class="modal-title pull-left">
-          <span *ngIf="!newProduct.id">Nueva categoría</span>
-          <span *ngIf="newProduct.id">Editar categoría {{newProduct.name}}</span>
+          <span *ngIf="newProduct.id">Validar producto {{newProduct.name}}</span>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="productFormGroup">
-          <fieldset>
-            <div class="form-group">
-              <input type="text"
-                     class="form-control"
-                     formControlName="name"
-                     [formGroup]="productFormGroup"
-                     placeholder="Nombre"
-                     aria-label="Name"
-                     aria-describedby="basic-addon1"
-                     [(ngModel)]="newProduct.name"
-                     required>
-              <div class="form-control-feedback"
-                   *ngIf="productFormGroup.controls['name'].errors && (productFormGroup.controls['name'].dirty || productFormGroup.controls['name'].touched)">
-                <p class="error" *ngIf="productFormGroup.controls['name'].errors.required">Es requerido</p>
-              </div>
-            </div>
-          </fieldset>
-        </form>
+        ¿Está seguro que desea validar el producto?
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': productFormGroup.invalid}" (click)="uploadProduct()">Guardar</button>
+        <button type="submit" class="btn btn-primary" (click)="validateProductA()">Confirmar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.products.error">
         <div class="card-block">
           <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
+            <p>Hubo un error al validar el producto.</p>
           </blockquote>
         </div>
       </div>
@@ -104,14 +86,14 @@
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetDeleteModal()">
         <h4 class="modal-title pull-left">Eliminar
-          <span *ngIf="productToDelete">Categoria {{productToDelete.name}}</span>
+          <span *ngIf="productToDelete">Producto {{productToDelete.name}}</span>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ¿Está seguro que desea eliminar la <span *ngIf="productToDelete">categoría</span>?
+        ¿Está seguro que desea eliminar el producto?
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
@@ -120,7 +102,7 @@
       <div class="alert alert-danger text-center" *ngIf="alerts.products.deletingError">
         <div class="card-block">
           <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar al Eliminar Categoria.</p>
+            <p>Hubo un error al agregar al eliminar el producto.</p>
           </blockquote>
         </div>
       </div>

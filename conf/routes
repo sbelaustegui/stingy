@@ -41,6 +41,7 @@ DELETE      /api/supplier/:id                                   controllers.Supp
 # Product
 POST        /api/product                                        controllers.ProductController.register()
 GET         /api/product/all                                    controllers.ProductController.getAll
+GET         /api/product/validate/:id                           controllers.ProductController.validate(id: Long)
 GET         /api/product/id/:id                                 controllers.ProductController.getById(id: Long)
 PUT         /api/product                                        controllers.ProductController.update()
 DELETE      /api/product/:id                                    controllers.ProductController.delete(id: Long)

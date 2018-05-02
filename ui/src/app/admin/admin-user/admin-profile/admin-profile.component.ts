@@ -5,16 +5,15 @@ import {EmailValidation, PasswordValidation} from "../../../shared/validators/eq
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
-import {UserService} from "../../../shared/services/user.service";
-import {UserAuthService} from "../../../shared/auth/user/user-auth.service";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {BsModalService} from "ngx-bootstrap/modal";
+import {AdminService} from "../../../shared/services/admin.service";
 
 @Component({
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
   styleUrls: ['./admin-profile.component.scss'],
-  providers: [UserService]
+  providers: [AdminService]
 })
 export class AdminProfileComponent implements OnInit {
 
@@ -40,7 +39,7 @@ export class AdminProfileComponent implements OnInit {
   modalRef: BsModalRef;
 
 
-  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: AdminAuthService, private modalService: BsModalService) {}
+  constructor(public fb: FormBuilder, public userService: AdminService, public router: Router, private titleService: Title, public authService: AdminAuthService, private modalService: BsModalService) {}
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');

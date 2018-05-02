@@ -51,6 +51,10 @@ object ProductDAO {
     }
   }
 
+  def validate(product: Product) : Product = {
+    saveOrUpdate(product.copy(isValidated = true)).get
+  }
+
   def getAllProducts: List[Product] = {
     EProduct.getAllProducts.map(Product.apply).toList
   }

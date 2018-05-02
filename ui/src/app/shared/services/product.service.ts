@@ -55,6 +55,14 @@ export class ProductService {
   public deleteProduct(id: number): Promise<any> {
     return this.http.delete('/api/product/' + id)
       .then(res => {
+        this._productsById.set(id, res.data);
+        return res.data;
+      });
+  }
+
+  public validateProduct(id: number): Promise<any> {
+    return this.http.get('/api/product/validate/' + id)
+      .then(res => {
         this._productsById.delete(id);
         return res;
       });

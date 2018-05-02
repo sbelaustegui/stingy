@@ -32,7 +32,7 @@ export class AdminService {
 
   public addUser(user: User): Promise<User> {
     return this.http
-      .post('/api/user', user)
+      .post('/api/admin', user)
       .then(res => {
         this._usersById.set(res.data.id, res.data);
         return res.data;
@@ -42,7 +42,7 @@ export class AdminService {
   public updateUser(user: User): Promise<User> {
     if(this._usersById.get(user.id)) {
       return this.http
-        .put('/api/user', user)
+        .put('/api/admin', user)
         .then(res => {
           this._usersById.set(user.id, res.data);
           return res.data;
@@ -53,7 +53,7 @@ export class AdminService {
   }
 
   public deleteUser(id: number): Promise<any> {
-    return this.http.delete('/api/user/' + id)
+    return this.http.delete('/api/admin/' + id)
       .then(res => {
         this._usersById.delete(id);
         return res;
@@ -66,7 +66,7 @@ export class AdminService {
 
   private requestUsers(): Promise<User[]> {
     return this.http
-      .get('/api/user/all')
+      .get('/api/admin/all')
       .then(res => {
         const users = res.data as User[];
         users.forEach(user => this._usersById = this._usersById.set(user.id, user));
@@ -77,7 +77,7 @@ export class AdminService {
 
   private requestUser(id: number): Promise<User> {
     return this.http
-      .get('/api/user/id/' + id)
+      .get('/api/admin/id/' + id)
       .then(res => {
         this._usersById.set(id,res.data);
         return res.data;

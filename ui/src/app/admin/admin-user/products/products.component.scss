@@ -32,6 +32,10 @@
               border: none;
             }
           }
+          &.product-image{
+            overflow-x: scroll;
+            max-width: 200px;
+          }
         }
       }
     }

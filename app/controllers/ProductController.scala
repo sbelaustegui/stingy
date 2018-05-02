@@ -137,4 +137,21 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
           )
       }
   }
+
+  def validate(id: Long) = Action {
+    Product.getById(id) match {
+      case Some(product) =>
+        Ok(
+          Json.toJson(
+            ResponseGenerated(OK, "Product update successful", Json.toJson(Product.validate(product)))
+          )
+        )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(BAD_REQUEST, "No product found")
+          )
+        )
+    }
+  }
 }

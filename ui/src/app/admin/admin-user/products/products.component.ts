@@ -14,7 +14,6 @@ import {Title} from "@angular/platform-browser";
 })
 export class ProductsComponent implements OnInit {
 
-  public productFormGroup: FormGroup;
   public newProduct: Product;
   public productToDelete: Product;
   public productIndexToDelete: number;
@@ -34,7 +33,7 @@ export class ProductsComponent implements OnInit {
   };
   modalRef: BsModalRef;
 
-  constructor(public fb: FormBuilder, public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  constructor(public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService) {
   }
 
   ngOnInit() {
@@ -52,7 +51,6 @@ export class ProductsComponent implements OnInit {
         loading: false,
       }
     };
-    this.createProductFormControls();
     this.getProducts();
   }
 
@@ -69,37 +67,20 @@ export class ProductsComponent implements OnInit {
     })
   }
 
-  uploadProduct() {
+  validateProductA() {
     this.alerts.addProduct.loading = true;
-    if(this.newProduct.id) {
-      this.productService.updateProduct(this.newProduct).then(res => {
-        this.alerts.addProduct.loading = false;
-        this.alerts.addProduct.error = false;
-        this.newProduct = Product.empty();
-        this.productFormGroup.reset();
-        this.modalRef.hide();
-        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
-      }).catch(() => {
-        //TODO mostrar en el front mensaje de error
-        this.alerts.addProduct.loading = false;
-        this.alerts.addProduct.error = true;
-      })
-    } else {
-      this.productService.addProduct(this.newProduct).then(res => {
-        this.productsArray.push(res);
-        this.alerts.addProduct.loading = false;
-        this.alerts.addProduct.error = false;
-        this.newProduct = Product.empty();
-        this.productFormGroup.reset();
-        this.modalRef.hide();
-        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
-        // this.router.navigate(['products']);
-      }).catch(() => {
-        //TODO mostrar en el front mensaje de error
-        this.alerts.addProduct.loading = false;
-        this.alerts.addProduct.error = true;
-      })
-    }
+    this.productService.validateProduct(this.newProduct.id).then(res => {
+      this.newProduct.isValidated = true;
+      this.alerts.addProduct.loading = false;
+      this.alerts.addProduct.error = false;
+      this.newProduct = Product.empty();
+      this.modalRef.hide();
+      //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+    }).catch(() => {
+      //TODO mostrar en el front mensaje de error
+      this.alerts.addProduct.loading = false;
+      this.alerts.addProduct.error = true;
+    })
   }
 
   deleteProduct() {
@@ -113,13 +94,6 @@ export class ProductsComponent implements OnInit {
     }).catch(() => {
       this.alerts.products.deleting = false;
       this.alerts.products.deletingError = true;
-    })
-  }
-
-
-  private createProductFormControls() {
-    this.productFormGroup = this.fb.group({
-      name: ['', Validators.required],
     })
   }
 
