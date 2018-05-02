@@ -58,6 +58,7 @@ export class ProductsComponent implements OnInit {
   getProducts() {
     this.productService.products.then(res => {
       this.productsArray = res;
+      this.productsArray.map(p => Product.from(p));
       this.alerts.products.error = false;
       this.alerts.products.loading = false;
     }).catch(err => {
