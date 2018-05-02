@@ -26,6 +26,7 @@ export class UploadProductComponent implements OnInit {
   public newProduct: Product;
   public uploadProductError: boolean;
   public addingProduct: boolean;
+  public addingProductSuccess: boolean;
   public selectedCategoryId: number;
   public categories: Category[];
   public subcategories: Subcategory[];
@@ -56,6 +57,7 @@ export class UploadProductComponent implements OnInit {
     this.newProduct = Product.empty();
     this.addingProduct = false;
     this.uploadProductError = false;
+    this.addingProductSuccess = false;
     this.userAuthService.loggedUser.then(res => this.userId = res.id);
     this.createFormControls();
     this.subcategories = [];
@@ -86,6 +88,8 @@ export class UploadProductComponent implements OnInit {
     this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
     this.productService.addProduct(this.newProduct).then( () => {
       this.addingProduct = false;
+      this.addingProductSuccess = true;
+      setTimeout(() => {this.addingProductSuccess = false;});
       this.uploadProductError = false;
       this.resetUploadProduct();
     }).catch(() => {
