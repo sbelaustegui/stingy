@@ -28,8 +28,8 @@
           <td class="product-image">{{product.imageUrl}}</td>
           <td>{{product.description}}</td>
           <td>{{product.price}}</td>
-          <td>{{product.updateDate}}</td>
-          <td>{{product.uploadDate}}</td>
+          <td><span *ngIf="product.updateDate">{{product.updateDate.toStringDate()}}</span><span *ngIf="!product.updateDate">Nunca</span></td>
+          <td>{{product.uploadDate.toStringDate()}}</td>
           <td>
             <div class="upload-button">
               <button type="button" class="btn btn-light" *ngIf="!product.isValidated" (click)="openProductModal(validateProduct, product)">

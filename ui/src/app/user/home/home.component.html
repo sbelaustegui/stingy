@@ -61,4 +61,5 @@
     </div>
   </div>
   <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
+  <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
 </div>

@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   public selectedCategoryId: number;
   public searched: boolean;
   public productName: string;
-  public selectedSubcategoryId: number;
+  public selectedSubcategoryId: string;
   public categories: Category[];
   public alerts: {
     subcategories:{
@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit {
     if(this.productName && this.productName !== '' && this.selectedSubcategoryId) {
       this.productService.searchProduct({
         name: this.productName,
-        subcategoryId: this.selectedSubcategoryId ? this.selectedSubcategoryId : 0
+        subcategoryId: this.selectedSubcategoryId ? parseInt(this.selectedSubcategoryId) : 0
       }).then(res => {
         this.searchedProducts = res;
         this.searched = true;
