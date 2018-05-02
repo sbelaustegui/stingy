@@ -2,7 +2,7 @@
   <form class="new-user-form" [formGroup]="formGroup" (ngSubmit)="uploadProduct()">
     <div class="row">
       <div class="col-md-4 offset-md-2 align-content-end">
-        <h3 class="text" align="center">Complete sus datos:</h3>
+        <h3 class="text" align="center">¡Carga un producto, ayuda al resto!</h3>
         <!--INPUT NAME-->
         <fieldset>
           <div class="form-group">
@@ -94,22 +94,39 @@
         </fieldset>
 
         <!--SELECT CATEGORY-->
-        <select class="custom-select custom-select mb-3" [(ngModel)]="selectedCategoryId" (ngModelChange)="getSubcategories()">
+          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="selectedCategoryId"
+                          [formGroup]="formGroup" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
           <option [value]="undefined" selected>Seleccione una categoría</option>
           <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
         </select>
 
-        <!--SELECT SUBCATEGORY-->
-        <select class="custom-select custom-select mb-3" [(ngModel)]="selectedSubcategoryId" *ngIf="!alerts.subcategories.loading">
-          <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
-          <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
-        </select>
+        <fieldset>
+          <!--SELECT SUBCATEGORY-->
+          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="newProduct.subcategoryId" formControlName="subcategoryId"
+                  [formGroup]="formGroup" *ngIf="!alerts.subcategories.loading">
+            <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
+            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+          </select>
+          <div class="form-control-feedback"
+               *ngIf="formGroup.controls['subcategoryId'].errors && (formGroup.controls['subcategoryId'].dirty || formGroup.controls['subcategoryId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['subcategoryId'].errors.required">Es requerida la selección</p>
+          </div>
+        </fieldset>
+
 
         <!--SELECT SUPPLIER-->
-        <select class="custom-select custom-select mb-3" [(ngModel)]="selectedSupplierId" (ngModelChange)="getSuppliers()" >
-          <option [value]="undefined" selected>Seleccione un Proveedor</option>
-          <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
-        </select>
+        <fieldset>
+          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId" formControlName="supplierId"
+                  [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading" >
+            <option [value]="undefined" selected>Seleccione un Proveedor</option>
+            <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
+          </select>
+          <div class="form-control-feedback"
+               *ngIf="formGroup.controls['supplierId'].errors && (formGroup.controls['supplierId'].dirty || formGroup.controls['supplierId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['supplierId'].errors.required">Es requerida la selección</p>
+          </div>
+        </fieldset>
+
 
       </div>
       <div class="alert alert-danger text-center" *ngIf="uploadProductError">
