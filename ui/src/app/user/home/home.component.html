@@ -8,7 +8,7 @@
         <form class="form-inline my-2 my-lg-0" *ngIf="!alerts.categories.loading">
           <div class="row search-row">
             <div class="col-md-3 name">
-              <input class="form-control mr-sm-2" type="search" [(ngModel)]="productName" [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
+              <input class="form-control mr-sm-2 name-input" type="search" [(ngModel)]="productName" [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
             </div>
             <div class="col-md-4">
               <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
@@ -22,8 +22,8 @@
                 <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
               </select>
             </div>
-            <div class="col-md-1">
-              <button class="btn btn-success my-2 my-sm-0" type="submit" (click)="search()">Search</button>
+            <div class="col-md-1" style="text-align: center">
+              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search()">Buscar</button>
             </div>
           </div>
         </form>
