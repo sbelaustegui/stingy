@@ -89,7 +89,7 @@ export class UploadProductComponent implements OnInit {
     this.productService.addProduct(this.newProduct).then( () => {
       this.addingProduct = false;
       this.addingProductSuccess = true;
-      setTimeout(() => {this.addingProductSuccess = false;});
+      setTimeout(() => {this.addingProductSuccess = false;},5000);
       this.uploadProductError = false;
       this.resetUploadProduct();
     }).catch(() => {
