@@ -6,13 +6,19 @@ import {Title} from "@angular/platform-browser";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {ProductService} from "../../shared/services/product.service";
 import {Product} from "../../shared/models/product.model";
+import {Subcategory} from "../../shared/models/subcategory.model";
+import {Category} from "../../shared/models/category.model";
+import {SubcategoryService} from "../../shared/services/subcategory.service";
+import {CategoryService} from "../../shared/services/category.service";
+import {SupplierService} from "../../shared/services/supplier.service";
+import {Supplier} from "../../shared/models/supplier.model";
 
 
 @Component({
   selector: 'app-upload-product',
   templateUrl: './upload-product.component.html',
   styleUrls: ['./upload-product.component.scss'],
-  providers: [ProductService]
+  providers: [ProductService, SubcategoryService, CategoryService, SupplierService]
 })
 export class UploadProductComponent implements OnInit {
 
@@ -124,8 +130,32 @@ export class UploadProductComponent implements OnInit {
   public newProduct: Product;
   public uploadProductError: boolean;
   public addingProduct: boolean;
+  public selectedCategoryId: number;
+  public categories: Category[];
+  public selectedSubcategoryId: number;
+  public subcategories: Subcategory[];
+  public selectedSupplierId: number;
+  public suppliers: Supplier[];
+  public alerts: {
+    subcategories:{
+      loading: boolean,
+      error: boolean,
+    },
+    categories:{
+      loading: boolean,
+      error: boolean,
+    },
+    suppliers:{
+      loading: boolean,
+      error: boolean,
+    }
+  };
 
-  constructor(public fb: FormBuilder, public productService: ProductService, public router: Router, private titleService: Title) {}
+
+  constructor(public fb: FormBuilder, public productService: ProductService, public router: Router, private titleService: Title,
+              private subcategoryService: SubcategoryService, private categoryService: CategoryService,
+              private supplierService: SupplierService
+  ) {}
 
   ngOnInit() {
     this.titleService.setTitle('Carga de Producto | Stingy');
@@ -133,11 +163,36 @@ export class UploadProductComponent implements OnInit {
     this.addingProduct = false;
     this.uploadProductError = false;
     this.createFormControls();
+    this.subcategories = [];
+    this.getCategories();
+    this.getSuppliers();
+    this.alerts = {
+      subcategories: {
+        loading: false,
+        error: false,
+      },
+      categories: {
+        loading: true,
+        error: false,
+      },
+      suppliers:{
+        loading: false,
+        error: false,
+      }
+    };
   }
+
 
   uploadProduct() {
     this.addingProduct = true;
-    this.newProduct.updateDate = this.newProduct.uploadDate;
+    if(this.selectedSupplierId == null && this.selectedSubcategoryId == null){
+      this.uploadProductError = true;
+      this.addingProduct = false;
+      return;
+    }
+    this.newProduct.isValidated = false;
+    this.newProduct.subcategoryId = this.selectedSubcategoryId;
+    this.newProduct.supplierId = this.selectedSupplierId;
     this.productService.addProduct(this.newProduct).then( () => {
       this.addingProduct = false;
       this.uploadProductError = false;
@@ -151,17 +206,47 @@ export class UploadProductComponent implements OnInit {
   private createFormControls() {
     this.formGroup = this.fb.group({
       name: ['', Validators.required],
-      price: ['', Validators.required,Validators.pattern("[0-9]+")],
-      email: ['', [Validators.required, Validators.email]],
+      price: ['', [Validators.required,Validators.min(0)]],
       description: ['', Validators.required],
-      confirmEmail: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
+      imageUrl: ['', [Validators.required,]],
     }, {
     })
   }
 
-  goLogin(){
-    this.router.navigate(['login'])
+  getSubcategories(){
+    this.subcategoryService.getSubcategoryByCategoryId(this.selectedCategoryId).then(res => {
+      this.subcategories = res;
+      this.alerts.subcategories.error = false;
+      this.alerts.subcategories.loading = false;
+    }).catch(err => {
+      console.log(err);
+      this.alerts.subcategories.error = true;
+      this.alerts.subcategories.loading = false;
+    })
   }
+
+  getCategories(){
+    this.categoryService.categories.then(res => {
+      this.categories = res;
+      this.alerts.categories.error = false;
+      this.alerts.categories.loading = false;
+    }).catch(err => {
+      console.log(err);
+      this.alerts.categories.error = true;
+      this.alerts.categories.loading = false;
+    })
+  }
+
+  getSuppliers(){
+    this.supplierService.suppliers.then(res => {
+      this.suppliers = res;
+      this.alerts.suppliers.error = false;
+      this.alerts.suppliers.loading = false;
+    }).catch(err => {
+      console.log(err);
+      this.alerts.suppliers.error = true;
+      this.alerts.suppliers.loading = false;
+    })
+  }
+
 }

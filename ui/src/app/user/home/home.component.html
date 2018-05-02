@@ -17,7 +17,7 @@
               </select>
             </div>
             <div class="col-md-4">
-              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId" [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
+              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedSubcategoryId" [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
                 <option [value]="undefined" selected disabled>Seleccione una subcategoría</option>
                 <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
               </select>
