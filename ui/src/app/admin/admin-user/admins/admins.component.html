@@ -1,3 +1,242 @@
-<p>
-  admins works!
-</p>
+<div class="admins">
+  <div class="row">
+    <!--ADMIN TABLE-->
+    <div class="col-12 col-md-6 mx-auto">
+      <div class="row">
+        <div class="col-8">
+          <h2>Administradores</h2>
+        </div>
+        <div class="add-button col-4">
+          <button type="button" class="btn btn-light" (click)="openAdminModal(newAdminModal)">
+            <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <table class="table table-striped" *ngIf="!alerts.admins.loading">
+        <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre y Apellido</th>
+          <th scope="col">Email</th>
+          <th scope="col">Usuario</th>
+          <!--<th scope="col">Editar</th>-->
+          <th scope="col">Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let admin of (adminsArray | paginate: { itemsPerPage: 10, currentPage: adminsPage, id: 'admins' }); let i=index">
+          <th scope="row">{{admin.id}}</th>
+          <td>{{admin.name}} {{admin.lastName}}</td>
+          <td>{{admin.email}}</td>
+          <td>{{admin.username}}</td>
+          <!--<td>-->
+            <!--<div class="upload-button">-->
+              <!--<button type="button" class="btn btn-light"  (click)="openAdminModal(newAdminModal, admin)">-->
+                <!--<i class="fa fa-pencil"></i>-->
+              <!--</button>-->
+            <!--</div>-->
+          <!--</td>-->
+          <td>
+            <div class="remove-button">
+              <button type="submit" class="btn btn-danger" (click)="openAdminDeleteModal(deleteModal, admin, i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="admins"
+                           class="paginator"
+                           (pageChange)="adminsPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+
+    <!--New admin Modal-->
+    <ng-template #newAdminModal>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          <span *ngIf="!newAdmin.id">Nuevo administrador</span>
+          <span *ngIf="newAdmin.id">Editar administrador {{newAdmin.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="adminFormGroup">
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="name"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Nombre"
+                     aria-label="Name"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newAdmin.name"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['name'].errors && (adminFormGroup.controls['name'].dirty || adminFormGroup.controls['name'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['name'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+          <!--INPUT LASTNAME-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="lastname"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Apellido"
+                     aria-label="LastName"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newAdmin.lastName"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['lastname'].errors && (adminFormGroup.controls['lastname'].dirty || adminFormGroup.controls['lastname'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['lastname'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+          <!--INPUT USERNAME-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="username"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Usuario"
+                     aria-label="UserName"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newAdmin.username"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['username'].errors && (adminFormGroup.controls['username'].dirty || adminFormGroup.controls['username'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['username'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+        <!--INPUT EMAIL-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="email"
+                   [formGroup]="adminFormGroup"
+                   placeholder="Correo Electrónico"
+                   aria-label="Email"
+                   aria-describedby="basic-addon2"
+                   [(ngModel)]="newAdmin.email"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="adminFormGroup.controls['email'].errors && (adminFormGroup.controls['email'].dirty || adminFormGroup.controls['email'].touched)">
+              <p class="error" *ngIf="adminFormGroup.controls['email'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="adminFormGroup.controls['email'].errors.email">Email Inválido</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED EMAIL-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="confirmEmail"
+                   [formGroup]="adminFormGroup"
+                   placeholder="Confirmar Correo Electrónico"
+                   aria-label="Confirmed Email"
+                   aria-describedby="basic-addon3"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="adminFormGroup.controls['confirmEmail'].errors && (adminFormGroup.controls['confirmEmail'].dirty || adminFormGroup.controls['confirmEmail'].touched)">
+              <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no
+                coinciden.</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="password"
+                   [formGroup]="adminFormGroup"
+                   placeholder="Contraseña"
+                   aria-label="Password"
+                   aria-describedby="basic-addon4"
+                   [(ngModel)]="newAdmin.password"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="adminFormGroup.controls['password'].errors && (adminFormGroup.controls['password'].dirty || adminFormGroup.controls['password'].touched)">
+              <p class="error" *ngIf="adminFormGroup.controls['password'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="adminFormGroup.controls['password'].errors.minlength">Minimo de 8 caracteres</p>
+            </div>
+          </div>
+        </fieldset>
+        <!--INPUT CONFIRMED PASSWORD-->
+        <fieldset>
+          <div class="form-group">
+            <input type="password"
+                   class="form-control"
+                   formControlName="confirmPassword"
+                   [formGroup]="adminFormGroup"
+                   placeholder="Confirmar Contraseña"
+                   aria-label="Confirmed Password"
+                   aria-describedby="basic-addon5"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="adminFormGroup.controls['confirmPassword'].errors && (adminFormGroup.controls['confirmPassword'].dirty || adminFormGroup.controls['confirmPassword'].touched)">
+              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.required">Es requerido</p>
+              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8 caracteres</p>
+              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no
+                coinciden.</p>
+            </div>
+          </div>
+        </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': adminFormGroup.invalid}" (click)="uploadAdmin()">Guardar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.admins.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+    <!--Delete confirmation modal-->
+    <ng-template #deleteModal>
+      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
+        <h4 class="modal-title pull-left">Eliminar
+          <span>Administrador {{adminToDelete.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro que desea eliminar el administrador?
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" (click)="this.deleteAdmin()">Eliminar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.admins.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar al Eliminar el adminstrador.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+
