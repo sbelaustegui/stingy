@@ -31,5 +31,34 @@
     </div>
   </div>
 </section>
-<span *ngIf="searchedProducts.length <= 0">La busqueda no obtuvo resultados</span>
-<div *ngIf="searchedProducts.length > 0"> <span *ngFor="let product of searchedProducts">{{product.name}}</span></div>
+<div class="row results">
+  <h3 class="col-12" *ngIf="searched">Productos encontrados</h3>
+  <div class="col-12 loader">
+    <span *ngIf="alerts.search.loading" class="mx-auto">
+      <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
+    </span>
+  </div>
+  <div class="col-md-12" style="margin-bottom: 50px" *ngIf="searchedProducts.length > 0">
+    <div class="card col-md-3 offset-md-1" *ngFor="let product of searchedProducts">
+      <img class="card-img-top" [src]="product.imageUrl" alt="Product img">
+      <div class="card-body">
+        <h5 class="card-title">{{product.name}}</h5>
+        <p class="card-text">
+          {{product.description}}
+        </p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <span style="font-weight: bold">Precio:</span> ${{product.price}}
+        </li>
+        <li class="list-group-item">
+          <span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}
+        </li>
+        <li class="list-group-item">
+          <a class="btn btn-primary">Agregar al carrito</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
+</div>

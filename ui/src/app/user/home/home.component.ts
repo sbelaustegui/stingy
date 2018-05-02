@@ -6,18 +6,22 @@ import {CategoryService} from "../../shared/services/category.service";
 import {Title} from "@angular/platform-browser";
 import {ProductService} from "../../shared/services/product.service";
 import {Product} from "../../shared/models/product.model";
+import {Supplier} from "../../shared/models/supplier.model";
+import {SupplierService} from "../../shared/services/supplier.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [SubcategoryService, CategoryService, ProductService]
+  providers: [SubcategoryService, CategoryService, ProductService, SupplierService]
 })
 export class HomeComponent implements OnInit {
 
   public subcategories: Subcategory[];
   public searchedProducts : Product[];
+  public productsSuppliers : Map<number, Supplier>;
   public selectedCategoryId: number;
+  public searched: boolean;
   public productName: string;
   public selectedSubcategoryId: number;
   public categories: Category[];
@@ -36,7 +40,7 @@ export class HomeComponent implements OnInit {
     },
   };
 
-  constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService, private titleService: Title, public productService: ProductService) {}
+  constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService, private titleService: Title, public productService: ProductService, public suppliersService: SupplierService) {}
 
   ngOnInit() {
     this.titleService.setTitle('Búsqueda de Producto | Stingy');
@@ -56,6 +60,7 @@ export class HomeComponent implements OnInit {
     };
     this.subcategories = [];
     this.searchedProducts = [];
+    this.productsSuppliers = new Map<number, Supplier>();
     this.getCategories();
   }
 
@@ -86,6 +91,10 @@ export class HomeComponent implements OnInit {
   search(){
     this.productService.searchProduct({name: this.productName, subcategoryId: this.selectedSubcategoryId ? this.selectedSubcategoryId : 0}).then(res => {
       this.searchedProducts = res;
+      this.searched = true;
+      this.searchedProducts.forEach(p => {
+        this.getProductSupplier(p.id, p.supplierId)
+      });
       //TODO agregar loader y mensaje de error
       this.alerts.search.error = false;
       this.alerts.search.loading = false;
@@ -93,6 +102,14 @@ export class HomeComponent implements OnInit {
       console.log(err);
       this.alerts.search.error = true;
       this.alerts.search.loading = false;
+    })
+  }
+
+  getProductSupplier(productId: number, supplierId: number){
+    this.suppliersService.getSupplierById(supplierId).then(res => {
+      this.productsSuppliers.set(productId, res);
+    }).catch(err => {
+      console.log(err);
     })
   }
 }
