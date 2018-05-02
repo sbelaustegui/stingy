@@ -83,20 +83,31 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
         case Some(product) =>
           Product.getByName(product.name) match {
             case Some(productFounded) =>
-              val a : List[Product] = List(productFounded)
-              Ok(
-                Json.toJson(
-                  ResponseGenerated(
-                    OK, "Ok",  Json.toJson(a)
+              if (productFounded.isValidated) {
+                val a : List[Product] = List(productFounded)
+                Ok(
+                  Json.toJson(
+                    ResponseGenerated(
+                      OK, "Ok",  Json.toJson(a)
+                    )
                   )
                 )
-              )
+              } else {
+                val emptyList : List[Product] = List.empty
+                Ok(
+                  Json.toJson(
+                    ResponseGenerated(
+                      OK, "No results",  Json.toJson(emptyList)
+                    )
+                  )
+                )
+              }
             case None =>
               val emptyList : List[Product] = List.empty
               Ok(
                 Json.toJson(
                   ResponseGenerated(
-                    OK, "Ok",  Json.toJson(emptyList)
+                    OK, "No results",  Json.toJson(emptyList)
                   )
                 )
               )
