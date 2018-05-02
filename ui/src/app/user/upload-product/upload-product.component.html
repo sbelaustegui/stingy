@@ -61,19 +61,6 @@
         </fieldset>
       </div>
       <div class="col-md-4">
-        <!--&lt;!&ndash;INPUT UPLOAD DATE&ndash;&gt;-->
-        <!--&lt;!&ndash;INPUT CONFIRMED UploadDate&ndash;&gt;-->
-        <!--<fieldset>-->
-          <!--<div class="form-group">-->
-
-            <!--<input class="datepicker" data-date-format="mm/dd/yyyy">-->
-            <!--<div class="form-control-feedback"-->
-                 <!--*ngIf="formGroup.controls['confirmUploadDate'].errors && (formGroup.controls['confirmUploadDate'].dirty || formGroup.controls['confirmUploadDate'].touched)">-->
-              <!--<p class="error" *ngIf="formGroup.controls['confirmUploadDate'].errors.required">Es requerido</p>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</fieldset>-->
-
         <!--INPUT URL-->
         <fieldset>
           <div class="form-group">
@@ -139,7 +126,7 @@
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <div class="row">
           <div class="register-button col-8 col-md-6" align="center">
-            <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid">
+            <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid || addingProduct">
               <span *ngIf="!addingProduct">Agregar</span>
               <span *ngIf="addingProduct"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
             </button>
@@ -149,112 +136,3 @@
     </div>
   </form>
 </div>
-
-<!--<div class="upload-product">-->
-  <!--<div class="row">-->
-
-    <!--&lt;!&ndash;PRODUCTS TABLE&ndash;&gt;-->
-    <!--<div class="col-12">-->
-      <!--<div class="row">-->
-        <!--<div class="col-8">-->
-          <!--<h2>Productos</h2>-->
-        <!--</div>-->
-        <!--<div class="add-button col-4">-->
-          <!--<button type="button" class="btn btn-light" (click)="openProductModal(newProductModal)">-->
-            <!--<i class="fa fa-plus" aria-hidden="true"></i></button>-->
-        <!--</div>-->
-
-      <!--</div>-->
-      <!--<table class="table table-striped" *ngIf="!alerts.products.loading">-->
-        <!--<thead>-->
-        <!--<tr>-->
-          <!--<th scope="col">Id</th>-->
-          <!--<th scope="col">Nombre</th>-->
-          <!--<th scope="col">Imagen</th>-->
-          <!--<th scope="col">Description</th>-->
-          <!--<th scope="col">Precio</th>-->
-          <!--<th scope="col">Ultima Modificación</th>-->
-          <!--<th scope="col">Creación</th>-->
-          <!--<th scope="col">Modificar</th>-->
-
-        <!--</tr>-->
-        <!--</thead>-->
-        <!--<tbody>-->
-        <!--<tr-->
-          <!--*ngFor="let product of (products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">-->
-          <!--<th scope="row">{{product.id}}</th>-->
-          <!--<td>{{product.id}}</td>-->
-          <!--<td>{{product.name}}</td>-->
-          <!--<td>{{product.imageUrl}}</td>-->
-          <!--<td>{{product.description}}</td>-->
-          <!--<td>{{product.price}}</td>-->
-          <!--<td>{{product.updateDate}}</td>-->
-          <!--<td>{{product.uploadDate}}</td>-->
-          <!--<td>-->
-            <!--<div class="upload-button">-->
-              <!--<button type="button" class="btn btn-light" (click)="openProductModal(newProduct, product)">-->
-                <!--<i class="fa fa-pencil"></i>-->
-              <!--</button>-->
-            <!--</div>-->
-          <!--</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-      <!--</table>-->
-      <!--<pagination-controls id="products"-->
-                           <!--class="paginator"-->
-                           <!--(pageChange)="productsPage = $event"-->
-                           <!--autoHide="true"-->
-                           <!--previousLabel="Anterior"-->
-                           <!--nextLabel="Siguiente">-->
-      <!--</pagination-controls>-->
-    <!--</div>-->
-
-    <!--&lt;!&ndash;new Product Modal&ndash;&gt;-->
-    <!--<ng-template #newProductModal>-->
-      <!--<div class="modal-header">-->
-        <!--<h4 class="modal-title pull-left">-->
-          <!--<span *ngIf="!newProduct.id">Nueva categoría</span>-->
-          <!--<span *ngIf="newProduct.id">Editar categoría {{newProduct.name}}</span>-->
-        <!--</h4>-->
-        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">-->
-          <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
-      <!--</div>-->
-      <!--<div class="modal-body">-->
-        <!--<form [formGroup]="productFormGroup">-->
-          <!--<fieldset>-->
-            <!--<div class="form-group">-->
-              <!--<input type="text"-->
-                     <!--class="form-control"-->
-                     <!--formControlName="name"-->
-                     <!--[formGroup]="productFormGroup"-->
-                     <!--placeholder="Nombre"-->
-                     <!--aria-label="Name"-->
-                     <!--aria-describedby="basic-addon1"-->
-                     <!--[(ngModel)]="newProduct.name"-->
-                     <!--required>-->
-              <!--<div class="form-control-feedback"-->
-                   <!--*ngIf="productFormGroup.controls['name'].errors && (productFormGroup.controls['name'].dirty || productFormGroup.controls['name'].touched)">-->
-                <!--<p class="error" *ngIf="productFormGroup.controls['name'].errors.required">Es requerido</p>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</fieldset>-->
-        <!--</form>-->
-      <!--</div>-->
-      <!--<div class="modal-footer">-->
-        <!--<button type="submit" class="btn btn-primary" [ngClass]="{'disabled': productFormGroup.invalid}"-->
-                <!--(click)="uploadProduct()">Guardar-->
-        <!--</button>-->
-      <!--</div>-->
-      <!--<div class="alert alert-danger text-center" *ngIf="alerts.products.error">-->
-        <!--<div class="card-block">-->
-          <!--<blockquote class="card-blockquote">-->
-            <!--<p>Hubo un error al agregar una Producto. Revise que el nombre sea valido y no se encuentre repetido.</p>-->
-          <!--</blockquote>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</ng-template>-->
-
-
-  <!--</div>-->
-<!--</div>-->
