@@ -152,8 +152,8 @@ export class UploadProductComponent implements OnInit {
     this.formGroup = this.fb.group({
       name: ['', Validators.required],
       price: ['', Validators.required,Validators.pattern("[0-9]+")],
-      uploadDate: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      description: ['', Validators.required],
       confirmEmail: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8)]]

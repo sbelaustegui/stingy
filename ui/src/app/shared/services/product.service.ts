@@ -1,6 +1,7 @@
 import {HttpService} from "./http.service";
 import {Injectable} from '@angular/core';
 import {Product} from "../models/product.model";
+import {ProductSearch} from "../models/product-search.model";
 
 /*
 # Product
@@ -65,6 +66,13 @@ export class ProductService {
       .then(res => {
         this._productsById.delete(id);
         return res;
+      });
+  }
+
+  public searchProduct(product :ProductSearch): Promise<Product[]> {
+    return this.http.post('/api/product/search', product)
+      .then(res => {
+        return res.data;
       });
   }
 

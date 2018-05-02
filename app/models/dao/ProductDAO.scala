@@ -51,6 +51,15 @@ object ProductDAO {
     }
   }
 
+  def getByName(name: String) : Option[Product] = {
+    toScalaOption(EProduct.getByName(name)) match {
+      case Some(product) =>
+        Some(Product(product))
+      case None =>
+        None
+    }
+  }
+
   def validate(product: Product) : Product = {
     saveOrUpdate(product.copy(isValidated = true)).get
   }

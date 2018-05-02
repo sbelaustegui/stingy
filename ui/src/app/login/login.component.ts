@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
   login() {
     this.loginLoading = true;
     this.authUserService.login(this.loginUser).then(() => {
+      window.location.reload();
       this.loginUserError = false;
       this.loginLoading = false;
-      this.router.navigate(['user', 'home'])
     }).catch(() => {
       this.loginUserError = true;
       this.loginLoading = false;

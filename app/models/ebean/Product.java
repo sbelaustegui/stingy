@@ -1,5 +1,6 @@
 package models.ebean;
 
+import io.ebean.Ebean;
 import io.ebean.Finder;
 import io.ebean.Model;
 import io.ebean.annotation.NotNull;
@@ -60,6 +61,10 @@ public class Product extends Model {
             return Optional.of(product);
         }
         return Optional.empty();
+    }
+
+    public static Optional<Product> getByName(String name){
+        return Optional.ofNullable(Ebean.find(Product.class).where().eq("name", name).findOne());
     }
 
     public static List<Product> getAllProducts() {

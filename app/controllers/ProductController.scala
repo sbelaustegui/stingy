@@ -77,6 +77,41 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     )
   }
 
+  def search = Action{
+    request =>
+      request.body.asJson.get.asOpt[ProductSearch] match {
+        case Some(product) =>
+          Product.getByName(product.name) match {
+            case Some(productFounded) =>
+              val a : List[Product] = List(productFounded)
+              Ok(
+                Json.toJson(
+                  ResponseGenerated(
+                    OK, "Ok",  Json.toJson(a)
+                  )
+                )
+              )
+            case None =>
+              val emptyList : List[Product] = List.empty
+              Ok(
+                Json.toJson(
+                  ResponseGenerated(
+                    OK, "Ok",  Json.toJson(emptyList)
+                  )
+                )
+              )
+          }
+        case None =>
+          BadRequest(
+            Json.toJson(
+              ResponseGenerated(
+                BAD_REQUEST, "Invalid data"
+              )
+            )
+          )
+      }
+  }
+
   def delete(id: Long) = Action {
     Product.getById(id) match {
       case Some(product) =>

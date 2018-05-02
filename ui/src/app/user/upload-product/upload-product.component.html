@@ -60,24 +60,6 @@
       </div>
       <div class="col-md-4">
         <!--INPUT UPLOAD DATE-->
-        <fieldset>
-          <div class="form-group">
-            <input data-date-format="mm/dd/yyyy"
-                   class="bs-datepicker-buttons form-control"
-                   formControlName="uploadDate"
-                   [formGroup]="formGroup"
-                   placeholder="Fecha"
-                   aria-label="UploadDate"
-                   aria-describedby="basic-addon2"
-                   [(ngModel)]="newProduct.uploadDate"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="formGroup.controls['uploadDate'].errors && (formGroup.controls['uploadDate'].dirty || formGroup.controls['uploadDate'].touched)">
-              <p class="error" *ngIf="formGroup.controls['uploadDate'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="formGroup.controls['uploadDate'].errors.uploadDate">UploadDate Inválido</p>
-            </div>
-          </div>
-        </fieldset>
         <!--INPUT CONFIRMED UploadDate-->
         <fieldset>
           <div class="form-group">

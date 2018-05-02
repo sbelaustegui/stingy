@@ -54,6 +54,10 @@ object Product extends ProductJsonFormat {
     ProductDAO.getById(id)
   }
 
+  def getByName(name : String) : Option[Product] = {
+    ProductDAO.getByName(name)
+  }
+
   def getAll: List[Product] = {
     ProductDAO.getAllProducts
   }
