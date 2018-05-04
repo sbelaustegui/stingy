@@ -29,7 +29,8 @@ export class ProductsComponent implements OnInit {
     addProduct: {
       error: boolean,
       loading: boolean,
-    }
+    },
+    success: boolean
   };
   modalRef: BsModalRef;
 
@@ -49,7 +50,8 @@ export class ProductsComponent implements OnInit {
       addProduct: {
         error: false,
         loading: false,
-      }
+      },
+      success:false
     };
     this.getProducts();
   }
@@ -78,11 +80,14 @@ export class ProductsComponent implements OnInit {
       this.alerts.addProduct.error = false;
       this.newProduct = Product.empty();
       this.modalRef.hide();
-      //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+      this.alerts.success = true;
+      setTimeout(() => {this.alerts.success = false;},2500);
     }).catch(() => {
       //TODO mostrar en el front mensaje de error
       this.alerts.addProduct.loading = false;
       this.alerts.addProduct.error = true;
+      this.alerts.addProduct.error = true;
+      setTimeout(() => {this.alerts.addProduct.error = false;},5000);
     })
   }
 
@@ -94,9 +99,12 @@ export class ProductsComponent implements OnInit {
       this.alerts.products.deleting = false;
       this.alerts.products.deletingError = false;
       this.modalRef.hide();
+      this.alerts.success = true;
+      setTimeout(() => {this.alerts.success = false;},2500);
     }).catch(() => {
       this.alerts.products.deleting = false;
       this.alerts.products.deletingError = true;
+      setTimeout(() => {this.alerts.products.deletingError = false;},5000);
     })
   }
 

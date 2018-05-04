@@ -40,6 +40,7 @@ export class NewUserComponent implements OnInit {
       this.router.navigate(['login']);
     }).catch(() => {
       this.registerUserError = true;
+      setTimeout(() => {this.registerUserError = false;},5000);
       this.addingUser = false;
     })
 

@@ -2,62 +2,21 @@
   padding-right: 50px;
   padding-left: 50px;
   .row {
-    padding-top: 10%;
+    padding-top: 5%;
     background-color: #8BC4FF;
-    .add-button {
-      text-align: right;
-      button {
-        background-color: white;
-        color: black;
-      }
-    }
+
     h3 {
       color: white;
       font-family: Open-Sans, "Lilita One", sans-serif;
+      margin: 2.5%;
     }
-    table {
-      text-align: center;
-      background-color: white;
-      tr{
-        th{
-          vertical-align: middle;
-        }
-        td{
-          vertical-align: middle;
-          .upload-button, .remove-button{
-            button {
-              font-size: 26px;
-              background-color: transparent;
-              color: black;
-              border: none;
-            }
-          }
-        }
-      }
+
+    #register-button{
+      background-color: #58bee0;
+      font-weight: bold;
+      color: white;
     }
-    .paginator /deep/ .ngx-pagination {
-      text-align: center;
-      li{
-        color: white;
-        &.current{
-          background-color: white;
-          color: black;
-        }
-        & :hover(:not(.disabled)){
-          background-color: white;
-          color: black;
-        }
-        &.disabled{
-          cursor: not-allowed;
-        }
-        a{
-          color: white;
-          & :hover{
-            background-color: white;
-            color: black;
-          }
-        }
-      }
-    }
+
   }
 }
+

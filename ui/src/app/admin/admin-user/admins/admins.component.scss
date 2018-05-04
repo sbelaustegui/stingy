@@ -7,8 +7,9 @@
     .add-button {
       text-align: right;
       button {
-        background-color: white;
-        color: black;
+        background-color: #58bee0;
+        font-weight: bold;
+        color: white;
       }
     }
     h2 {
@@ -57,6 +58,12 @@
             color: black;
           }
         }
+      }
+    }
+
+    .remove-button{
+      i{
+        color: red;
       }
     }
   }

@@ -101,6 +101,23 @@
       </pagination-controls>
     </div>
 
+    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+      <div class="alert alert-danger text-center" *ngIf="alerts.addCategory.error ">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center" *ngIf="alerts.addCategory.success || alerts.deleteSuccess">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>¡Operación realizada con éxito!</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+
     <!--New category Modal-->
     <ng-template #newCategoryModal>
       <div class="modal-header">

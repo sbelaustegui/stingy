@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
@@ -88,27 +88,17 @@ export class UploadProductComponent implements OnInit {
     this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
     this.productService.addProduct(this.newProduct).then( () => {
       this.addingProduct = false;
+      // this.alertTimerMessage(this.addingProductSuccess,10000);
       this.addingProductSuccess = true;
-      setTimeout(() => {this.addingProductSuccess = false;},5000);
+      setTimeout(() => {this.addingProductSuccess = false;},2500);
       this.uploadProductError = false;
       this.resetUploadProduct();
     }).catch(() => {
       this.uploadProductError = true;
+      setTimeout(() => {this.uploadProductError = false;},5000);
       this.addingProduct = false;
     })
 
-  }
-
-  private createFormControls() {
-    this.formGroup = this.fb.group({
-      name: ['', Validators.required],
-      price: ['', [Validators.required,Validators.min(0)]],
-      description: ['', Validators.required],
-      imageUrl: ['', [Validators.required,]],
-      subcategoryId: [-1, [Validators.required,Validators.min(0)]],
-      supplierId: [-1, [Validators.required,Validators.min(0)]],
-    }, {
-    })
   }
 
   getSubcategories(){
@@ -152,5 +142,20 @@ export class UploadProductComponent implements OnInit {
     this.newProduct = Product.empty();
     this.selectedCategoryId = -1;
   }
+
+  private createFormControls() {
+    this.formGroup = this.fb.group({
+      name: ['', Validators.required],
+      price: ['', [Validators.required,Validators.min(0)]],
+      description: ['', Validators.required],
+      imageUrl: ['', [Validators.required,]],
+      subcategoryId: [-1, [Validators.required,Validators.min(0)]],
+      supplierId: [-1, [Validators.required,Validators.min(0)]],
+    }, {
+    })
+  }
+
+
+
 
 }

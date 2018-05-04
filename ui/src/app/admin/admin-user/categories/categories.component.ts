@@ -8,7 +8,6 @@ import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import {PageChangedEvent} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-categories',
@@ -39,6 +38,7 @@ export class CategoriesComponent implements OnInit {
       deletingError: boolean,
     },
     addCategory: {
+      success: boolean;
       error: boolean,
       loading: boolean,
     },
@@ -48,6 +48,7 @@ export class CategoriesComponent implements OnInit {
       deleting: boolean,
       deletingError: boolean,
     },
+    deleteSuccess: boolean,
   };
   public newSubcategory: Subcategory;
   modalRef: BsModalRef;
@@ -69,6 +70,7 @@ export class CategoriesComponent implements OnInit {
       addCategory: {
         error: false,
         loading: false,
+        success:false
       },
       subcategories: {
         error: false,
@@ -76,6 +78,7 @@ export class CategoriesComponent implements OnInit {
         deleting: false,
         deletingError: false
       },
+      deleteSuccess: false,
     };
     this.categories = new Map<number, Category>();
     this.createCategoryFormControls();
@@ -90,7 +93,6 @@ export class CategoriesComponent implements OnInit {
       this.alerts.subcategories.error = false;
       this.alerts.subcategories.loading = false;
     }).catch(err => {
-      //TODO mostrar en el front mensaje de error
       this.alerts.subcategories.error = true;
       this.alerts.subcategories.loading = false;
     })
@@ -105,7 +107,6 @@ export class CategoriesComponent implements OnInit {
       this.alerts.categories.error = false;
       this.alerts.categories.loading = false;
     }).catch(err => {
-      //TODO mostrar en el front mensaje de error
       this.alerts.categories.error = true;
       this.alerts.categories.loading = false;
     })
@@ -120,11 +121,13 @@ export class CategoriesComponent implements OnInit {
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
-        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+        this.alerts.addCategory.success = true;
+        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
       }).catch(() => {
-        //TODO mostrar en el front mensaje de error
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
+        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
+
       })
     } else {
       this.categoryService.addCategory(this.newCategory).then(res => {
@@ -135,12 +138,14 @@ export class CategoriesComponent implements OnInit {
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
-        //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
+        this.alerts.addCategory.success = true;
+        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
         // this.router.navigate(['categories']);
+
       }).catch(() => {
-        //TODO mostrar en el front mensaje de error
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
+        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
       })
     }
   }
@@ -156,9 +161,13 @@ export class CategoriesComponent implements OnInit {
         this.newSubcategory = Subcategory.empty();
         this.subcategoryFormGroup.reset();
         this.modalRef.hide();
+        this.alerts.addCategory.success = true;
+        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
+        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
+
       })
     } else {
       this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
@@ -171,7 +180,8 @@ export class CategoriesComponent implements OnInit {
         this.modalRef.hide();
       }).catch(() => {
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = true;
+        this.alerts.subcategories.error = true;
+        setTimeout(() => {this.alerts.subcategories.error = false;},5000);
       })
     }
   }
@@ -181,14 +191,15 @@ export class CategoriesComponent implements OnInit {
     this.categoryService.deleteCategory(this.categoryToDelete.id).then(res => {
       this.categoriesArray.splice(this.categoryIndexToDelete,1);
       this.categories.delete(this.categoryToDelete.id);
-      // this.deleteSubCategories();
-      //TODO mostrar mensajes de error/success/ y loader
       this.alerts.categories.deleting = false;
       this.alerts.categories.deletingError = false;
       this.modalRef.hide();
+      this.alerts.deleteSuccess= true;
+      setTimeout(() => {this.alerts.deleteSuccess= false;},2500);
     }).catch(() => {
       this.alerts.categories.deleting = false;
-      this.alerts.categories.deletingError = true;
+      this.alerts.categories.error = true;
+      setTimeout(() => {this.alerts.categories.error = false;},2500);
     })
   }
 
@@ -196,13 +207,15 @@ export class CategoriesComponent implements OnInit {
     this.alerts.subcategories.deleting = true;
     this.subcategoryService.deleteSubcategory(this.subcategoryToDelete.id).then(res => {
       this.subcategories.splice(this.subcategoryIndexToDelete,1);
-      //TODO mostrar mensajes de error/success/ y loader
       this.alerts.subcategories.deleting = false;
       this.alerts.subcategories.deletingError = false;
       this.modalRef.hide();
+      this.alerts.addCategory.success = true;
+      setTimeout(() => {this.alerts.addCategory.success = false;},2500);
     }).catch(() => {
       this.alerts.subcategories.deleting = false;
       this.alerts.subcategories.deletingError = true;
+      setTimeout(() => {this.alerts.subcategories.deletingError = false;},2500);
     })
   }
 

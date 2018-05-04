@@ -1,8 +1,11 @@
 <div class="upload-product">
   <form class="new-user-form" [formGroup]="formGroup" (ngSubmit)="uploadProduct()">
     <div class="row">
-      <div class="col-md-4 offset-md-2 align-content-end">
+      <div class="col-12">
         <h3 class="text" align="center">¡Carga un producto, ayuda al resto!</h3>
+      </div>
+      <div class="col-md-4 offset-md-2 align-content-end">
+
         <!--INPUT NAME-->
         <fieldset>
           <div class="form-group">
@@ -21,6 +24,49 @@
             </div>
           </div>
         </fieldset>
+
+        <!--SELECT CATEGORY-->
+        <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="selectedCategoryId"
+                [formGroup]="formGroup" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
+          <option [value]="undefined" selected>Seleccione una categoría</option>
+          <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+        </select>
+
+        <!--SELECT SUPPLIER-->
+        <fieldset>
+          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId"
+                  formControlName="supplierId"
+                  [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading">
+            <option [value]="undefined" selected>Seleccione un Proveedor</option>
+            <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
+          </select>
+          <div class="form-control-feedback"
+               *ngIf="formGroup.controls['supplierId'].errors && (formGroup.controls['supplierId'].dirty || formGroup.controls['supplierId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['supplierId'].errors.required">Es requerida la selección</p>
+          </div>
+        </fieldset>
+
+        <!--INPUT DESCRIPTION-->
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="description"
+                   [formGroup]="formGroup"
+                   placeholder="Descripción"
+                   aria-label="Description"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="newProduct.description"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="formGroup.controls['description'].errors && (formGroup.controls['description'].dirty || formGroup.controls['description'].touched)">
+              <p class="error" *ngIf="formGroup.controls['description'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+      <div class="col-md-4">
         <!--INPUT PRICE-->
         <fieldset>
           <div class="form-group">
@@ -41,26 +87,21 @@
             </div>
           </div>
         </fieldset>
-        <!--INPUT DESCRIPTION-->
+
+        <!--SELECT SUBCATEGORY-->
         <fieldset>
-          <div class="form-group">
-            <input type="text"
-                   class="form-control"
-                   formControlName="description"
-                   [formGroup]="formGroup"
-                   placeholder="Descripción"
-                   aria-label="Description"
-                   aria-describedby="basic-addon1"
-                   [(ngModel)]="newProduct.description"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="formGroup.controls['description'].errors && (formGroup.controls['description'].dirty || formGroup.controls['description'].touched)">
-              <p class="error" *ngIf="formGroup.controls['description'].errors.required">Es requerido</p>
-            </div>
+          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="newProduct.subcategoryId"
+                  formControlName="subcategoryId"
+                  [formGroup]="formGroup" *ngIf="!alerts.subcategories.loading">
+            <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
+            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+          </select>
+          <div class="form-control-feedback"
+               *ngIf="formGroup.controls['subcategoryId'].errors && (formGroup.controls['subcategoryId'].dirty || formGroup.controls['subcategoryId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['subcategoryId'].errors.required">Es requerida la selección</p>
           </div>
         </fieldset>
-      </div>
-      <div class="col-md-4">
+
         <!--INPUT URL-->
         <fieldset>
           <div class="form-group">
@@ -80,42 +121,9 @@
           </div>
         </fieldset>
 
-        <!--SELECT CATEGORY-->
-          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="selectedCategoryId"
-                          [formGroup]="formGroup" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
-          <option [value]="undefined" selected>Seleccione una categoría</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
-        </select>
-
-        <fieldset>
-          <!--SELECT SUBCATEGORY-->
-          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="newProduct.subcategoryId" formControlName="subcategoryId"
-                  [formGroup]="formGroup" *ngIf="!alerts.subcategories.loading">
-            <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
-            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
-          </select>
-          <div class="form-control-feedback"
-               *ngIf="formGroup.controls['subcategoryId'].errors && (formGroup.controls['subcategoryId'].dirty || formGroup.controls['subcategoryId'].touched)">
-            <p class="error" *ngIf="formGroup.controls['subcategoryId'].errors.required">Es requerida la selección</p>
-          </div>
-        </fieldset>
-
-
-        <!--SELECT SUPPLIER-->
-        <fieldset>
-          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId" formControlName="supplierId"
-                  [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading" >
-            <option [value]="undefined" selected>Seleccione un Proveedor</option>
-            <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
-          </select>
-          <div class="form-control-feedback"
-               *ngIf="formGroup.controls['supplierId'].errors && (formGroup.controls['supplierId'].dirty || formGroup.controls['supplierId'].touched)">
-            <p class="error" *ngIf="formGroup.controls['supplierId'].errors.required">Es requerida la selección</p>
-          </div>
-        </fieldset>
-
-
       </div>
+
+      <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
       <div class="alert alert-danger text-center" *ngIf="uploadProductError">
         <div class="card-block">
           <blockquote class="card-blockquote">
@@ -130,14 +138,15 @@
           </blockquote>
         </div>
       </div>
+      </div>
+
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-        <div class="row">
-          <div class="register-button col-8 col-md-6" align="center">
-            <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid || addingProduct">
-              <span *ngIf="!addingProduct">Agregar</span>
-              <span *ngIf="addingProduct"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-            </button>
-          </div>
+        <div class="register-button col-4 offset-4" align="center">
+          <button type="submit" class="btn btn-light" id="register-button"
+                  [disabled]="formGroup.invalid || addingProduct">
+            <span *ngIf="!addingProduct">Agregar</span>
+            <span *ngIf="addingProduct"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+          </button>
         </div>
       </div>
     </div>

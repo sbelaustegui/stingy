@@ -33,6 +33,7 @@ export class AdminsComponent implements OnInit {
       error: boolean,
       loading: boolean,
     },
+    success: boolean
   };
   modalRef: BsModalRef;
 
@@ -53,6 +54,7 @@ export class AdminsComponent implements OnInit {
         error: false,
         loading: false,
       },
+      success: false
     };
     this.createFormControls();
     this.getAdmins();
@@ -80,11 +82,12 @@ export class AdminsComponent implements OnInit {
       this.newAdmin = User.empty();
       this.adminFormGroup.reset();
       this.modalRef.hide();
-      //TODO Agregar alerts.success y mostrar un toast o algun mensaje de que se agrego con exito
-    }).catch(() => {
+      this.alerts.success = true;
+      setTimeout(() => {this.alerts.success = false;},2500);    }).catch(() => {
       //TODO mostrar en el front mensaje de error
       this.alerts.addAdmin.loading = false;
       this.alerts.addAdmin.error = true;
+      setTimeout(() => {this.alerts.addAdmin.error = false;},2500);
     })
   }
 
@@ -97,9 +100,12 @@ export class AdminsComponent implements OnInit {
       this.alerts.admins.deleting = false;
       this.alerts.admins.deletingError = false;
       this.modalRef.hide();
+      this.alerts.success = true;
+      setTimeout(() => {this.alerts.success = false;},2500);
     }).catch(() => {
       this.alerts.admins.deleting = false;
       this.alerts.admins.deletingError = true;
+      setTimeout(() => {this.alerts.admins.deletingError = false;},5000);
     })
   }
 

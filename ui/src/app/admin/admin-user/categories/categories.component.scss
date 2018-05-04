@@ -7,8 +7,9 @@
     .add-button {
       text-align: right;
       button {
-        background-color: white;
-        color: black;
+        background-color: #58bee0;
+        font-weight: bold;
+        color: white;
       }
     }
     h2 {
@@ -24,12 +25,26 @@
         }
         td{
           vertical-align: middle;
-          .upload-button, .remove-button{
+          .upload-button{
             button {
               font-size: 26px;
               background-color: transparent;
               color: black;
               border: none;
+            }
+            i{
+              color: #cc6600;
+            }
+          }
+          .remove-button{
+            button {
+              font-size: 26px;
+              background-color: transparent;
+              color: black;
+              border: none;
+            }
+            i{
+              color: red;
             }
           }
         }
