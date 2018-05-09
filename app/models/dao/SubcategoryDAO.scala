@@ -55,6 +55,9 @@ object SubcategoryDAO {
     category.id match {
       case Some(_) =>
         val eSubcategory: ESubcategory = toEbean(category)
+        ProductDAO.getBySubcategoryId(eSubcategory.getId).foreach(p => {
+          ProductDAO.delete(p)
+        })
         eSubcategory.delete()
         Some(true)
       case None =>

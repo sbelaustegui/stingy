@@ -52,6 +52,16 @@ object ProductDAO {
     }
   }
 
+
+  def getBySubcategoryId(id: Long) : Option[List[Product]] = {
+    toScalaOption(EProduct.getProductBySubcategoryId(id)) match {
+      case Some(product) =>
+        Some(product.map(Product.apply).toList)
+      case None =>
+        None
+    }
+  }
+
   def getByName(name: String, subcategoryId: Long) : Option[List[Product]] = {
     toScalaOption(EProduct.getByName(name, subcategoryId)) match {
       case Some(product) =>
