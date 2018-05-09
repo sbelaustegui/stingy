@@ -1,5 +1,9 @@
 package controllers
 
+import java.io.{File, FileWriter}
+import java.nio.file.Paths
+
+import javax.imageio.ImageIO
 import javax.inject.Inject
 import models.domain.product._
 import play.api.libs.json.Json
@@ -81,27 +85,15 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     request =>
       request.body.asJson.get.asOpt[ProductSearch] match {
         case Some(product) =>
-          Product.getByName(product.name) match {
-            case Some(productFounded) =>
-              if (productFounded.isValidated) {
-                val a : List[Product] = List(productFounded)
-                Ok(
-                  Json.toJson(
-                    ResponseGenerated(
-                      OK, "Ok",  Json.toJson(a)
-                    )
+          Product.getByName(product.name, product.subcategoryId) match {
+            case Some(productsFounded) =>
+              Ok(
+                Json.toJson(
+                  ResponseGenerated(
+                    OK, "Ok",  Json.toJson(productsFounded)
                   )
                 )
-              } else {
-                val emptyList : List[Product] = List.empty
-                Ok(
-                  Json.toJson(
-                    ResponseGenerated(
-                      OK, "No results",  Json.toJson(emptyList)
-                    )
-                  )
-                )
-              }
+              )
             case None =>
               val emptyList : List[Product] = List.empty
               Ok(
@@ -198,6 +190,44 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
             ResponseGenerated(BAD_REQUEST, "No product found")
           )
         )
+    }
+  }
+
+  def saveImage = Action {
+    request =>
+      request.body.asMultipartFormData match {
+        case Some(data) =>
+          data.file("foto") match {
+            case Some(file) =>
+              val filename = Paths.get(file.filename).getFileName
+              file.ref.moveTo(Paths.get(s"/tmp/picture/$filename"), replace = true)
+              Ok(
+                Json.toJson(
+                  ResponseGenerated(OK, "Image Saved")
+                )
+              )
+          }
+        case None =>
+          BadRequest(
+            Json.toJson(
+              ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
+            )
+          )
+      }
+  }
+
+  def upload = Action(parse.multipartFormData) { request =>
+    request.body.file("foto").map { picture =>
+      val filename = Paths.get(picture.filename).getFileName
+
+      picture.ref.moveTo(Paths.get(s"/tmp/images/$filename"), replace = true)
+      Ok("File uploaded")
+    }.getOrElse {
+      BadRequest(
+        Json.toJson(
+          ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
+        )
+      )
     }
   }
 }

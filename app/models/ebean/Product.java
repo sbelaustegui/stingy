@@ -63,8 +63,8 @@ public class Product extends Model {
         return Optional.empty();
     }
 
-    public static Optional<Product> getByName(String name){
-        return Optional.ofNullable(Ebean.find(Product.class).where().eq("name", name).findOne());
+    public static Optional<List<Product>> getByName(String name, Long subcategoryId){
+        return Optional.of(Ebean.find(Product.class).where().contains("name", name).eq("subcategory_id", subcategoryId).eq("is_validated", 1).orderBy("price").findList());
     }
 
     public static List<Product> getAllProducts() {

@@ -3,6 +3,7 @@ package models.dao
 import models.domain.product.Product
 import models.ebean.{Product => EProduct}
 import utils.ScalaOptional.toScalaOption
+import scala.collection.JavaConverters._
 
 import scala.collection.JavaConversions._
 
@@ -51,10 +52,10 @@ object ProductDAO {
     }
   }
 
-  def getByName(name: String) : Option[Product] = {
-    toScalaOption(EProduct.getByName(name)) match {
+  def getByName(name: String, subcategoryId: Long) : Option[List[Product]] = {
+    toScalaOption(EProduct.getByName(name, subcategoryId)) match {
       case Some(product) =>
-        Some(Product(product))
+        Some(product.map(Product.apply).toList)
       case None =>
         None
     }
