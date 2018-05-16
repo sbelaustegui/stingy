@@ -26,6 +26,8 @@ import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-prof
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { AgmCoreModule } from '@agm/core';
+import {TruncateModule} from "ng2-truncate";
+import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { AgmCoreModule } from '@agm/core';
     AdminsComponent,
     AdminProfileComponent,
     ProductsComponent,
+    SuppliersComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,7 @@ import { AgmCoreModule } from '@agm/core';
     HttpModule,
     ModalModule.forRoot(),
     NgxPaginationModule,
+    TruncateModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'
     })

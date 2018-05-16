@@ -18,7 +18,7 @@
           <th scope="col">Nombre y Apellido</th>
           <th scope="col">Email</th>
           <th scope="col">Usuario</th>
-          <!--<th scope="col">Editar</th>-->
+          <th scope="col">Editar</th>
           <th scope="col">Eliminar</th>
         </tr>
         </thead>
@@ -28,6 +28,13 @@
           <td>{{admin.name}} {{admin.lastName}}</td>
           <td>{{admin.email}}</td>
           <td>{{admin.username}}</td>
+          <td>
+            <div class="upload-button">
+              <button type="button" class="btn btn-light"  (click)="openAdminModal(newAdminModal, admin)">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </div>
+          </td>
           <td>
             <div class="remove-button">
               <button type="submit" class="btn btn-danger" (click)="openAdminDeleteModal(deleteModal, admin, i)">
@@ -215,7 +222,7 @@
       <div class="alert alert-danger text-center" *ngIf="alerts.admins.error">
         <div class="card-block">
           <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
+            <p>Hubo un error al agregar el adminstrador. Revise que el nombre sea valido y no se encuentre repetido.</p>
           </blockquote>
         </div>
       </div>

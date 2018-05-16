@@ -26,10 +26,10 @@
           <th scope="row">{{product.id}}</th>
           <td>{{product.name}}</td>
           <td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>
-          <td>{{product.description}}</td>
-          <td>{{product.price}}</td>
-          <td><span *ngIf="product.updateDate">{{product.updateDate.toDateString()}}</span><span *ngIf="!product.updateDate">Nunca</span></td>
-          <td>{{product.uploadDate.toDateString()}}</td>
+          <td style="text-align: left">{{product.description | truncate: 100}}</td>
+          <td>${{product.price}}</td>
+          <td><span *ngIf="product.updateDate">{{product.updateDate.toStringDate()}}</span><span *ngIf="!product.updateDate">Nunca</span></td>
+          <td>{{product.uploadDate.toStringDate()}}</td>
           <td>
             <div class="upload-button">
               <button type="button" class="btn btn-light" *ngIf="!product.isValidated" (click)="openProductModal(validateProduct, product)">

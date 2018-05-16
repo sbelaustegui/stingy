@@ -1,0 +1,182 @@
+<div class="suppliers">
+  <div class="row">
+    <!--SUPPLIER TABLE-->
+    <div class="col-12 col-md-8 mx-auto">
+      <div class="row">
+        <div class="col-8">
+          <h2>Proveedores</h2>
+        </div>
+        <div class="add-button col-4">
+          <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal)">
+            <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <table class="table table-striped" *ngIf="!alerts.suppliers.loading">
+        <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
+          <th scope="row">{{supplier.id}}</th>
+          <td>{{supplier.name}}</td>
+          <td>{{supplier.description}}</td>
+          <td>
+            <div class="upload-button">
+              <button type="button" class="btn btn-light"  (click)="openSupplierModal(newSupplierModal, supplier)">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="remove-button">
+              <button type="submit" class="btn btn-danger" (click)="openSupplierDeleteModal(deleteModal, supplier, i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="suppliers"
+                           class="paginator"
+                           (pageChange)="suppliersPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+
+    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+      <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center" *ngIf="alerts.success ">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>¡Operación realizada con éxito!</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+
+    <!--New supplier Modal-->
+    <ng-template #newSupplierModal>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          <span *ngIf="!newSupplier.id">Nuevo Proveedor</span>
+          <span *ngIf="newSupplier.id">Editar Proveedor {{newSupplier.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="supplierFormGroup">
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="name"
+                     [formGroup]="supplierFormGroup"
+                     placeholder="Nombre"
+                     aria-label="Name"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newSupplier.name"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="supplierFormGroup.controls['name'].errors && (supplierFormGroup.controls['name'].dirty || supplierFormGroup.controls['name'].touched)">
+                <p class="error" *ngIf="supplierFormGroup.controls['name'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <!--INPUT DESCRIPTION-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="description"
+                     [formGroup]="supplierFormGroup"
+                     placeholder="Descripción"
+                     aria-label="description"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newSupplier.description"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="supplierFormGroup.controls['description'].errors && (supplierFormGroup.controls['description'].dirty || supplierFormGroup.controls['description'].touched)">
+                <p class="error" *ngIf="supplierFormGroup.controls['description'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <!--INPUT LOCATION-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="location"
+                     [formGroup]="supplierFormGroup"
+                     placeholder="Ubicación"
+                     aria-label="location"
+                     aria-describedby="basic-addon1"
+                     [(ngModel)]="newSupplier.location"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="supplierFormGroup.controls['location'].errors && (supplierFormGroup.controls['location'].dirty || supplierFormGroup.controls['location'].touched)">
+                <p class="error" *ngIf="supplierFormGroup.controls['location'].errors.required">Es requerido</p>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}" (click)="uploadSupplier()">Guardar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar el proveedor. Revise que el nombre sea valido y no se encuentre repetido.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+    <!--Delete confirmation modal-->
+    <ng-template #deleteModal>
+      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
+        <h4 class="modal-title pull-left">Eliminar
+          <span>Proveedor {{supplierToDelete.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro que desea eliminar el proveedor?
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" (click)="this.deleteSupplier()">Eliminar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al agregar al eliminar el proveedor.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+

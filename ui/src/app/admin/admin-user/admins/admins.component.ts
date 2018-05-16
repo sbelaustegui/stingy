@@ -63,7 +63,6 @@ export class AdminsComponent implements OnInit {
   getAdmins() {
     this.adminService.users.then(res => {
       this.adminsArray = res;
-
       this.alerts.admins.error = false;
       this.alerts.admins.loading = false;
     }).catch(err => {
@@ -74,21 +73,50 @@ export class AdminsComponent implements OnInit {
   }
 
   uploadAdmin() {
-    this.alerts.addAdmin.loading = true;
-    this.adminService.addUser(this.newAdmin).then(res => {
-      this.adminsArray.push(res);
-      this.alerts.addAdmin.loading = false;
-      this.alerts.addAdmin.error = false;
-      this.newAdmin = User.empty();
-      this.adminFormGroup.reset();
-      this.modalRef.hide();
-      this.alerts.success = true;
-      setTimeout(() => {this.alerts.success = false;},2500);    }).catch(() => {
-      //TODO mostrar en el front mensaje de error
-      this.alerts.addAdmin.loading = false;
-      this.alerts.addAdmin.error = true;
-      setTimeout(() => {this.alerts.addAdmin.error = false;},2500);
-    })
+    if(this.newAdmin.id){
+      this.alerts.addAdmin.loading = true;
+      this.adminService.updateUser(this.newAdmin).then(res => {
+        this.adminsArray.splice(this.adminsArray.findIndex(a => a.id === res.id),1);
+        this.adminsArray.push(res);
+        this.alerts.addAdmin.loading = false;
+        this.alerts.addAdmin.error = false;
+        this.newAdmin = User.empty();
+        this.adminFormGroup.reset();
+        this.modalRef.hide();
+        this.alerts.success = true;
+        setTimeout(() => {
+          this.alerts.success = false;
+        }, 2500);
+      }).catch(() => {
+        //TODO mostrar en el front mensaje de error
+        this.alerts.addAdmin.loading = false;
+        this.alerts.addAdmin.error = true;
+        setTimeout(() => {
+          this.alerts.addAdmin.error = false;
+        }, 2500);
+      })
+    } else {
+      this.alerts.addAdmin.loading = true;
+      this.adminService.addUser(this.newAdmin).then(res => {
+        this.adminsArray.push(res);
+        this.alerts.addAdmin.loading = false;
+        this.alerts.addAdmin.error = false;
+        this.newAdmin = User.empty();
+        this.adminFormGroup.reset();
+        this.modalRef.hide();
+        this.alerts.success = true;
+        setTimeout(() => {
+          this.alerts.success = false;
+        }, 2500);
+      }).catch(() => {
+        //TODO mostrar en el front mensaje de error
+        this.alerts.addAdmin.loading = false;
+        this.alerts.addAdmin.error = true;
+        setTimeout(() => {
+          this.alerts.addAdmin.error = false;
+        }, 2500);
+      })
+    }
   }
 
   deleteAdmin() {
@@ -124,7 +152,8 @@ export class AdminsComponent implements OnInit {
   }
 
   openAdminModal(template: TemplateRef<any>, admin?) {
-    if(admin) this.newAdmin = admin;
+    if(admin) this.newAdmin = Object.assign({}, admin);
+    this.adminFormGroup.controls['confirmPassword'].setValue(this.newAdmin.password);
     this.modalRef = this.modalService.show(template);
   }
 

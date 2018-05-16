@@ -19,6 +19,7 @@ import {AdminUserComponent} from "./admin/admin-user/admin-user.component";
 import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 import {ProductsComponent} from "./admin/admin-user/products/products.component";
+import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 
 const routes: Routes =[
   {
@@ -45,8 +46,9 @@ const routes: Routes =[
             children: [
               {path: 'categories',                                    component: CategoriesComponent},
               {path: 'users',                                         component: AdminsComponent},
-              {path: 'admin-profile',                                       component: AdminProfileComponent},
+              {path: 'admin-profile',                                 component: AdminProfileComponent},
               {path: 'products',                                      component: ProductsComponent},
+              {path: 'suppliers',                                     component: SuppliersComponent},
             ]
           }
         ]

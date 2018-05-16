@@ -17,16 +17,16 @@ public class Supplier extends Model {
     private Long id;
     @NotNull
     private String name;
-    private String location;
     private String description;
+    private String location;
 
     private static Finder<Long, Supplier> finder = new Finder<>(Supplier.class);
 
-    public Supplier(Long id, String name, String location, String description){
+    public Supplier(Long id, String name, String description, String location){
         this.id = id;
         this.name = name;
-        this.location = location;
         this.description = description;
+        this.location = location;
     }
 
     @Override

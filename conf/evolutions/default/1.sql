@@ -70,8 +70,8 @@ create table sub_category (
 create table supplier (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
-  location                      varchar(255),
   description                   varchar(255),
+  location                      varchar(255),
   constraint pk_supplier primary key (id)
 );
 

@@ -233,7 +233,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   openCategoryModal(template: TemplateRef<any>, category?) {
-    if(category) this.newCategory = category;
+    if(category) this.newCategory = Object.assign({}, category);
     this.modalRef = this.modalService.show(template);
   }
 
