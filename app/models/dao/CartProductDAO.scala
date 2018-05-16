@@ -43,6 +43,10 @@ object CartProductDAO {
     }
   }
 
+  def getByCartId(id: Long) : List[CartProduct] = {
+    ECartProduct.getCartProductsByCartId(id).map(CartProduct.apply).toList
+  }
+
   def getAllCartProducts: List[CartProduct] = {
     ECartProduct.getAllCartProducts.map(CartProduct.apply).toList
   }

@@ -68,6 +68,16 @@ class CartProductController @Inject()(cc: ControllerComponents) extends Abstract
     }
   }
 
+  def getByCartId(id: Long) = Action {
+    Ok(
+      Json.toJson(
+        ResponseGenerated(
+          OK, "CartProducts", Json.toJson(CartProduct.getByCartId(id))
+        )
+      )
+    )
+  }
+
   def getAll = Action{
     Ok(
       Json.toJson(

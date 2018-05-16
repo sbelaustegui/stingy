@@ -60,6 +60,7 @@ DELETE      /api/cart/:id                                       controllers.Cart
 POST        /api/cart/product                                   controllers.CartProductController.register()
 GET         /api/cart/product/all                               controllers.CartProductController.getAll
 GET         /api/cart/product/id/:id                            controllers.CartProductController.getById(id: Long)
+GET         /api/cart/product/cart/:id                          controllers.CartProductController.getByCartId(id: Long)
 PUT         /api/cart/product                                   controllers.CartProductController.update()
 DELETE      /api/cart/product/:id                               controllers.CartProductController.delete(id: Long)
 

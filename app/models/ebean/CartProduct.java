@@ -42,6 +42,10 @@ public class CartProduct extends Model {
         return Optional.empty();
     }
 
+    public static List<CartProduct> getCartProductsByCartId(Long id){
+        return Ebean.find(CartProduct.class).where().eq("cart_id", id).findList();
+    }
+
     public static List<CartProduct> getAllCartProducts() {
         return finder.all();
     }
