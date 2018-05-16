@@ -32,6 +32,12 @@ create table category (
   constraint pk_category primary key (id)
 );
 
+create table image (
+  id                            bigint auto_increment not null,
+  path                          varchar(255) not null,
+  constraint pk_image primary key (id)
+);
+
 create table product (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
@@ -45,6 +51,13 @@ create table product (
   user_id                       bigint,
   subcategory_id                bigint,
   constraint pk_product primary key (id)
+);
+
+create table product_image (
+  id                            bigint auto_increment not null,
+  product_id                    bigint,
+  image_id                      bigint,
+  constraint pk_product_image primary key (id)
 );
 
 create table sub_category (
@@ -62,8 +75,20 @@ create table supplier (
   constraint pk_supplier primary key (id)
 );
 
+alter table product_image add constraint fk_product_image_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
+create index ix_product_image_product_id on product_image (product_id);
+
+alter table product_image add constraint fk_product_image_image_id foreign key (image_id) references image (id) on delete restrict on update restrict;
+create index ix_product_image_image_id on product_image (image_id);
+
 
 # --- !Downs
+
+alter table product_image drop foreign key fk_product_image_product_id;
+drop index ix_product_image_product_id on product_image;
+
+alter table product_image drop foreign key fk_product_image_image_id;
+drop index ix_product_image_image_id on product_image;
 
 drop table if exists abstract_user;
 
@@ -73,7 +98,11 @@ drop table if exists cart_product;
 
 drop table if exists category;
 
+drop table if exists image;
+
 drop table if exists product;
+
+drop table if exists product_image;
 
 drop table if exists sub_category;
 

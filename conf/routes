@@ -46,7 +46,7 @@ GET         /api/product/validate/:id                           controllers.Prod
 GET         /api/product/id/:id                                 controllers.ProductController.getById(id: Long)
 PUT         /api/product                                        controllers.ProductController.update()
 DELETE      /api/product/:id                                    controllers.ProductController.delete(id: Long)
-POST        /api/product/image                                  controllers.ProductController.upload
+POST        /api/product/image                                  controllers.ProductController.addImage
 
 # Cart
 POST        /api/cart                                           controllers.CartController.register()

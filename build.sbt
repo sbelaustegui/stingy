@@ -19,3 +19,5 @@ libraryDependencies += "com.pauldijou" %% "jwt-play" % "0.16.0"
 libraryDependencies += "io.ebean" % "ebean" % "11.7.1"
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.41"
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"
+libraryDependencies += "com.amazonaws" % "aws-java-sdk-s3" % "1.11.234"
+

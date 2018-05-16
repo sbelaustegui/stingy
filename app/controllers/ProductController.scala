@@ -1,11 +1,11 @@
 package controllers
 
-import java.io.{File, FileWriter}
 import java.nio.file.Paths
 
-import javax.imageio.ImageIO
 import javax.inject.Inject
+import models.domain.image.Image
 import models.domain.product._
+import models.domain.product.productImage.ProductImageCreate
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -193,24 +193,100 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     }
   }
 
-  def saveImage = Action {
+//  def saveImage = Action {
+//    request =>
+//      request.body.asMultipartFormData match {
+//        case Some(data) =>
+//          data.dataParts("productId") match {
+//            case Some(id)
+//              data.file ("foto") match {
+//            case Some (file) =>
+//              Image.saveImageFile(file, ProductDAO, None) match {
+//               case Some(image) =>
+//                  Ok(
+//                    Json.toJson (
+//                      ResponseGenerated (OK, "Image Saved")
+//                    )
+//                  )}
+//          case None =>
+//          BadRequest(
+//          Json.toJson(
+//          ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
+//          )
+//          )
+//          }
+//
+//          }
+//        case None =>
+//          BadRequest(
+//            Json.toJson(
+//              ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
+//            )
+//          )
+//      }
+//  }
+
+  def addImage = Action {
     request =>
       request.body.asMultipartFormData match {
         case Some(data) =>
-          data.file("foto") match {
-            case Some(file) =>
-              val filename = Paths.get(file.filename).getFileName
-              file.ref.moveTo(Paths.get(s"/tmp/picture/$filename"), replace = true)
-              Ok(
+          Json.parse(data.dataParts("productImage").head).asOpt[ProductImageCreate] match {
+            case Some(productImage) =>
+              Product.getById(productImage.productId) match {
+                case Some(product) =>
+                  data.file("image") match {
+                    case Some(file) =>
+                      Image.saveImageFile(file, product.name, None) match {
+                        case Some(savedImage) =>
+                          Ok(
+                            Json.toJson(
+                              ResponseGenerated(
+                                OK, "Product image added", Json.toJson(Product.addImage(productImage.toProductImage(product, savedImage)).image)
+                              )
+                            )
+                          )
+                        case None =>
+                          BadRequest(
+                            Json.toJson(
+                              ResponseGenerated(
+                                BAD_REQUEST, "Image save error"
+                              )
+                            )
+                          )
+                      }
+                    case None =>
+                      BadRequest(
+                        Json.toJson(
+                          ResponseGenerated(
+                            BAD_REQUEST, "No image attached"
+                          )
+                        )
+                      )
+                  }
+                case None =>
+                  BadRequest(
+                    Json.toJson(
+                      ResponseGenerated(
+                        BAD_REQUEST, "No product found for that id"
+                      )
+                    )
+                  )
+              }
+            case None =>
+              BadRequest(
                 Json.toJson(
-                  ResponseGenerated(OK, "Image Saved")
+                  ResponseGenerated(
+                    BAD_REQUEST, "Invalid data"
+                  )
                 )
               )
           }
         case None =>
           BadRequest(
             Json.toJson(
-              ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
+              ResponseGenerated(
+                BAD_REQUEST, "Invalid data type"
+              )
             )
           )
       }

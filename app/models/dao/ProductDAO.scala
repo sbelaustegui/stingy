@@ -1,10 +1,11 @@
 package models.dao
 
 import models.domain.product.Product
+import models.domain.product.productImage.ProductImage
 import models.ebean.{Product => EProduct}
 import utils.ScalaOptional.toScalaOption
-import scala.collection.JavaConverters._
 
+import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 
 /**
@@ -69,6 +70,10 @@ object ProductDAO {
       case None =>
         None
     }
+  }
+
+  def addImage(productImage: ProductImage): ProductImage = {
+    ProductImageDAO.saveOrUpdate(productImage)
   }
 
   def validate(product: Product) : Product = {
