@@ -219,7 +219,6 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
   def upload = Action(parse.multipartFormData) { request =>
     request.body.file("foto").map { picture =>
       val filename = Paths.get(picture.filename).getFileName
-
       picture.ref.moveTo(Paths.get(s"/tmp/images/$filename"), replace = true)
       Ok("File uploaded")
     }.getOrElse {

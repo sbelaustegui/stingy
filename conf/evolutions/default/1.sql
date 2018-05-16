@@ -16,6 +16,16 @@ create table abstract_user (
   constraint pk_abstract_user primary key (id)
 );
 
+create table cart (
+  id                            bigint auto_increment not null,
+  constraint pk_cart primary key (id)
+);
+
+create table cart_product (
+  id                            bigint auto_increment not null,
+  constraint pk_cart_product primary key (id)
+);
+
 create table category (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
@@ -56,6 +66,10 @@ create table supplier (
 # --- !Downs
 
 drop table if exists abstract_user;
+
+drop table if exists cart;
+
+drop table if exists cart_product;
 
 drop table if exists category;
 
