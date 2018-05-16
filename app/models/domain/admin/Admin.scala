@@ -4,6 +4,7 @@ import models.dao.AdminDAO
 import models.domain.authentication.{CaseUser, UserLogin}
 import play.api.libs.json.{Json, OFormat}
 import models.ebean.{Admin => EAdmin}
+import utils.Encrypter
 
 case class Admin(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String)
 
@@ -16,6 +17,17 @@ object Admin extends AdminJsonFormat {
       eAdmin.getEmail,
       eAdmin.getUsername,
       eAdmin.getPassword
+    )
+  }
+
+  def apply(userCreate: AdminCreate): Admin = {
+    Admin(
+      None,
+      userCreate.name,
+      userCreate.lastName,
+      userCreate.email,
+      userCreate.username,
+      Encrypter.encrypt(userCreate.password)
     )
   }
 

@@ -157,7 +157,7 @@
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <div class="register-button col-4 offset-4" align="center">
           <button type="submit" class="btn btn-light" id="register-button"
-                  [disabled]="formGroup.invalid || addingProduct">
+                  [disabled]="formGroup.invalid || addingProduct || !file">
             <span *ngIf="!addingProduct">Agregar</span>
             <span *ngIf="addingProduct"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
           </button>

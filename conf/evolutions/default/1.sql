@@ -42,7 +42,7 @@ create table product (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
   image_url                     varchar(255) not null,
-  description                   varchar(255) not null,
+  description                   varchar(900) not null,
   price                         double not null,
   update_date                   datetime(6),
   upload_date                   datetime(6),

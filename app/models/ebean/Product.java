@@ -5,6 +5,7 @@ import io.ebean.Finder;
 import io.ebean.Model;
 import io.ebean.annotation.NotNull;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Product extends Model {
     @NotNull
     private String imageUrl;
     @NotNull
+    @Column(length = 900)
     private String description;
     @NotNull
     private Double price;
