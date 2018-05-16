@@ -5,7 +5,6 @@ import models.domain.product.productImage.ProductImage
 import models.ebean.{Product => EProduct}
 import utils.ScalaOptional.toScalaOption
 
-import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 
 /**

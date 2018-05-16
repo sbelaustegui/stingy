@@ -1,13 +1,10 @@
 package models.domain.product
 
-import models.dao.{ImageDAO, ProductDAO}
-import models.domain.image.Image
+import models.dao.ProductDAO
 import models.domain.product.productImage.ProductImage
 import models.domain.util.Date
 import models.ebean.{Product => EProduct}
-import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.{Json, OFormat}
-import play.api.mvc.MultipartFormData
 
 case class Product(id: Option[Long], name: String, imageUrl: String, description: String, price: Double, updateDate: Option[Date], uploadDate: Date, isValidated: Boolean, supplierId: Long, userId: Long, subcategoryId: Long) {
   def equals(product: Product): Boolean = {

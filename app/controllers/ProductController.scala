@@ -193,39 +193,6 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     }
   }
 
-//  def saveImage = Action {
-//    request =>
-//      request.body.asMultipartFormData match {
-//        case Some(data) =>
-//          data.dataParts("productId") match {
-//            case Some(id)
-//              data.file ("foto") match {
-//            case Some (file) =>
-//              Image.saveImageFile(file, ProductDAO, None) match {
-//               case Some(image) =>
-//                  Ok(
-//                    Json.toJson (
-//                      ResponseGenerated (OK, "Image Saved")
-//                    )
-//                  )}
-//          case None =>
-//          BadRequest(
-//          Json.toJson(
-//          ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
-//          )
-//          )
-//          }
-//
-//          }
-//        case None =>
-//          BadRequest(
-//            Json.toJson(
-//              ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
-//            )
-//          )
-//      }
-//  }
-
   def addImage = Action {
     request =>
       request.body.asMultipartFormData match {
@@ -238,10 +205,13 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
                     case Some(file) =>
                       Image.saveImageFile(file, product.name, None) match {
                         case Some(savedImage) =>
+                          val imageProduct = Product.addImage(productImage.toProductImage(product, savedImage)).image
+                          val newProduct = product.copy(imageUrl = imageProduct.path)
+                          Product.saveOrUpdate(newProduct)
                           Ok(
                             Json.toJson(
                               ResponseGenerated(
-                                OK, "Product image added", Json.toJson(Product.addImage(productImage.toProductImage(product, savedImage)).image)
+                                OK, "Product image added", Json.toJson(imageProduct)
                               )
                             )
                           )
@@ -290,19 +260,5 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
             )
           )
       }
-  }
-
-  def upload = Action(parse.multipartFormData) { request =>
-    request.body.file("foto").map { picture =>
-      val filename = Paths.get(picture.filename).getFileName
-      picture.ref.moveTo(Paths.get(s"/tmp/images/$filename"), replace = true)
-      Ok("File uploaded")
-    }.getOrElse {
-      BadRequest(
-        Json.toJson(
-          ResponseGenerated(BAD_REQUEST, "No se pudo guardar")
-        )
-      )
-    }
   }
 }
