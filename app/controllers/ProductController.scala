@@ -197,7 +197,7 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
     request =>
       request.body.asMultipartFormData match {
         case Some(data) =>
-          Json.parse(data.dataParts("productImage").head).asOpt[ProductImageCreate] match {
+          Json.parse(data.dataParts("productId").head).asOpt[ProductImageCreate] match {
             case Some(productImage) =>
               Product.getById(productImage.productId) match {
                 case Some(product) =>

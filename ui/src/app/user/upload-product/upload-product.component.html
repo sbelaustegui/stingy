@@ -32,17 +32,17 @@
           <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
         </select>
 
-        <!--SELECT SUPPLIER-->
+        <!--SELECT SUBCATEGORY-->
         <fieldset>
-          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId"
-                  formControlName="supplierId"
-                  [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading">
-            <option [value]="undefined" selected>Seleccione un Proveedor</option>
-            <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
+          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="newProduct.subcategoryId"
+                  formControlName="subcategoryId"
+                  [formGroup]="formGroup" *ngIf="!alerts.subcategories.loading">
+            <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
+            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
           </select>
           <div class="form-control-feedback"
-               *ngIf="formGroup.controls['supplierId'].errors && (formGroup.controls['supplierId'].dirty || formGroup.controls['supplierId'].touched)">
-            <p class="error" *ngIf="formGroup.controls['supplierId'].errors.required">Es requerida la selección</p>
+               *ngIf="formGroup.controls['subcategoryId'].errors && (formGroup.controls['subcategoryId'].dirty || formGroup.controls['subcategoryId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['subcategoryId'].errors.required">Es requerida la selección</p>
           </div>
         </fieldset>
 
@@ -88,39 +88,46 @@
           </div>
         </fieldset>
 
-        <!--SELECT SUBCATEGORY-->
+        <!--SELECT SUPPLIER-->
         <fieldset>
-          <select type="number" class="custom-select custom-select mb-3" [(ngModel)]="newProduct.subcategoryId"
-                  formControlName="subcategoryId"
-                  [formGroup]="formGroup" *ngIf="!alerts.subcategories.loading">
-            <option [value]="undefined" selected disabled>Seleccione una Subcategoría</option>
-            <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
+          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId"
+                  formControlName="supplierId"
+                  [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading">
+            <option [value]="undefined" selected>Seleccione un Proveedor</option>
+            <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</option>
           </select>
           <div class="form-control-feedback"
-               *ngIf="formGroup.controls['subcategoryId'].errors && (formGroup.controls['subcategoryId'].dirty || formGroup.controls['subcategoryId'].touched)">
-            <p class="error" *ngIf="formGroup.controls['subcategoryId'].errors.required">Es requerida la selección</p>
+               *ngIf="formGroup.controls['supplierId'].errors && (formGroup.controls['supplierId'].dirty || formGroup.controls['supplierId'].touched)">
+            <p class="error" *ngIf="formGroup.controls['supplierId'].errors.required">Es requerida la selección</p>
           </div>
         </fieldset>
 
         <!--INPUT URL-->
+        <!--<fieldset>-->
+          <!--<div class="form-group">-->
+            <!--<input type="imageUrl"-->
+                   <!--class="form-control"-->
+                   <!--formControlName="imageUrl"-->
+                   <!--[formGroup]="formGroup"-->
+                   <!--placeholder="Image-URL"-->
+                   <!--aria-label="imageUrl"-->
+                   <!--aria-describedby="basic-addon4"-->
+                   <!--[(ngModel)]="newProduct.imageUrl"-->
+                   <!--required>-->
+            <!--<div class="form-control-feedback"-->
+                 <!--*ngIf="formGroup.controls['imageUrl'].errors && (formGroup.controls['imageUrl'].dirty || formGroup.controls['imageUrl'].touched)">-->
+              <!--<p class="error" *ngIf="formGroup.controls['imageUrl'].errors.required">Es requerida una URL</p>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</fieldset>-->
         <fieldset>
-          <div class="form-group">
-            <input type="imageUrl"
-                   class="form-control"
-                   formControlName="imageUrl"
-                   [formGroup]="formGroup"
-                   placeholder="Image-URL"
-                   aria-label="imageUrl"
-                   aria-describedby="basic-addon4"
-                   [(ngModel)]="newProduct.imageUrl"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="formGroup.controls['imageUrl'].errors && (formGroup.controls['imageUrl'].dirty || formGroup.controls['imageUrl'].touched)">
-              <p class="error" *ngIf="formGroup.controls['imageUrl'].errors.required">Es requerida una URL</p>
+          <div class="input-group mb-3">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile01" (change)="imageSelect($event)" accept="image/*">
+              <label class="custom-file-label" for="inputGroupFile01">{{file ? file.name : 'Seleccionar Imagen'}}</label>
             </div>
           </div>
         </fieldset>
-
       </div>
 
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
@@ -128,6 +135,13 @@
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>Hubo un error al cargar su PRODUCTO. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+        <div class="alert alert-danger text-center" *ngIf="alerts.file.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al cargar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.</p>
           </blockquote>
         </div>
       </div>

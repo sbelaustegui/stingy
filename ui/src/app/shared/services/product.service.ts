@@ -40,6 +40,17 @@ export class ProductService {
       });
   }
 
+  public addProductImage(productId, file): Promise<any> {
+    const formData: FormData = new FormData();
+    formData.append('productId', JSON.stringify({productId: productId}));
+    formData.append('image', file);
+    return this.http
+      .postMultiPartFormData('/api/product/image', formData)
+      .then(res => {
+        return res.data;
+      });
+  }
+
   public updateProduct(product: Product): Promise<Product> {
     if(this._productsById.get(product.id)) {
       return this.http

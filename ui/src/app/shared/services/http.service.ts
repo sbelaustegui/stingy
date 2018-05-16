@@ -52,6 +52,10 @@ export class HttpService {
     return this.asPromise(this._http.head(url, this.requestOptions()));
   }
 
+  public postMultiPartFormData(url: string, body: any): Promise<ResponseData> {
+    return this.asPromise(this._http.post(url, body));
+  }
+
   public options(url: string): Promise<ResponseData> {
     return this.asPromise(this._http.options(url, this.requestOptions()));
   }

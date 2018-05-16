@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
     this.authUserService.login(this.loginUser).then(() => {
       window.location.reload();
       this.loginUserError = false;
-      this.loginLoading = false;
     }).catch(() => {
       this.loginUserError = true;
       this.loginLoading = false;

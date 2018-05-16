@@ -35,7 +35,7 @@ object Product extends ProductJsonFormat {
     Product(
       None,
       productCreate.name,
-      productCreate.imageUrl,
+      productCreate.imageUrl.get,
       productCreate.description,
       productCreate.price,
       None,

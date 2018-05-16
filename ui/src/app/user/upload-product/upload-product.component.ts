@@ -31,6 +31,7 @@ export class UploadProductComponent implements OnInit {
   public categories: Category[];
   public subcategories: Subcategory[];
   public suppliers: Supplier[];
+  public file: File;
   public alerts: {
     subcategories:{
       loading: boolean,
@@ -42,6 +43,9 @@ export class UploadProductComponent implements OnInit {
     },
     suppliers:{
       loading: boolean,
+      error: boolean,
+    },
+    file: {
       error: boolean,
     }
   };
@@ -75,30 +79,39 @@ export class UploadProductComponent implements OnInit {
       suppliers:{
         loading: false,
         error: false,
+      },
+      file: {
+        error: false,
       }
     };
   }
 
 
   uploadProduct() {
-    this.addingProduct = true;
-    this.newProduct.isValidated = false;
-    this.newProduct.userId = this.userId;
-    this.newProduct.subcategoryId = parseInt(String(this.newProduct.subcategoryId));
-    this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
-    this.productService.addProduct(this.newProduct).then( () => {
-      this.addingProduct = false;
-      // this.alertTimerMessage(this.addingProductSuccess,10000);
-      this.addingProductSuccess = true;
-      setTimeout(() => {this.addingProductSuccess = false;},2500);
-      this.uploadProductError = false;
-      this.resetUploadProduct();
-    }).catch(() => {
-      this.uploadProductError = true;
-      setTimeout(() => {this.uploadProductError = false;},5000);
-      this.addingProduct = false;
-    })
-
+    if (!this.file || this.file.size > 2000000) {
+      this.alerts.file.error = true;
+      return;
+    } else {
+      this.alerts.file.error = false;
+      this.addingProduct = true;
+      this.newProduct.isValidated = false;
+      this.newProduct.userId = this.userId;
+      this.newProduct.subcategoryId = parseInt(String(this.newProduct.subcategoryId));
+      this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
+      this.productService.addProduct(this.newProduct).then( res => {
+        this.productService.addProductImage(res.id, this.file).then(() => {
+          this.addingProduct = false;
+          this.addingProductSuccess = true;
+          setTimeout(() => {this.addingProductSuccess = false;},2500);
+          this.uploadProductError = false;
+          this.resetUploadProduct();
+        });
+      }).catch(() => {
+        this.uploadProductError = true;
+        setTimeout(() => {this.uploadProductError = false;},5000);
+        this.addingProduct = false;
+      })
+    }
   }
 
   getSubcategories(){
@@ -141,6 +154,7 @@ export class UploadProductComponent implements OnInit {
     this.formGroup.reset();
     this.newProduct = Product.empty();
     this.selectedCategoryId = -1;
+    this.file = undefined;
   }
 
   private createFormControls() {
@@ -148,11 +162,18 @@ export class UploadProductComponent implements OnInit {
       name: ['', Validators.required],
       price: ['', [Validators.required,Validators.min(0)]],
       description: ['', Validators.required],
-      imageUrl: ['', [Validators.required,]],
       subcategoryId: [-1, [Validators.required,Validators.min(0)]],
       supplierId: [-1, [Validators.required,Validators.min(0)]],
     }, {
     })
+  }
+
+  imageSelect(event) {
+    this.file = event.srcElement.files[0];
+  };
+
+  uploadImage(){
+    //TODO pegarle con un objeto multipartformdata con productid y el file a la ruta de add product image
   }
 
 
