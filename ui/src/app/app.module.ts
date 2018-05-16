@@ -25,6 +25,7 @@ import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,10 @@ import {NgxPaginationModule} from 'ngx-pagination';
     ReactiveFormsModule,
     HttpModule,
     ModalModule.forRoot(),
-    NgxPaginationModule
+    NgxPaginationModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'
+    })
   ],
   providers : [
     CookieService,
