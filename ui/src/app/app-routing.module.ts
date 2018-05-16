@@ -39,10 +39,8 @@ const routes: Routes =[
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          {path: 'login',                                                 component: AdminLoginComponent},
-          // {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
-          {path: 'admin-user',                           component: AdminUserComponent,
-          // {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
+          {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
+          {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
             children: [
               {path: 'categories',                                    component: CategoriesComponent},
               {path: 'users',                                         component: AdminsComponent},

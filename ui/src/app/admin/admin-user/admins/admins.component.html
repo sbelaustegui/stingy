@@ -73,14 +73,14 @@
 
     <!--New admin Modal-->
     <ng-template #newAdminModal>
-      <div class="modal-header">
+      <div class="modal-header" (keyup.esc)="resetModal()">
         <h4 class="modal-title pull-left">
           <span *ngIf="!newAdmin.id">Nuevo administrador</span>
           <span *ngIf="newAdmin.id">Editar administrador {{newAdmin.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="resetModal()">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
       </div>
       <div class="modal-body">
         <form [formGroup]="adminFormGroup">
@@ -217,6 +217,7 @@
         </form>
       </div>
       <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" (click)="resetModal()">Guardar</button>
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': adminFormGroup.invalid}" (click)="uploadAdmin()">Guardar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.admins.error">

@@ -71,14 +71,14 @@
 
     <!--New supplier Modal-->
     <ng-template #newSupplierModal>
-      <div class="modal-header">
+      <div class="modal-header" (keyup.esc)="resetModal()">
         <h4 class="modal-title pull-left">
           <span *ngIf="!newSupplier.id">Nuevo Proveedor</span>
           <span *ngIf="newSupplier.id">Editar Proveedor {{newSupplier.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="resetModal()">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
       </div>
       <div class="modal-body">
         <form [formGroup]="supplierFormGroup">
@@ -119,6 +119,10 @@
             </div>
           </fieldset>
 
+          <agm-map [latitude]="lat" [longitude]="lng">
+            <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+          </agm-map>
+
           <!--INPUT LOCATION-->
           <fieldset>
             <div class="form-group">
@@ -140,6 +144,7 @@
         </form>
       </div>
       <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" (click)="resetModal()">Cancelar</button>
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}" (click)="uploadSupplier()">Guardar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.error">

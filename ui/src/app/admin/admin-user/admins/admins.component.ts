@@ -166,5 +166,11 @@ export class AdminsComponent implements OnInit {
   resetDeleteModal(){
     this.adminToDelete = undefined;
     this.adminIndexToDelete = -1;
-    }
+  }
+
+  resetModal(){
+    this.newAdmin = User.empty();
+    this.adminFormGroup.reset();
+    this.modalRef.hide();
+  }
 }

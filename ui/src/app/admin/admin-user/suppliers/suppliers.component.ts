@@ -37,6 +37,9 @@ export class SuppliersComponent implements OnInit {
   };
   modalRef: BsModalRef;
 
+  lat: number = 51.678418;
+  lng: number = 7.809007;
+
   constructor(public fb: FormBuilder, public supplierService: SupplierService, public router: Router, private titleService: Title, private modalService: BsModalService) {
   }
 
@@ -150,5 +153,11 @@ export class SuppliersComponent implements OnInit {
   resetDeleteModal(){
     this.supplierToDelete = undefined;
     this.supplierIndexToDelete = -1;
-    }
+  }
+
+  resetModal(){
+    this.newSupplier = Supplier.empty();
+    this.supplierFormGroup.reset();
+    this.modalRef.hide();
+  }
 }
