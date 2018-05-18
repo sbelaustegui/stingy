@@ -21,6 +21,7 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
   def createUsers(): List[User] = {
     var users: List[User] = List()
     users = User.saveOrUpdate(User(UserCreate("Sebas", "Belaustegui", "sebas@gmail.com", "sebasb", "123456"))).get :: users
+    users = User.saveOrUpdate(User(UserCreate("Lucas", "Manzanelli", "lucas@gmail.com", "lmanza", "123456"))).get :: users
     users
   }
 

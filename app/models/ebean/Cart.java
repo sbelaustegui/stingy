@@ -6,7 +6,9 @@ import io.ebean.Model;
 import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ public class Cart extends Model {
     @NotNull
     private Long id;
     @NotNull
+    @ManyToOne
     private User user;
 
     private static Finder<Long, Cart> finder = new Finder<>(Cart.class);

@@ -18,11 +18,14 @@ create table abstract_user (
 
 create table cart (
   id                            bigint auto_increment not null,
+  user_id                       bigint,
   constraint pk_cart primary key (id)
 );
 
 create table cart_product (
   id                            bigint auto_increment not null,
+  cart_id                       bigint,
+  product_id                    bigint,
   constraint pk_cart_product primary key (id)
 );
 
@@ -75,6 +78,15 @@ create table supplier (
   constraint pk_supplier primary key (id)
 );
 
+alter table cart add constraint fk_cart_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
+create index ix_cart_user_id on cart (user_id);
+
+alter table cart_product add constraint fk_cart_product_cart_id foreign key (cart_id) references cart (id) on delete restrict on update restrict;
+create index ix_cart_product_cart_id on cart_product (cart_id);
+
+alter table cart_product add constraint fk_cart_product_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
+create index ix_cart_product_product_id on cart_product (product_id);
+
 alter table product_image add constraint fk_product_image_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
 create index ix_product_image_product_id on product_image (product_id);
 
@@ -83,6 +95,15 @@ create index ix_product_image_image_id on product_image (image_id);
 
 
 # --- !Downs
+
+alter table cart drop foreign key fk_cart_user_id;
+drop index ix_cart_user_id on cart;
+
+alter table cart_product drop foreign key fk_cart_product_cart_id;
+drop index ix_cart_product_cart_id on cart_product;
+
+alter table cart_product drop foreign key fk_cart_product_product_id;
+drop index ix_cart_product_product_id on cart_product;
 
 alter table product_image drop foreign key fk_product_image_product_id;
 drop index ix_product_image_product_id on product_image;
