@@ -10,7 +10,7 @@ import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 object S3Client {
 
   private val bucketName = "stingy"
-  private val credentials = new BasicAWSCredentials("AKIAI7RA6FDMRM34KO3A", "fLOkiWYZ07P5KEWxKZJ6vyUh9rzIWxrzC+uK+YxN")
+  private val credentials = new BasicAWSCredentials("AAAAA", "AAAA")
 
   def uploadFile(fileName: String, keyName: String): Option[String] = {
     val amazonClient: AmazonS3 = AmazonS3ClientBuilder.standard.withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion("sa-east-1").build
