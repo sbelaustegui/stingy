@@ -8,12 +8,15 @@ import {ProductService} from "../../shared/services/product.service";
 import {Product} from "../../shared/models/product.model";
 import {Supplier} from "../../shared/models/supplier.model";
 import {SupplierService} from "../../shared/services/supplier.service";
+import {CartProductService} from "../../shared/services/cartProduct.service";
+import {CartProduct} from "../../shared/models/cartProduct.model";
+import {UserAuthService} from "../../shared/auth/user/user-auth.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [SubcategoryService, CategoryService, ProductService, SupplierService]
+  providers: [SubcategoryService, CategoryService, ProductService, SupplierService, CartProductService, UserAuthService]
 })
 export class HomeComponent implements OnInit {
 
@@ -25,6 +28,7 @@ export class HomeComponent implements OnInit {
   public productName: string;
   public selectedSubcategoryId: string;
   public categories: Category[];
+  public userId: number;
   public alerts: {
     subcategories:{
       loading: boolean,
@@ -40,7 +44,10 @@ export class HomeComponent implements OnInit {
     },
   };
 
-  constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService, private titleService: Title, public productService: ProductService, public suppliersService: SupplierService) {}
+  constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
+              public cartProductService: CartProductService, public userAuthService: UserAuthService,
+              public productService: ProductService, public suppliersService: SupplierService,
+  private titleService: Title) {}
 
   ngOnInit() {
     this.titleService.setTitle('Búsqueda de Producto | Stingy');
@@ -58,6 +65,7 @@ export class HomeComponent implements OnInit {
         error: false,
       },
     };
+    this.getUserId();
     this.subcategories = [];
     this.searchedProducts = [];
     this.productsSuppliers = new Map<number, Supplier>();
@@ -117,4 +125,17 @@ export class HomeComponent implements OnInit {
       console.log(err);
     })
   }
+
+  addToCart(productId: number) {
+    this.cartProductService.addCartProduct(new CartProduct(this.userId,productId));
+  }
+
+  private getUserId() {
+    this.userAuthService.loggedUser.then(res => {
+      this.userId = res.id;
+    }).catch(() => {
+      //TODO user dont logged errors
+    })
+  }
+
 }

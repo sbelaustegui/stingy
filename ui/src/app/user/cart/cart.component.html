@@ -1,3 +1,95 @@
-<p>
-  cart works!
-</p>
+<div class="cart">
+  <div class="row">
+    <!--PRODUCTS TABLE-->
+    <div class="col-12">
+      <div class="row">
+        <div class="col-8">
+          <h2>Productos</h2>
+        </div>
+      </div>
+      <!--TODO get products table by supplier id -> foreach the supplier -->
+      <div class="suppliers" *ngFor="let supplier of getSuppliersArray()">
+        <!--TODO supplier name -> think tittle or table with total price -->
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <th>{{supplier.name}}</th>
+          </tr>
+          </tbody>
+        </table>
+        <table class="table table-striped" *ngIf="!alerts.products.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Ultima Modificación</th>
+            <th scope="col">Remover</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let product of (cartProducts | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let i=index">
+            <div *ngIf="product.supplierId == supplier.id">
+              <th scope="row">{{product.id}}</th>
+              <td>{{product.name}}</td>
+              <td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>
+              <td>{{product.description}}</td>
+              <td>{{product.price}}</td>
+              <td><span *ngIf="product.updateDate">{{product.updateDate.toDateString()}}</span><span
+                *ngIf="!product.updateDate">Nunca</span></td>
+              <td>{{product.uploadDate.toDateString()}}</td>
+              <!--<td>-->
+                <!--<div class="remove-button">-->
+                  <!--<button type="submit" class="btn btn-danger"-->
+                          <!--(click)="openProductDeleteModal(deleteModal, product, i)">-->
+                    <!--<i class="fa fa-trash"></i>-->
+                  <!--</button>-->
+                <!--</div>-->
+              <!--</td>-->
+            </div>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <pagination-controls id="products"
+                           class="paginator"
+                           (pageChange)="productsPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+
+    <!--&lt;!&ndash;Delete confirmation modal&ndash;&gt;-->
+    <!--<ng-template #deleteModal>-->
+      <!--<div class="modal-header" (keyup.esc)="resetDeleteModal()">-->
+        <!--<h4 class="modal-title pull-left">Eliminar-->
+          <!--<span *ngIf="productToDelete">Producto {{productToDelete.name}}</span>-->
+        <!--</h4>-->
+        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+      <!--</div>-->
+      <!--<div class="modal-body">-->
+        <!--¿Está seguro que desea eliminar el producto?-->
+      <!--</div>-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>-->
+        <!--<button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>-->
+      <!--</div>-->
+      <!--<div class="alert alert-danger text-center" *ngIf="alerts.products.deletingError">-->
+        <!--<div class="card-block">-->
+          <!--<blockquote class="card-blockquote">-->
+            <!--<p>Hubo un error al agregar al eliminar el producto.</p>-->
+          <!--</blockquote>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</ng-template>-->
+
+
+  </div>
+</div>
+

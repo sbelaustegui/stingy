@@ -1,4 +1,4 @@
-<section id="home" class="helpr-section helpr-layout-1 section section-inverse-color" >
+<section id="home" scroll = "no" class="helpr-section helpr-layout-1 section section-inverse-color"  >
   <div class="container">
     <div class="helpr-content" data-stellar-offset-parent="true">
       <div class="helpr-text" data-wow-duration="1s" data-wow-delay="0.5s">
@@ -55,7 +55,8 @@
           <span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}
         </li>
         <li class="list-group-item">
-          <a class="btn btn-primary">Agregar al carrito</a>
+          <!--<a class="btn btn-primary">Agregar al carrito</a>-->
+          <a class="btn btn-primary" (click)="addToCart(product.id)">Agregar al carrito</a>
         </li>
       </ul>
     </div>
