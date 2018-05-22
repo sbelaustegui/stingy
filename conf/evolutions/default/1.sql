@@ -74,8 +74,16 @@ create table supplier (
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
   description                   varchar(255),
-  location                      varchar(255),
+  location_id                   bigint,
+  constraint uq_supplier_location_id unique (location_id),
   constraint pk_supplier primary key (id)
+);
+
+create table supplier_location (
+  id                            bigint auto_increment not null,
+  longitude                     double,
+  latitude                      double,
+  constraint pk_supplier_location primary key (id)
 );
 
 alter table cart add constraint fk_cart_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
@@ -92,6 +100,8 @@ create index ix_product_image_product_id on product_image (product_id);
 
 alter table product_image add constraint fk_product_image_image_id foreign key (image_id) references image (id) on delete restrict on update restrict;
 create index ix_product_image_image_id on product_image (image_id);
+
+alter table supplier add constraint fk_supplier_location_id foreign key (location_id) references supplier_location (id) on delete restrict on update restrict;
 
 
 # --- !Downs
@@ -111,6 +121,8 @@ drop index ix_product_image_product_id on product_image;
 alter table product_image drop foreign key fk_product_image_image_id;
 drop index ix_product_image_image_id on product_image;
 
+alter table supplier drop foreign key fk_supplier_location_id;
+
 drop table if exists abstract_user;
 
 drop table if exists cart;
@@ -128,4 +140,6 @@ drop table if exists product_image;
 drop table if exists sub_category;
 
 drop table if exists supplier;
+
+drop table if exists supplier_location;
 

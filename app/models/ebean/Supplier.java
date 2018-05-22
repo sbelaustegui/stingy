@@ -4,8 +4,7 @@ import io.ebean.Finder;
 import io.ebean.Model;
 import io.ebean.annotation.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +17,13 @@ public class Supplier extends Model {
     @NotNull
     private String name;
     private String description;
-    private String location;
+    @OneToOne
+    @Column(name = "location_id", nullable = false)
+    private SupplierLocation location;
 
     private static Finder<Long, Supplier> finder = new Finder<>(Supplier.class);
 
-    public Supplier(Long id, String name, String description, String location){
+    public Supplier(Long id, String name, String description, SupplierLocation location) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,11 +55,11 @@ public class Supplier extends Model {
         return name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public SupplierLocation getLocation() {
+        return location;
     }
 }

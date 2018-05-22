@@ -6,6 +6,7 @@ import models.domain.admin.{Admin, AdminCreate}
 import models.domain.category.{Category, CategoryCreate}
 import models.domain.product.{Product, ProductCreate}
 import models.domain.subcategory.{Subcategory, SubcategoryCreate}
+import models.domain.supplier.location.{SupplierLocation, SupplierLocationCreate}
 import models.domain.supplier.{Supplier, SupplierCreate}
 import models.domain.user.{User, UserCreate}
 
@@ -53,11 +54,19 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     categories
   }
 
+  def createSuppliersLocation(): List[SupplierLocation] = {
+    var suppliers: List[SupplierLocation] = List()
+    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
+    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
+    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
+    suppliers
+  }
+
   def createSuppliers(): List[Supplier] = {
     var suppliers: List[Supplier] = List()
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Wallmart", "Panamericana - Pilar", "Hipermercado Wallmart de Pilar"))).get :: suppliers
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Carrefour", "Paseo Champagnat - Pilar", "Supermercado Carrefour de Pilar"))).get :: suppliers
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Vital", "Colectora Oeste - Pilar", "Hipermercado Mayorista Vital de Pilar"))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Wallmart", "Hipermercado Wallmart de Pilar", 1))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Carrefour", "Supermercado Carrefour de Pilar", 2))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Vital", "Hipermercado Mayorista Vital de Pilar", 3))).get :: suppliers
     suppliers
   }
 
@@ -91,6 +100,7 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
         createAdmins()
         createCategories()
         createSubCategories()
+        createSuppliersLocation()
         createSuppliers()
         createProducts()
     }

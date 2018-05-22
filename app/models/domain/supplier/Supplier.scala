@@ -1,10 +1,11 @@
 package models.domain.supplier
 
 import models.dao.SupplierDAO
+import models.domain.supplier.location.SupplierLocation
 import models.ebean.{Supplier => ESupplier}
 import play.api.libs.json.{Json, OFormat}
 
-case class Supplier(id: Option[Long], name: String, description: String, location: String) {
+case class Supplier(id: Option[Long], name: String, description: String, location: SupplierLocation) {
   def equals(supplier: Supplier): Boolean = {
     if(supplier.id.isDefined && id.isDefined) id.get.equals(supplier.id.get)
     else false
@@ -18,7 +19,7 @@ object Supplier extends SupplierJsonFormat {
       Option(supplier.getId),
       supplier.getName,
       supplier.getDescription,
-      supplier.getLocation
+      SupplierLocation.apply(supplier.getLocation)
     )
   }
 
@@ -27,7 +28,7 @@ object Supplier extends SupplierJsonFormat {
       None,
       supplierCreate.name,
       supplierCreate.description,
-      supplierCreate.location
+      SupplierLocation.getById(supplierCreate.locationId).get
     )
   }
 

@@ -1,11 +1,14 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, NgZone, OnInit, TemplateRef} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {SupplierService} from "../../../shared/services/supplier.service";
 import {BsModalService} from "ngx-bootstrap/modal";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {Supplier} from "../../../shared/models/supplier.model";
+import {MapsAPILoader} from "@agm/core";
+import { } from 'googlemaps';
+import {google} from "@agm/core/services/google-maps-types";
 
 @Component({
   selector: 'app-suppliers',
@@ -40,7 +43,7 @@ export class SuppliersComponent implements OnInit {
   lat: number = 51.678418;
   lng: number = 7.809007;
 
-  constructor(public fb: FormBuilder, public supplierService: SupplierService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  constructor(public fb: FormBuilder, public supplierService: SupplierService, public router: Router, private titleService: Title, private modalService: BsModalService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) {
   }
 
   ngOnInit() {
@@ -134,8 +137,7 @@ export class SuppliersComponent implements OnInit {
   private createFormControls() {
     this.supplierFormGroup = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
-      location: ['', Validators.required],
+      description: ['', Validators.required]
     })
   }
 
@@ -159,5 +161,11 @@ export class SuppliersComponent implements OnInit {
     this.newSupplier = Supplier.empty();
     this.supplierFormGroup.reset();
     this.modalRef.hide();
+  }
+
+  placeMarker($event){
+    this.newSupplier.location.latitude = $event.coords.lat;
+    this.newSupplier.location.longitude =  $event.coords.lng;
+    console.log(this.newSupplier)
   }
 }

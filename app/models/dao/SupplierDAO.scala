@@ -2,6 +2,7 @@ package models.dao
 
 import models.domain.supplier.Supplier
 import models.ebean.{Supplier => ESupplier}
+import models.ebean.{SupplierLocation => ESupplierLocation}
 import utils.ScalaOptional.toScalaOption
 
 import scala.collection.JavaConversions._
@@ -18,7 +19,7 @@ object SupplierDAO {
       if(supplier.id.isDefined) supplier.id.get else null,
       supplier.name,
       supplier.description,
-      supplier.location
+      new ESupplierLocation(if(supplier.location.id.isDefined) supplier.location.id.get else null, supplier.location.latitude, supplier.location.longitude)
     )
   }
 
