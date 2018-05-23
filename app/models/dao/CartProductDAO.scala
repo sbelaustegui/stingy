@@ -1,7 +1,7 @@
 package models.dao
 
 import models.domain.cartProduct.CartProduct
-import models.ebean.{Cart, Product, CartProduct => ECartProduct}
+import models.ebean.{Cart, SupplierProduct, CartProduct => ECartProduct}
 import utils.ScalaOptional.toScalaOption
 
 import scala.collection.JavaConversions._
@@ -17,7 +17,7 @@ object CartProductDAO {
     new ECartProduct(
       if(cartProduct.id.isDefined) cartProduct.id.get else null,
       Cart.getCartById(cartProduct.cartId).get(),
-      Product.getProductById(cartProduct.productId).get()
+      SupplierProduct.getSupplierProductById(cartProduct.supplierProductId).get
     )
   }
 

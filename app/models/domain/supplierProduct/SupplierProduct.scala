@@ -30,7 +30,7 @@ object SupplierProduct extends SupplierProductJsonFormat {
       supplierProductCreate.supplierId,
       supplierProductCreate.productId,
       supplierProductCreate.price,
-      Date(supplierProductCreate.date.toDateTime)
+      Date.now
     )
   }
 

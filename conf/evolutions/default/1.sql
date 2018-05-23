@@ -48,7 +48,6 @@ create table product (
   description                   varchar(900) not null,
   upload_date                   datetime(6),
   is_validated                  tinyint(1) default 0 not null,
-  supplier_id                   bigint,
   user_id                       bigint,
   subcategory_id                bigint,
   constraint pk_product primary key (id)
@@ -100,7 +99,7 @@ create index ix_cart_user_id on cart (user_id);
 alter table cart_product add constraint fk_cart_product_cart_id foreign key (cart_id) references cart (id) on delete restrict on update restrict;
 create index ix_cart_product_cart_id on cart_product (cart_id);
 
-alter table cart_product add constraint fk_cart_product_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
+alter table cart_product add constraint fk_cart_product_product_id foreign key (product_id) references supplier_product (id) on delete restrict on update restrict;
 create index ix_cart_product_product_id on cart_product (product_id);
 
 alter table product_image add constraint fk_product_image_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;

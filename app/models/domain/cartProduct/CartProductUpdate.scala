@@ -2,12 +2,12 @@ package models.domain.cartProduct
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CartProductUpdate(id: Long, cartId: Option[Long], productId: Option[Long]) {
+case class CartProductUpdate(id: Long, cartId: Option[Long], supplierProductId: Option[Long]) {
   def toCartProduct(cartProduct: CartProduct): CartProduct = {
     CartProduct(
       Option(id),
       cartProduct.cartId,
-      cartProduct.productId
+      cartProduct.supplierProductId
     )
   }
 }

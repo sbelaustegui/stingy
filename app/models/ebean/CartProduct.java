@@ -22,14 +22,14 @@ public class CartProduct extends Model {
     private Cart cart;
     @NotNull
     @ManyToOne
-    private Product product;
+    private SupplierProduct supplierProduct;
 
     private static Finder<Long, CartProduct> finder = new Finder<>(CartProduct.class);
 
-    public CartProduct(Long id, Cart cart, Product product) {
+    public CartProduct(Long id, Cart cart, SupplierProduct supplierProduct) {
         this.id = id;
         this.cart = cart;
-        this.product = product;
+        this.supplierProduct = supplierProduct;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CartProduct extends Model {
         return cart;
     }
 
-    public Product getProduct() {
-        return product;
+    public SupplierProduct getSupplierProduct() {
+        return supplierProduct;
     }
 }

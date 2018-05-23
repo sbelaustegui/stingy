@@ -4,7 +4,7 @@ import models.dao.CartProductDAO
 import models.ebean.{CartProduct => ECartProduct}
 import play.api.libs.json.{Json, OFormat}
 
-case class CartProduct(id: Option[Long], cartId: Long, productId: Long) {
+case class CartProduct(id: Option[Long], cartId: Long, supplierProductId: Long) {
   def equals(cartProduct: CartProduct): Boolean = {
     if(cartProduct.id.isDefined && id.isDefined) id.get.equals(cartProduct.id.get)
     else false
@@ -17,7 +17,7 @@ object CartProduct extends CartProductJsonFormat {
     CartProduct(
       Option(cartProduct.getId),
       cartProduct.getCart.getId,
-      cartProduct.getProduct.getId
+      cartProduct.getSupplierProduct.getId
     )
   }
 
@@ -25,7 +25,7 @@ object CartProduct extends CartProductJsonFormat {
     CartProduct(
       None,
       cartProductCreate.cartId,
-      cartProductCreate.productId
+      cartProductCreate.supplierProductId
     )
   }
 
