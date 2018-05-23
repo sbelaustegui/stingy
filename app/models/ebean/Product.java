@@ -25,9 +25,6 @@ public class Product extends Model {
     @NotNull
     @Column(length = 900)
     private String description;
-    @NotNull
-    private Double price;
-    private DateTime updateDate;
     private DateTime uploadDate;
     @NotNull
     private boolean isValidated;
@@ -38,13 +35,11 @@ public class Product extends Model {
 
     private static Finder<Long, Product> finder = new Finder<>(Product.class);
 
-    public Product(Long id, String name, String imageUrl, String description, Double price, DateTime updateDate, DateTime uploadDate, boolean isValidated, Long supplierId, Long userId, Long subcategoryId) {
+    public Product(Long id, String name, String imageUrl, String description, DateTime uploadDate, boolean isValidated, Long supplierId, Long userId, Long subcategoryId) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.price = price;
-        this.updateDate = updateDate;
         this.uploadDate = uploadDate;
         this.isValidated = isValidated;
         this.supplierId = supplierId;
@@ -70,7 +65,7 @@ public class Product extends Model {
     }
 
     public static Optional<List<Product>> getByName(String name, Long subcategoryId){
-        return Optional.of(Ebean.find(Product.class).where().icontains("name", name).eq("subcategory_id", subcategoryId).eq("is_validated", 1).orderBy("price").findList());
+        return Optional.of(Ebean.find(Product.class).where().icontains("name", name).eq("subcategory_id", subcategoryId).eq("is_validated", 1).findList());
     }
 
     public static List<Product> getAllProducts() {
@@ -91,14 +86,6 @@ public class Product extends Model {
 
     public String getDescription() {
         return description;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public DateTime getUpdateDate() {
-        return updateDate;
     }
 
     public DateTime getUploadDate() {

@@ -20,8 +20,6 @@ object ProductDAO {
       product.name,
       product.imageUrl,
       product.description,
-      product.price,
-      if(product.updateDate.isDefined) product.updateDate.get.toDateTime else null,
       product.uploadDate.toDateTime,
       product.isValidated,
       product.supplierId,

@@ -15,6 +15,7 @@ public class Supplier extends Model {
     @NotNull
     private Long id;
     @NotNull
+    @Column(unique=true)
     private String name;
     private String description;
     @OneToOne
