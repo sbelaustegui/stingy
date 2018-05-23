@@ -26,7 +26,7 @@ import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-prof
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { AgmCoreModule } from '@agm/core';
-import {TruncateModule} from "ng2-truncate";
+import {TruncateModule} from 'ng2-truncate';
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 
 @NgModule({
