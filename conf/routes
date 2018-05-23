@@ -64,6 +64,15 @@ GET         /api/cart/product/cart/:id                          controllers.Cart
 PUT         /api/cart/product                                   controllers.CartProductController.update()
 DELETE      /api/cart/product/:id                               controllers.CartProductController.delete(id: Long)
 
+# Supplier Product
+POST        /api/supplier/product                               controllers.SupplierProductController.register()
+GET         /api/supplier/product/all                           controllers.SupplierProductController.getAll
+GET         /api/supplier/product/id/:id                        controllers.SupplierProductController.getById(id: Long)
+GET         /api/supplier/product/supplier/:id                  controllers.SupplierProductController.getBySupplierId(id: Long)
+GET         /api/supplier/product/:productId                    controllers.SupplierProductController.getByProductId(productId: Long)
+PUT         /api/supplier/product                               controllers.SupplierProductController.update()
+DELETE      /api/supplier/product/:id                           controllers.SupplierProductController.delete(id: Long)
+
 # Login
 POST        /api/login                                          controllers.LoginController.login
 POST        /api/login/admin                                    controllers.LoginController.adminLogin

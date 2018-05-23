@@ -3,7 +3,7 @@ package models.domain.product
 import models.domain.util.Date
 import play.api.libs.json.{Json, OFormat}
 
-case class ProductUpdate(id: Long, name: Option[String], imageUrl: Option[String], description: Option[String], isValidated: Option[Boolean], supplierId: Option[Long], userId: Option[Long], subcategoryId: Option[Long]) {
+case class ProductUpdate(id: Long, name: Option[String], imageUrl: Option[String], description: Option[String], isValidated: Option[Boolean], userId: Option[Long], subcategoryId: Option[Long]) {
   def toProduct(product: Product): Product = {
     Product(
       Some(id),
@@ -12,7 +12,6 @@ case class ProductUpdate(id: Long, name: Option[String], imageUrl: Option[String
       description.getOrElse(product.description),
       product.uploadDate,
       isValidated.getOrElse(product.isValidated),
-      supplierId.getOrElse(product.supplierId),
       userId.getOrElse(product.userId),
       subcategoryId.getOrElse(product.subcategoryId)
     )

@@ -28,21 +28,19 @@ public class Product extends Model {
     private DateTime uploadDate;
     @NotNull
     private boolean isValidated;
-    private Long supplierId;
     private Long userId;
     private Long subcategoryId;
 
 
     private static Finder<Long, Product> finder = new Finder<>(Product.class);
 
-    public Product(Long id, String name, String imageUrl, String description, DateTime uploadDate, boolean isValidated, Long supplierId, Long userId, Long subcategoryId) {
+    public Product(Long id, String name, String imageUrl, String description, DateTime uploadDate, boolean isValidated, Long userId, Long subcategoryId) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
         this.uploadDate = uploadDate;
         this.isValidated = isValidated;
-        this.supplierId = supplierId;
         this.userId = userId;
         this.subcategoryId = subcategoryId;
     }
@@ -94,10 +92,6 @@ public class Product extends Model {
 
     public boolean isValidated() {
         return isValidated;
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
     }
 
     public Long getUserId() {

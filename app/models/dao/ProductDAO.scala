@@ -22,7 +22,6 @@ object ProductDAO {
       product.description,
       product.uploadDate.toDateTime,
       product.isValidated,
-      product.supplierId,
       product.userId,
       product.subcategoryId
     )

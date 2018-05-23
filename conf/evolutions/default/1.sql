@@ -46,8 +46,6 @@ create table product (
   name                          varchar(255) not null,
   image_url                     varchar(255) not null,
   description                   varchar(900) not null,
-  price                         double not null,
-  update_date                   datetime(6),
   upload_date                   datetime(6),
   is_validated                  tinyint(1) default 0 not null,
   supplier_id                   bigint,
@@ -75,6 +73,7 @@ create table supplier (
   name                          varchar(255) not null,
   description                   varchar(255),
   location_id                   bigint,
+  constraint uq_supplier_name unique (name),
   constraint uq_supplier_location_id unique (location_id),
   constraint pk_supplier primary key (id)
 );
@@ -84,6 +83,15 @@ create table supplier_location (
   longitude                     double,
   latitude                      double,
   constraint pk_supplier_location primary key (id)
+);
+
+create table supplier_product (
+  id                            bigint auto_increment not null,
+  supplier_id                   bigint not null,
+  product_id                    bigint not null,
+  price                         double,
+  date                          datetime(6),
+  constraint pk_supplier_product primary key (id)
 );
 
 alter table cart add constraint fk_cart_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
@@ -142,4 +150,6 @@ drop table if exists sub_category;
 drop table if exists supplier;
 
 drop table if exists supplier_location;
+
+drop table if exists supplier_product;
 
