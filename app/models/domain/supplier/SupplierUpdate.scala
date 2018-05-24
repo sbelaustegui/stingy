@@ -1,9 +1,9 @@
 package models.domain.supplier
 
-import models.domain.supplier.location.SupplierLocation
+import models.domain.supplier.location.Location
 import play.api.libs.json.{Json, OFormat}
 
-case class SupplierUpdate(id: Long, name: Option[String], description: Option[String], location: Option[SupplierLocation]) {
+case class SupplierUpdate(id: Long, name: Option[String], description: Option[String], location: Option[Location]) {
   def toSupplier(supplier: Supplier): Supplier = {
     Supplier(
       Option(id),

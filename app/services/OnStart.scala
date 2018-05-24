@@ -8,7 +8,7 @@ import models.domain.cartProduct.{CartProduct, CartProductCreate}
 import models.domain.category.{Category, CategoryCreate}
 import models.domain.product.{Product, ProductCreate}
 import models.domain.subcategory.{Subcategory, SubcategoryCreate}
-import models.domain.supplier.location.{SupplierLocation, SupplierLocationCreate}
+import models.domain.supplier.location.{Location, LocationCreate}
 import models.domain.supplier.{Supplier, SupplierCreate}
 import models.domain.supplierProduct.{SupplierProduct, SupplierProductCreate}
 import models.domain.user.{User, UserCreate}
@@ -57,11 +57,11 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     categories
   }
 
-  def createSuppliersLocation(): List[SupplierLocation] = {
-    var suppliers: List[SupplierLocation] = List()
-    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
-    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
-    suppliers = SupplierLocation.saveOrUpdate(SupplierLocation(SupplierLocationCreate(43.5, 50.7))).get :: suppliers
+  def createSuppliersLocation(): List[Location] = {
+    var suppliers: List[Location] = List()
+    suppliers = Location.saveOrUpdate(Location(LocationCreate(43.5, 50.7))).get :: suppliers
+    suppliers = Location.saveOrUpdate(Location(LocationCreate(43.5, 50.7))).get :: suppliers
+    suppliers = Location.saveOrUpdate(Location(LocationCreate(43.5, 50.7))).get :: suppliers
     suppliers
   }
 

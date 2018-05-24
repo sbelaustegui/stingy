@@ -14,7 +14,8 @@ object UserCreate extends UserCreateJsonFormat{
       user.getLastName,
       user.getEmail,
       user.getUsername,
-      Encrypter.encrypt(user.getPassword)
+      Encrypter.encrypt(user.getPassword),
+      None
     )
   }
 }

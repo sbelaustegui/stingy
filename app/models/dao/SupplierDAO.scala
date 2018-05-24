@@ -2,7 +2,7 @@ package models.dao
 
 import models.domain.supplier.Supplier
 import models.ebean.{Supplier => ESupplier}
-import models.ebean.{SupplierLocation => ESupplierLocation}
+import models.ebean.{Location => ESupplierLocation}
 import utils.ScalaOptional.toScalaOption
 
 import scala.collection.JavaConversions._

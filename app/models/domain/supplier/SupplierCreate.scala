@@ -1,6 +1,6 @@
 package models.domain.supplier
 
-import models.domain.supplier.location.{SupplierLocation, SupplierLocationCreate}
+import models.domain.supplier.location.{Location, LocationCreate}
 import models.ebean.{Supplier => ESupplier}
 import play.api.libs.json.{Json, OFormat}
 
@@ -12,7 +12,7 @@ object SupplierCreate extends SupplierCreateJsonFormat{
       Option(supplier.getId),
       supplier.getName,
       supplier.getDescription,
-      SupplierLocationCreate(supplier.getLocation)
+      LocationCreate(supplier.getLocation)
     )
   }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
-public class SupplierLocation extends Model {
+public class Location extends Model {
 
     @Id
     @NotNull
@@ -17,9 +17,9 @@ public class SupplierLocation extends Model {
     private Double longitude;
     private Double latitude;
 
-    private static Finder<Long, SupplierLocation> finder = new Finder<>(SupplierLocation.class);
+    private static Finder<Long, Location> finder = new Finder<>(Location.class);
 
-    public SupplierLocation(Long id, Double longitude, Double latitude) {
+    public Location(Long id, Double longitude, Double latitude) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -30,14 +30,14 @@ public class SupplierLocation extends Model {
         super.save();
     }
 
-    public static List<SupplierLocation> getAllSuppliersLocation() {
+    public static List<Location> getAllsLocation() {
         return finder.all();
     }
 
-    public static Optional<SupplierLocation> getSupplierLocationById(Long id){
-        SupplierLocation supplier = finder.byId(id);
-        if(supplier != null){
-            return Optional.of(supplier);
+    public static Optional<Location> getLocationById(Long id){
+        Location location = finder.byId(id);
+        if( location != null){
+            return Optional.of(location);
         }
         return Optional.empty();
     }

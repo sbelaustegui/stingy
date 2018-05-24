@@ -20,11 +20,11 @@ public class Supplier extends Model {
     private String description;
     @OneToOne
     @Column(name = "location_id", nullable = false)
-    private SupplierLocation location;
+    private Location location;
 
     private static Finder<Long, Supplier> finder = new Finder<>(Supplier.class);
 
-    public Supplier(Long id, String name, String description, SupplierLocation location) {
+    public Supplier(Long id, String name, String description, Location location) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -60,7 +60,7 @@ public class Supplier extends Model {
         return description;
     }
 
-    public SupplierLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 }

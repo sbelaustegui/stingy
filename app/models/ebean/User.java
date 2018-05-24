@@ -4,6 +4,8 @@ import io.ebean.Ebean;
 import utils.Encrypter;
 import io.ebean.Finder;
 
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,6 +15,10 @@ import java.util.Optional;
 @Entity
 @DiscriminatorValue("User")
 public class User extends AbstractUser{
+
+    @OneToOne
+    @Column(name = "location_id", nullable = true)
+    private Location location;
 
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
@@ -46,5 +52,9 @@ public class User extends AbstractUser{
 
     public static List<User> getAll() {
         return finder.all();
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }
