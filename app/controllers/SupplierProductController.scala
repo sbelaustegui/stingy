@@ -1,7 +1,9 @@
 package controllers
 
 import javax.inject.Inject
+import models.domain.product.Product
 import models.domain.supplierProduct.{SupplierProductCreate, _}
+import models.domain.user.User
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -65,6 +67,61 @@ class SupplierProductController @Inject()(cc: ControllerComponents) extends Abst
           )
         )
     }
+  }
+
+  def getByLocation = Action {
+    request =>
+      request.body.asJson.get.asOpt[SupplierProductLocation] match {
+        case Some(supplierProductLocation) =>
+          User.getById(supplierProductLocation.userId) match {
+            case Some(user) =>
+              user.location match {
+                case Some(location) =>
+                  Product.getById(supplierProductLocation.productId) match {
+                    case Some(_) =>
+                      Ok(
+                        Json.toJson(
+                          ResponseGenerated(
+                            OK, "SupplierProducts", Json.toJson(SupplierProduct.getByLocation(supplierProductLocation.productId, location))
+                          )
+                        )
+                      )
+                    case None =>
+                      BadRequest(
+                        Json.toJson(
+                          ResponseGenerated(
+                            BAD_REQUEST, "No product for that id"
+                          )
+                        )
+                      )
+                  }
+                case None =>
+                  BadRequest(
+                    Json.toJson(
+                      ResponseGenerated(
+                        BAD_REQUEST, "No location for that user"
+                      )
+                    )
+                  )
+              }
+            case None =>
+              BadRequest(
+                Json.toJson(
+                  ResponseGenerated(
+                    BAD_REQUEST, "No user for that id"
+                  )
+                )
+              )
+          }
+        case None =>
+          BadRequest(
+            Json.toJson(
+              ResponseGenerated(
+                BAD_REQUEST, "Invalid Data"
+              )
+            )
+          )
+      }
   }
 
   def getBySupplierId(id: Long) = Action {

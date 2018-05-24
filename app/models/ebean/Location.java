@@ -53,4 +53,18 @@ public class Location extends Model {
     public Double getLatitude() {
         return latitude;
     }
+
+    public static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(lat1 * (Math.PI / 180.0)) * Math.sin(lat2 * (Math.PI / 180.0)) + Math.cos(lat1 * (Math.PI / 180.0)) * Math.cos(lat2 * (Math.PI / 180.0)) * Math.cos(theta * (Math.PI / 180.0));
+        dist = Math.acos(dist);
+        dist = dist * (180.0 / Math.PI);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') {
+            dist = dist * 1.609344;
+        } else if (unit == 'N') {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
 }

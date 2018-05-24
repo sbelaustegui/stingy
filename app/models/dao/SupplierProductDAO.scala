@@ -1,7 +1,8 @@
 package models.dao
 
+import models.domain.supplier.location.Location
 import models.domain.supplierProduct.SupplierProduct
-import models.ebean.{SupplierProduct => ESupplierProduct}
+import models.ebean.{SupplierProduct => ESupplierProduct, Location => ELocation}
 import utils.ScalaOptional.toScalaOption
 
 import scala.collection.JavaConversions._
@@ -51,6 +52,10 @@ object SupplierProductDAO {
 
   def getByProductId(id: Long) : List[SupplierProduct] = {
     ESupplierProduct.getSupplierProductByProductId(id).map(SupplierProduct.apply).toList
+  }
+
+  def getByLocation(productId: Long, userLocation: Location) : List[SupplierProduct] = {
+    ESupplierProduct.getSupplierProductByLocation(productId, ELocation.getLocationById(userLocation.id.get).get()).map(SupplierProduct.apply).toList
   }
 
   def getAllSupplierProducts: List[SupplierProduct] = {

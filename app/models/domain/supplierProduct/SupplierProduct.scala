@@ -1,6 +1,7 @@
 package models.domain.supplierProduct
 
 import models.dao.SupplierProductDAO
+import models.domain.supplier.location.Location
 import models.domain.util.Date
 import models.ebean.{SupplierProduct => ESupplierProduct}
 import play.api.libs.json.{Json, OFormat}
@@ -48,6 +49,10 @@ object SupplierProduct extends SupplierProductJsonFormat {
 
   def getByProductId(id : Long) : List[SupplierProduct] = {
     SupplierProductDAO.getByProductId(id)
+  }
+
+  def getByLocation(productId: Long, userLocation: Location) : List[SupplierProduct] = {
+    SupplierProductDAO.getByLocation(productId, userLocation)
   }
 
   def getAll: List[SupplierProduct] = {

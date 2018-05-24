@@ -70,6 +70,7 @@ GET         /api/supplier/product/all                           controllers.Supp
 GET         /api/supplier/product/id/:id                        controllers.SupplierProductController.getById(id: Long)
 GET         /api/supplier/product/supplier/:id                  controllers.SupplierProductController.getBySupplierId(id: Long)
 GET         /api/supplier/product/:productId                    controllers.SupplierProductController.getByProductId(productId: Long)
+POST        /api/supplier/product/location                      controllers.SupplierProductController.getByLocation
 PUT         /api/supplier/product                               controllers.SupplierProductController.update()
 DELETE      /api/supplier/product/:id                           controllers.SupplierProductController.delete(id: Long)
 
