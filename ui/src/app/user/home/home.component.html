@@ -1,4 +1,4 @@
-<section id="home" scroll = "no" class="helpr-section helpr-layout-1 section section-inverse-color"  >
+<section id="home" scroll="no" class="helpr-section helpr-layout-1 section section-inverse-color">
   <div class="container">
     <div class="helpr-content" data-stellar-offset-parent="true">
       <div class="helpr-text" data-wow-duration="1s" data-wow-delay="0.5s">
@@ -8,22 +8,32 @@
         <form class="form-inline my-2 my-lg-0" *ngIf="!alerts.categories.loading">
           <div class="row search-row">
             <div class="col-md-3 name">
-              <input class="form-control mr-sm-2 name-input" type="search" [(ngModel)]="productName" [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
+              <input class="form-control mr-sm-2 name-input" type="search" [(ngModel)]="productName"
+                     [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
             </div>
-            <div class="col-md-4">
-              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId" (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
+            <div class="col-md-3">
+              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId"
+                      (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
                 <option [value]="undefined" selected disabled>Seleccione una categoría</option>
                 <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
               </select>
             </div>
-            <div class="col-md-4">
-              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedSubcategoryId" [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
+            <div class="col-md-3">
+              <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedSubcategoryId"
+                      [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
                 <option [value]="undefined" selected disabled>Seleccione una subcategoría</option>
                 <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
               </select>
             </div>
             <div class="col-md-1" style="text-align: center">
-              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search()">Buscar</button>
+              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search()">Buscar
+              </button>
+            </div>
+            <div class="col-md-1" style="text-align: center">
+              <button class="btn btn-light my-2 my-sm-0 location-button"
+                    (click)="openLocationModal(locationModal)">
+            <i class="fa fa-road" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
         </form>
@@ -31,6 +41,7 @@
     </div>
   </div>
 </section>
+
 <div class="row results">
   <h3 class="col-12" *ngIf="searched">Productos encontrados</h3>
   <div class="col-12 loader">
@@ -38,7 +49,7 @@
       <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
     </span>
   </div>
-  <div class="col-md-12" style="margin-bottom: 50px" *ngIf="searchedProducts.length > 0">
+  <div class="col-md-12" style="margin-bottom: 50px" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
     <div class="card col-md-3 offset-md-1" *ngFor="let product of searchedProducts">
       <img class="card-img-top" [src]="product.imageUrl" alt="Product img">
       <div class="card-body">
@@ -48,11 +59,14 @@
         </p>
       </div>
       <ul class="list-group list-group-flush">
+        <!--<li class="list-group-item">-->
+          <!--<span style="font-weight: bold">Precio:</span> ${{product.price}}-->
+        <!--</li>-->
+        <!--<li class="list-group-item">-->
+          <!--<span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}-->
+        <!--</li>-->
         <li class="list-group-item">
-          <span style="font-weight: bold">Precio:</span> ${{product.price}}
-        </li>
-        <li class="list-group-item">
-          <span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}
+
         </li>
         <li class="list-group-item">
           <!--<a class="btn btn-primary">Agregar al carrito</a>-->
@@ -63,4 +77,33 @@
   </div>
   <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
   <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
+  <h3 class="col-12 no-results" *ngIf="searched && alerts.location.error">Hubo un error al obtener su ubicación.</h3>
 </div>
+
+<ng-template #locationModal>
+  <div class="modal-header" (keyup.esc)="resetModal()">
+    <h4 class="modal-title pull-left">
+      <span>Tu ubicacion actual</span>
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <agm-map [latitude]="latitude" [longitude]="longitude" *ngIf="!alerts.location.error && !alerts.location.loading">
+      <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+    </agm-map>
+    <div class="alert alert-danger text-center" *ngIf="alerts.location.error">
+      <div class="card-block">
+        <blockquote class="card-blockquote">
+          <p>¡Es necesario habilitar su Ubicacion!</p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-light" (click)="this.findCurrentGeoLocation()">Posicioname</button>
+  </div>
+</ng-template>
+
+

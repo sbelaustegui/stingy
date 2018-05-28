@@ -10,17 +10,9 @@
       <!--TODO get products table by supplier id -> foreach the supplier -->
       <div class="suppliers" *ngFor="let supplier of getSuppliersArray()">
         <!--TODO supplier name -> think tittle or table with total price -->
-        <table class="table table-striped">
-          <tbody>
-          <tr>
-            <th>{{supplier.name}}</th>
-          </tr>
-          </tbody>
-        </table>
         <table class="table table-striped" *ngIf="!alerts.products.loading">
           <thead>
           <tr>
-            <th scope="col">Id</th>
             <th scope="col">Nombre</th>
             <th scope="col">Imagen</th>
             <th scope="col">Descripcion</th>
