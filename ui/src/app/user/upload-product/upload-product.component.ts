@@ -27,6 +27,7 @@ export class UploadProductComponent implements OnInit {
   public uploadProductError: boolean;
   public addingProduct: boolean;
   public addingProductSuccess: boolean;
+  public uploadProductImageError: boolean;
   public selectedCategoryId: number;
   public categories: Category[];
   public subcategories: Subcategory[];
@@ -99,12 +100,17 @@ export class UploadProductComponent implements OnInit {
       this.newProduct.subcategoryId = parseInt(String(this.newProduct.subcategoryId));
       this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
       this.productService.addProduct(this.newProduct).then( res => {
+
         this.productService.addProductImage(res.id, this.file).then(() => {
           this.addingProduct = false;
           this.addingProductSuccess = true;
           setTimeout(() => {this.addingProductSuccess = false;},2500);
           this.uploadProductError = false;
           this.resetUploadProduct();
+        }).catch(() => {
+          this.uploadProductImageError = true;
+          setTimeout(() => {this.uploadProductImageError = false;},5000);
+          this.addingProduct = false;
         });
       }).catch(() => {
         this.uploadProductError = true;
@@ -120,7 +126,6 @@ export class UploadProductComponent implements OnInit {
       this.alerts.subcategories.error = false;
       this.alerts.subcategories.loading = false;
     }).catch(err => {
-      console.log(err);
       this.alerts.subcategories.error = true;
       this.alerts.subcategories.loading = false;
     })
@@ -132,7 +137,6 @@ export class UploadProductComponent implements OnInit {
       this.alerts.categories.error = false;
       this.alerts.categories.loading = false;
     }).catch(err => {
-      console.log(err);
       this.alerts.categories.error = true;
       this.alerts.categories.loading = false;
     })

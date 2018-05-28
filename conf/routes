@@ -74,6 +74,12 @@ POST        /api/supplier/product/location                      controllers.Supp
 PUT         /api/supplier/product                               controllers.SupplierProductController.update()
 DELETE      /api/supplier/product/:id                           controllers.SupplierProductController.delete(id: Long)
 
+# Location
+POST        /api/location                                       controllers.LocationController.register()
+GET         /api/location/id/:id                                controllers.LocationController.getById(id: Long)
+PUT         /api/location                                       controllers.LocationController.update()
+DELETE      /api/location/:id                                   controllers.LocationController.delete(id: Long)
+
 # Login
 POST        /api/login                                          controllers.LoginController.login
 POST        /api/login/admin                                    controllers.LoginController.adminLogin

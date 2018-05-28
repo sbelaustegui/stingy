@@ -138,7 +138,7 @@
           </blockquote>
         </div>
       </div>
-        <div class="alert alert-danger text-center" *ngIf="alerts.file.error">
+        <div class="alert alert-danger text-center" *ngIf="alerts.file.error || uploadProductImageError">
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>Hubo un error al cargar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.</p>

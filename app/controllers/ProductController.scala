@@ -1,6 +1,5 @@
 package controllers
 
-import java.nio.file.Paths
 
 import javax.inject.Inject
 import models.domain.image.Image
@@ -34,7 +33,7 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
              BadRequest(
                 Json.toJson(
                   ResponseGenerated(
-                    BAD_REQUEST, "Product Name already in use"
+                    BAD_REQUEST, "Error saving product"
                   )
                 )
               )
