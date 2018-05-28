@@ -96,11 +96,10 @@ export class UploadProductComponent implements OnInit {
       this.alerts.file.error = false;
       this.addingProduct = true;
       this.newProduct.isValidated = false;
-      this.newProduct.user = this.userId;
+      this.newProduct.userId = this.userId;
       this.newProduct.subcategoryId = parseInt(String(this.newProduct.subcategoryId));
       this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
       this.productService.addProduct(this.newProduct).then( res => {
-
         this.productService.addProductImage(res.id, this.file).then(() => {
           this.addingProduct = false;
           this.addingProductSuccess = true;
