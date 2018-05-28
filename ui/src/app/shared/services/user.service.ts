@@ -39,6 +39,20 @@ export class UserService {
       });
   }
 
+  public updateLocation (user : User, locationId: number){
+    if (this._usersById.get(user.id)){
+      user.locationId = locationId;
+      return this.http
+        .put('/api/user',user).then( res => {
+          this._usersById.set(user.id,res.data);
+          return res.data;
+        })
+    }
+    else {
+      this.requestUser(user.id).then(res => this.updateLocation(user,locationId));
+    }
+  }
+
   public updateUser(user: User): Promise<User> {
     if(this._usersById.get(user.id)) {
       return this.http

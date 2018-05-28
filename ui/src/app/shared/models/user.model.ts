@@ -1,7 +1,11 @@
-export class User{
+export class User {
 
-  static empty(): User{
+  static empty(): User {
     return new User('', '', '', '', '')
   }
-  constructor(public name: string, public username: string, public password: string, public lastName: string, public email: string, public id?: number) {}
+
+  constructor(public name: string, public username: string, public password: string,
+              public lastName: string, public email: string, public locationId?: number,
+              public id?: number) {
+  }
 }

@@ -2,39 +2,46 @@
   position: relative;
   background: url('https://www.helpr.in/images/backgrounds/section-light-bg.png') repeat-x bottom center;
 }
+
 .section-inverse-color {
   background: #222222 url('https://www.helpr.in/images/backgrounds/section-dark-bg.png');
   color: #5a5a5a;
 }
+
 .helpr-section {
   height: calc(100% - 56px);
   background: #8BC4FF;
   background-size: cover;
   overflow-y: scroll;
 }
+
 .helpr-text {
   height: 500px;
 }
+
 .webHomeTitle {
   display: block;
 }
+
 .home-service {
   width: 600px;
   margin: 40px auto 100px auto;
   border-radius: 8px;
   background: #fff;
-  -webkit-box-shadow: 0 4px 8px rgba(2,2,2,0.14);
-  -moz-box-shadow: 0 4px 8px rgba(2,2,2,0.14);
-  box-shadow: 0 4px 8px rgba(2,2,2,0.14);
+  -webkit-box-shadow: 0 4px 8px rgba(2, 2, 2, 0.14);
+  -moz-box-shadow: 0 4px 8px rgba(2, 2, 2, 0.14);
+  box-shadow: 0 4px 8px rgba(2, 2, 2, 0.14);
   position: relative;
   height: 65px;
 }
+
 .wrapper-demo1 {
   width: 200px;
   float: left;
   position: relative;
   margin: 11px 0 0 15px;
 }
+
 .wrapper-dropdown-3 {
   position: absolute;
   width: 200px;
@@ -48,19 +55,21 @@
   font-size: 20px;
   background: url(https://www.helpr.in/images/city-arw.png) no-repeat left 12px;
 }
+
 .helpr-title {
   padding: 100px 0 10px;
   font-size: 70px;
   line-height: 80px;
-  -webkit-text-shadow: 0 4px 6px rgba(0,0,0,.20);
-  -moz-text-shadow: 0 4px 6px rgba(0,0,0,.20);
-  text-shadow: 0 4px 6px rgba(0,0,0,.20);
+  -webkit-text-shadow: 0 4px 6px rgba(0, 0, 0, .20);
+  -moz-text-shadow: 0 4px 6px rgba(0, 0, 0, .20);
+  text-shadow: 0 4px 6px rgba(0, 0, 0, .20);
   font-family: 'LatoWebBlack', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   text-align: center;
   color: #ffffff;
   margin: 0;
   position: relative;
 }
+
 .helpr-content {
   position: relative;
   display: table;
@@ -68,47 +77,47 @@
   width: 100%;
 }
 
-.search-row{
+.search-row {
   width: 100%;
   margin-top: 50px;
-  .name{
+  .name {
     width: 100% !important;
-    .name-input{
+    .name-input {
       width: 100%;
       height: 75%;
       font-size: 20px;
     }
   }
-  .search-button{
+  .search-button {
     height: 73%;
     font-size: 20px;
   }
 }
 
-.results{
-  h3{
+.results {
+  h3 {
     color: white;
     font-size: 40px;
     margin-left: 50px;
     margin-bottom: 20px;
-    &.no-results{
+    &.no-results {
       text-align: center;
       font-size: 25px;
       margin-left: 0;
     }
   }
-  .loader{
+  .loader {
     text-align: center;
     color: white;
   }
-  .card{
-    h5{
+  .card {
+    h5 {
       text-align: left;
     }
-    p{
+    p {
       text-align: left;
     }
-    img{
+    img {
       padding-top: 15px;
       max-height: 250px;
       max-width: 325px;
@@ -116,8 +125,12 @@
     }
     width: 100%;
     text-align: center;
-    .btn{
+    .btn {
       color: white;
     }
   }
+
+}
+agm-map {
+  height: 300px;
 }
