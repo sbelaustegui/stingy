@@ -14,7 +14,6 @@
           <th scope="col">Nombre</th>
           <th scope="col">Imagen</th>
           <th scope="col">Descripcion</th>
-          <th scope="col">Precio</th>
           <th scope="col">Ultima Modificación</th>
           <th scope="col">Creación</th>
           <th scope="col">Validar</th>
@@ -27,7 +26,6 @@
           <td>{{product.name}}</td>
           <td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>
           <td style="text-align: left">{{product.description | truncate: 100}}</td>
-          <td>${{product.price}}</td>
           <td><span *ngIf="product.updateDate">{{product.updateDate.toStringDate()}}</span><span *ngIf="!product.updateDate">Nunca</span></td>
           <td>{{product.uploadDate.toStringDate()}}</td>
           <td>

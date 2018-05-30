@@ -9,7 +9,12 @@ case class SupplierUpdate(id: Long, name: Option[String], description: Option[St
       Option(id),
       name.getOrElse(supplier.name),
       description.getOrElse(supplier.description),
-      location.getOrElse(supplier.location)
+      location match {
+        case Some(loc) =>
+          Location.saveOrUpdate(loc).get
+        case None =>
+          supplier.location
+      }
     )
   }
 }

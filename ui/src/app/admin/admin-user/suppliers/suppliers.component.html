@@ -122,25 +122,6 @@
           <agm-map [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude" (mapClick)="placeMarker($event)">
             <agm-marker [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"></agm-marker>
           </agm-map>
-
-          <!--INPUT LOCATION-->
-          <!--<fieldset>-->
-            <!--<div class="form-group">-->
-              <!--<input type="text"-->
-                     <!--class="form-control"-->
-                     <!--formControlName="location"-->
-                     <!--[formGroup]="supplierFormGroup"-->
-                     <!--placeholder="Ubicación"-->
-                     <!--aria-label="location"-->
-                     <!--aria-describedby="basic-addon1"-->
-                     <!--[(ngModel)]="newSupplier.location"-->
-                     <!--required>-->
-              <!--<div class="form-control-feedback"-->
-                   <!--*ngIf="supplierFormGroup.controls['location'].errors && (supplierFormGroup.controls['location'].dirty || supplierFormGroup.controls['location'].touched)">-->
-                <!--<p class="error" *ngIf="supplierFormGroup.controls['location'].errors.required">Es requerido</p>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</fieldset>-->
         </form>
       </div>
       <div class="modal-footer">

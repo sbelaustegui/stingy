@@ -39,7 +39,7 @@ class LocationController extends Controller {
                 Ok(
                   Json.toJson(
                     ResponseGenerated(
-                      OK, "Location updated", Json.toJson(LocationDAO.saveOrUpdate(location))
+                      OK, "Location updated", Json.toJson(Location.saveOrUpdate(locationUpdate.toLocation(location)))
                     )
                   )
                 )

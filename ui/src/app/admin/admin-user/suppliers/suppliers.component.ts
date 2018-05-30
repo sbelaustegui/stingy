@@ -40,9 +40,6 @@ export class SuppliersComponent implements OnInit {
   };
   modalRef: BsModalRef;
 
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-
   constructor(public fb: FormBuilder, public supplierService: SupplierService, public router: Router, private titleService: Title, private modalService: BsModalService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) {
   }
 
@@ -166,6 +163,5 @@ export class SuppliersComponent implements OnInit {
   placeMarker($event){
     this.newSupplier.location.latitude = $event.coords.lat;
     this.newSupplier.location.longitude =  $event.coords.lng;
-    console.log(this.newSupplier)
   }
 }

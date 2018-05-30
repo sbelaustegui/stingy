@@ -4,7 +4,7 @@ import models.domain.location.LocationCreate
 import models.ebean.{Supplier => ESupplier}
 import play.api.libs.json.{Json, OFormat}
 
-case class SupplierCreate(name: String, description: String, locationId: Long)
+case class SupplierCreate(name: String, description: String, location: LocationCreate)
 
 object SupplierCreate extends SupplierCreateJsonFormat{
   def apply(supplier: ESupplier): Supplier = {

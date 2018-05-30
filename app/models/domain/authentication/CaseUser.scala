@@ -5,7 +5,7 @@ import models.domain.admin.Admin
 import models.domain.user.User
 import play.api.libs.json.{Json, OFormat}
 
-case class CaseUser(id: Long, name: String, email: String, userType: Option[String] = None)
+case class CaseUser(id: Long, name: String, email: String, userType: Option[String] = None, locationId: Option[Long])
 
 object CaseUser extends CaseUserJsonFormat{
   def toCaseUser(user: AbstractUser) : CaseUser = {
@@ -13,7 +13,13 @@ object CaseUser extends CaseUserJsonFormat{
       user.id.get,
       user.name,
       user.email,
-      AbstractUser.getUserType(user)
+      AbstractUser.getUserType(user),
+      User.getById(user.id.get).get.location match {
+        case Some(loc) =>
+          loc.id
+        case None =>
+          None
+      }
     )
   }
 
@@ -22,7 +28,8 @@ object CaseUser extends CaseUserJsonFormat{
       user.id.get,
       user.name,
       user.email,
-      Some(AbstractUser.ADMIN_TYPE)
+      Some(AbstractUser.ADMIN_TYPE),
+      None
     )
   }
 
@@ -31,7 +38,13 @@ object CaseUser extends CaseUserJsonFormat{
       user.id.get,
       user.name,
       user.email,
-      Some(AbstractUser.USER_TYPE)
+      Some(AbstractUser.USER_TYPE),
+      User.getById(user.id.get).get.location match {
+        case Some(loc) =>
+          loc.id
+        case None =>
+          None
+      }
     )
   }
 }

@@ -28,7 +28,7 @@ object Supplier extends SupplierJsonFormat {
       None,
       supplierCreate.name,
       supplierCreate.description,
-      Location.getById(supplierCreate.locationId).get
+      Location.saveOrUpdate(Location(supplierCreate.location)).orNull
     )
   }
 

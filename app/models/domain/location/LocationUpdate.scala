@@ -3,11 +3,11 @@ package models.domain.location
 import play.api.libs.json.{Json, OFormat}
 
 case class LocationUpdate(id: Long, longitude: Option[Double], latitude: Option[Double]) {
-  def toSupplier(supplier: Location): Location = {
+  def toLocation(location: Location): Location = {
     Location(
       Option(id),
-      longitude.getOrElse(supplier.longitude),
-      latitude.getOrElse(supplier.latitude)
+      longitude.getOrElse(location.longitude),
+      latitude.getOrElse(location.latitude)
     )
   }
 }

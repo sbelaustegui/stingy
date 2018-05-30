@@ -125,7 +125,7 @@ export class HomeComponent implements OnInit {
    */
 
   /**
-   * Gets users ids and last current location loaded at the database.
+   * Gets users ids and last current location on the database.
    */
   getUserData() {
     this.userAuthService.loggedUser.then(res => {

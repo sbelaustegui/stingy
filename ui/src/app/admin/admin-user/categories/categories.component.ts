@@ -22,6 +22,7 @@ export class CategoriesComponent implements OnInit {
   public newCategory: Category;
   public categoryToDelete: Category;
   public categoryIndexToDelete: number;
+  public categoryIndexUpdate: number;
   public subcategoryToDelete: Subcategory;
   public subcategoryIndexToDelete: number;
   public subcategoryIndexUpdate: number;
@@ -116,6 +117,7 @@ export class CategoriesComponent implements OnInit {
     this.alerts.addCategory.loading = true;
     if(this.newCategory.id) {
       this.categoryService.updateCategory(this.newCategory).then(res => {
+        this.categories[this.categoryIndexUpdate] = res;
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
@@ -232,8 +234,9 @@ export class CategoriesComponent implements OnInit {
     })
   }
 
-  openCategoryModal(template: TemplateRef<any>, category?) {
+  openCategoryModal(template: TemplateRef<any>, i, category?) {
     if(category) this.newCategory = Object.assign({}, category);
+    this.categoryIndexUpdate = i;
     this.modalRef = this.modalService.show(template);
   }
 
