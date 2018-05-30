@@ -75,7 +75,7 @@ public class SupplierProduct extends Model {
                 return 0;
             }
         });
-        return filteredProducts.subList(0, 3);
+        return filteredProducts.size() > 3 ? filteredProducts.subList(0, 3) : filteredProducts;
     }
 
     public static List<SupplierProduct> getSupplierProductBySupplierId(Long id){

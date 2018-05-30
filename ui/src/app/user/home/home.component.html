@@ -59,23 +59,14 @@
         </p>
       </div>
       <ul class="list-group list-group-flush">
-        <!--<li class="list-group-item">-->
-        <!--<span style="font-weight: bold">Precio:</span> ${{product.price}}-->
-        <!--</li>-->
-        <!--<li class="list-group-item">-->
-        <!--<span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}-->
-        <!--</li>-->
-
-        <div class="supplierProducts-items" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
-          <li class="list-group-item" >
-            <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
-            <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId).name}}</span>
-          </li>
-        </div>
+        <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
+          <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
+          <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId)?.name}}</span>
+        </li>
 
         <li class="list-group-item">
           <button class="btn btn-primary" (click)="addToCart(product.id)"
-                  *ngIf="supplierProducts.get(product.id).length > 0">Agregar al carrito</button>
+                  *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
         </li>
       </ul>
     </div>
