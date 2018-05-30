@@ -67,6 +67,7 @@
         <li class="list-group-item">
           <button class="btn btn-primary" (click)="addToCart(product.id)"
                   *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
+          <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
         </li>
       </ul>
     </div>

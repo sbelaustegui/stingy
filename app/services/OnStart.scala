@@ -67,9 +67,9 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
 
   def createSuppliers(): List[Supplier] = {
     var suppliers: List[Supplier] = List()
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Wallmart", "Hipermercado Wallmart de Pilar", LocationCreate(-34.4487028, -58.8859463)))).get :: suppliers
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Carrefour", "Supermercado Carrefour de Pilar", LocationCreate(-34.4555658, -58.8964535)))).get :: suppliers
-    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Vital", "Hipermercado Mayorista Vital de Pilar", LocationCreate(-34.4555645, -58.9118227)))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Wallmart", "Hipermercado Wallmart de Pilar", LocationCreate(-58.8859463, -34.4487028)))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Carrefour", "Supermercado Carrefour de Pilar", LocationCreate(-58.8964535, -34.4555658)))).get :: suppliers
+    suppliers = Supplier.saveOrUpdate(Supplier(SupplierCreate("Vital", "Hipermercado Mayorista Vital de Pilar", LocationCreate(-58.9118227, -34.4555645)))).get :: suppliers
     suppliers
   }
 

@@ -41,7 +41,7 @@ export class CartProductService {
 
   public addCartProduct(cartProduct: CartProduct): Promise<CartProduct> {
     return this.http
-      .post('/api/cartProduct', cartProduct)
+      .post('/api/cart/product', cartProduct)
       .then(res => {
         this._cartProductsById.set(res.data.id, res.data);
         return res.data;
@@ -51,7 +51,7 @@ export class CartProductService {
   public updateCartProduct(cartProduct: CartProduct): Promise<CartProduct> {
     if(this._cartProductsById.get(cartProduct.id)) {
       return this.http
-        .put('/api/cartProduct', cartProduct)
+        .put('/api/cart/product', cartProduct)
         .then(res => {
           this._cartProductsById.set(cartProduct.id, res.data);
           return res.data;
@@ -62,7 +62,7 @@ export class CartProductService {
   }
 
   public deleteCartProduct(id: number): Promise<any> {
-    return this.http.delete('/api/cartProduct/' + id)
+    return this.http.delete('/api/cart/product/' + id)
       .then(res => {
         this._cartProductsById.delete(id);
         return res;
@@ -75,7 +75,7 @@ export class CartProductService {
 
   private requestCartProducts(): Promise<CartProduct[]> {
     return this.http
-      .get('/api/cartProduct/all')
+      .get('/api/cart/product/all')
       .then(res => {
         const cartProducts = res.data as CartProduct[];
         cartProducts.forEach(cartProduct => this._cartProductsById = this._cartProductsById.set(cartProduct.id, cartProduct));
@@ -86,7 +86,7 @@ export class CartProductService {
 
   private requestCartProduct(id: number): Promise<CartProduct> {
     return this.http
-      .get('/api/cartProduct/id/' + id)
+      .get('/api/cart/product/id/' + id)
       .then(res => {
         this._cartProductsById.set(id,res.data);
         return res.data;

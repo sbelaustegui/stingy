@@ -18,6 +18,7 @@ import {SupplierProductService} from "../../shared/services/supplierProduct.serv
 import {User} from "../../shared/models/user.model";
 import {Location} from "../../shared/models/location.model";
 import {LocationService} from "../../shared/services/location.service";
+import {CartService} from "../../shared/services/cart.service";
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,7 @@ import {LocationService} from "../../shared/services/location.service";
   styleUrls: ['./home.component.scss'],
   providers: [SubcategoryService, CategoryService, ProductService,
     SupplierService, SupplierProductService, CartProductService, LocationService,
-    UserAuthService, BsModalService]
+    UserAuthService, BsModalService, CartService]
 })
 export class HomeComponent implements OnInit {
 
@@ -40,7 +41,6 @@ export class HomeComponent implements OnInit {
   public categories: Category[];
   public user: User;
   public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
-
 
   public alerts: {
     user: {
@@ -73,13 +73,11 @@ export class HomeComponent implements OnInit {
   modalRef: BsModalRef;
   location: Location;
 
-
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
               public productService: ProductService, public supplierService: SupplierService,
               public supplierProductService: SupplierProductService, public locationService: LocationService,
-              public modalService: BsModalService,
-              private titleService: Title) {
+              public modalService: BsModalService, public cartService: CartService, private titleService: Title) {
   }
 
   ngOnInit() {
@@ -133,10 +131,18 @@ export class HomeComponent implements OnInit {
       this.locationService.getLocationById(res.locationId).then(l => {
         this.location = l;
       });
+      this.getCurrentCart();
       this.findCurrentGeoLocation();
     }).catch(() => {
       this.alerts.user.error;
     })
+  }
+
+  getCurrentCart() {
+    this.cartService.getCartByUserId(this.user.id).then(res => {
+        this.currentCartId = res.id;
+      }
+    )
   }
 
   getSubcategories() {

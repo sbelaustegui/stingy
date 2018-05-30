@@ -103,7 +103,7 @@ export class CartComponent implements OnInit {
   }
 
   getCurrentCart(userId: number) {
-    this.cartService.getCartByUserId(userId).then(res => { //TODO GET CURRENT CART BY DATE OR BOOLEAN
+    this.cartService.getCartByUserId(userId).then(res => {
         this.currentCart = res;
         this.alerts.cart.loading = false;
         this.alerts.cart.error = false;
@@ -114,7 +114,6 @@ export class CartComponent implements OnInit {
       this.alerts.cart.error = true;
       this.alerts.cart.loading = false;
     })
-
   }
 
   private getCartProducts() {
