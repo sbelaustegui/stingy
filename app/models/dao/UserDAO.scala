@@ -2,7 +2,7 @@ package models.dao
 
 import java.util.Optional
 
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import models.domain.user.User
 import models.ebean.{User => EUser}
 import utils.ScalaOptional.toScalaOption

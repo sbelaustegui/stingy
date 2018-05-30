@@ -14,14 +14,14 @@
             <div class="col-md-3">
               <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedCategoryId"
                       (ngModelChange)="getSubcategories()" [ngModelOptions]="{standalone: true}">
-                <option [value]="undefined" selected disabled>Seleccione una categoría</option>
+                <option [value]="undefined" selected disabled>Categoría</option>
                 <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
               </select>
             </div>
             <div class="col-md-3">
               <select class="custom-select custom-select-lg mb-3" [(ngModel)]="selectedSubcategoryId"
                       [ngModelOptions]="{standalone: true}" *ngIf="!alerts.subcategories.loading">
-                <option [value]="undefined" selected disabled>Seleccione una subcategoría</option>
+                <option [value]="undefined" selected disabled>Subcategoría</option>
                 <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
               </select>
             </div>

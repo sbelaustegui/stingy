@@ -1,7 +1,7 @@
 export class User {
 
   static empty(): User {
-    return new User('', '', '', '', '',Location.empty().id)
+    return new User('', '', '', '', '', undefined)
   }
 
   constructor(public name: string, public username: string, public password: string,

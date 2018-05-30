@@ -1,7 +1,7 @@
 package models.domain.supplierProduct
 
 import models.dao.SupplierProductDAO
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import models.domain.util.Date
 import models.ebean.{SupplierProduct => ESupplierProduct}
 import play.api.libs.json.{Json, OFormat}

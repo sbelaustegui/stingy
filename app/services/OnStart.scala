@@ -6,10 +6,10 @@ import models.domain.admin.{Admin, AdminCreate}
 import models.domain.cart.{Cart, CartCreate}
 import models.domain.cartProduct.{CartProduct, CartProductCreate}
 import models.domain.category.{Category, CategoryCreate}
+import models.domain.location.{Location, LocationCreate}
 import models.domain.product.{Product, ProductCreate}
 import models.domain.report.{Report, ReportCreate}
 import models.domain.subcategory.{Subcategory, SubcategoryCreate}
-import models.domain.supplier.location.{Location, LocationCreate}
 import models.domain.supplier.{Supplier, SupplierCreate}
 import models.domain.supplierProduct.{SupplierProduct, SupplierProductCreate}
 import models.domain.user.{User, UserCreate}

@@ -1,6 +1,6 @@
 package models.domain.user
 
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import play.api.libs.json.{Json, OFormat}
 import utils.Encrypter
 
@@ -16,6 +16,7 @@ case class  UserCreate(name: String, lastName: String, email: String, username: 
       case Some(lId) =>
         Location.getById(lId)
       case None => None
+        Option(Location(None, 0, 0))
     }
   )
 }

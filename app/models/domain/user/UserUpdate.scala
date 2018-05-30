@@ -1,6 +1,6 @@
 package models.domain.user
 
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import play.api.libs.json.{Json, OFormat}
 import utils.Encrypter
 

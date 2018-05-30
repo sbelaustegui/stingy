@@ -1,6 +1,6 @@
 package models.dao
 
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import models.ebean.{Location => ELocation}
 import utils.ScalaOptional.toScalaOption
 

@@ -1,4 +1,4 @@
-package models.domain.supplier.location
+package models.domain.location
 
 import play.api.libs.json.{Json, OFormat}
 

@@ -1,7 +1,7 @@
 package controllers
 
 import models.dao.LocationDAO
-import models.domain.supplier.location.{Location, LocationCreate, LocationUpdate}
+import models.domain.location.{Location, LocationCreate, LocationUpdate}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import utils.ResponseGenerated

@@ -1,4 +1,4 @@
-package models.domain.supplier.location
+package models.domain.location
 
 import models.dao.LocationDAO
 import models.ebean.{Location => ELocation}

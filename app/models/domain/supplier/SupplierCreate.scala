@@ -1,6 +1,6 @@
 package models.domain.supplier
 
-import models.domain.supplier.location.{Location, LocationCreate}
+import models.domain.location.LocationCreate
 import models.ebean.{Supplier => ESupplier}
 import play.api.libs.json.{Json, OFormat}
 

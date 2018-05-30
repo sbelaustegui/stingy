@@ -1,8 +1,8 @@
 package models.dao
 
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import models.domain.supplierProduct.SupplierProduct
-import models.ebean.{SupplierProduct => ESupplierProduct, Location => ELocation}
+import models.ebean.{Location => ELocation, SupplierProduct => ESupplierProduct}
 import utils.ScalaOptional.toScalaOption
 
 import scala.collection.JavaConversions._

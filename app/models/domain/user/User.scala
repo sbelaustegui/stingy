@@ -2,7 +2,7 @@ package models.domain.user
 
 import models.dao.UserDAO
 import models.domain.authentication.UserLogin
-import models.domain.supplier.location.Location
+import models.domain.location.Location
 import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
 import utils.Encrypter
