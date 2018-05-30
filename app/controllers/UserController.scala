@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 import models.domain.cart.Cart
+import models.domain.supplier.location.{Location, LocationCreate}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import models.domain.user._
 import play.api.libs.json.Json
@@ -20,21 +21,33 @@ class UserController @Inject()(cc: ControllerComponents) extends AbstractControl
         case Some(userCreate) =>
           User.saveOrUpdate(User(userCreate)) match {
             case Some(savedUser) =>
-              var cart: Cart = new Cart(None, savedUser.id.get)
-              Cart.saveOrUpdate(cart) match {
+              val location: Location = Location(LocationCreate(0d, 0d))
+              Location.saveOrUpdate(location) match {
                 case Some(_) =>
-                  Ok(
-                    Json.toJson(
-                      ResponseGenerated(
-                        OK, "Ok",  Json.toJson(savedUser)
+                  val cart: Cart = new Cart(None, savedUser.id.get)
+                  Cart.saveOrUpdate(cart) match {
+                    case Some(_) =>
+                      Ok(
+                        Json.toJson(
+                          ResponseGenerated(
+                            OK, "Ok",  Json.toJson(savedUser)
+                          )
+                        )
                       )
-                    )
-                  )
+                    case None =>
+                      BadRequest(
+                        Json.toJson(
+                          ResponseGenerated(
+                            BAD_REQUEST, "Error when creating User Cart"
+                          )
+                        )
+                      )
+                  }
                 case None =>
                   BadRequest(
                     Json.toJson(
                       ResponseGenerated(
-                        BAD_REQUEST, "Error when creating User Cart"
+                        BAD_REQUEST, "Error when creating User Location"
                       )
                     )
                   )
