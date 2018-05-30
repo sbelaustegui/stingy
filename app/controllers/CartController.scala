@@ -19,18 +19,41 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
         case Some(cartCreate) =>
           Cart.saveOrUpdate(Cart(cartCreate)) match {
             case Some(savedCart) =>
-              Ok(
-                Json.toJson(
-                  ResponseGenerated(
-                    OK, "Ok",  Json.toJson(savedCart)
+              Cart.getById(savedCart.userId) match {
+                case Some(previousCart) =>
+                  val cart = previousCart.copy(current = false)
+                  Cart.saveOrUpdate(cart) match {
+                    case Some(_) =>
+                      Ok(
+                        Json.toJson(
+                          ResponseGenerated(
+                            OK, "Ok",  Json.toJson(savedCart)
+                          )
+                        )
+                      )
+                    case None =>
+                      BadRequest(
+                        Json.toJson(
+                          ResponseGenerated(
+                            BAD_REQUEST, "Error saving cart"
+                          )
+                        )
+                      )
+                  }
+                case None =>
+                  Ok(
+                    Json.toJson(
+                      ResponseGenerated(
+                        OK, "Ok",  Json.toJson(savedCart)
+                      )
+                    )
                   )
-                )
-              )
+              }
             case None =>
              BadRequest(
                 Json.toJson(
                   ResponseGenerated(
-                    BAD_REQUEST, "Cart Name already in use"
+                    BAD_REQUEST, "Error saving cart"
                   )
                 )
               )

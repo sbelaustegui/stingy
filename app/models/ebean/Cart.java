@@ -4,6 +4,7 @@ import io.ebean.Ebean;
 import io.ebean.Finder;
 import io.ebean.Model;
 import io.ebean.annotation.NotNull;
+import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -21,12 +22,16 @@ public class Cart extends Model {
     @NotNull
     @ManyToOne
     private User user;
+    private Boolean current;
+    private DateTime date;
 
     private static Finder<Long, Cart> finder = new Finder<>(Cart.class);
 
-    public Cart(Long id, User user) {
+    public Cart(Long id, User user, Boolean current, DateTime date) {
         this.id = id;
         this.user = user;
+        this.current = current;
+        this.date = date;
     }
 
     @Override
@@ -41,8 +46,9 @@ public class Cart extends Model {
         }
         return Optional.empty();
     }
+
     public static Optional<Cart> getCartByUserId(Long id){
-        return Optional.ofNullable(Ebean.find(Cart.class).where().eq("user_id", id).findOne());
+        return Optional.ofNullable(Ebean.find(Cart.class).where().eq("user_id", id).and().eq("current", 1).findOne());
     }
 
     public static List<Cart> getAllCarts() {
@@ -51,6 +57,14 @@ public class Cart extends Model {
 
     public Long getId() {
         return id;
+    }
+
+    public Boolean getCurrent() {
+        return current;
+    }
+
+    public DateTime getDate() {
+        return date;
     }
 
     public User getUser() {

@@ -28,18 +28,6 @@ object User extends UserJsonFormat {
     )
   }
 
-  def apply(userCreate: UserCreate): User = {
-    User(
-      None,
-      userCreate.name,
-      userCreate.lastName,
-      userCreate.email,
-      userCreate.username,
-      Encrypter.encrypt(userCreate.password),
-      None
-    )
-  }
-
   def saveOrUpdate(user: User): Option[User] = {
     UserDAO.saveOrUpdate(user)
   }

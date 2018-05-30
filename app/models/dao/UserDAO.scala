@@ -1,5 +1,8 @@
 package models.dao
 
+import java.util.Optional
+
+import models.domain.supplier.location.Location
 import models.domain.user.User
 import models.ebean.{User => EUser}
 import utils.ScalaOptional.toScalaOption
@@ -20,7 +23,8 @@ object UserDAO {
       user.lastName,
       user.email,
       user.username,
-      user.password
+      user.password,
+      Optional.ofNullable(LocationDAO.toEbean(user.location.orNull))
     )
   }
 

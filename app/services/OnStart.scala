@@ -7,6 +7,7 @@ import models.domain.cart.{Cart, CartCreate}
 import models.domain.cartProduct.{CartProduct, CartProductCreate}
 import models.domain.category.{Category, CategoryCreate}
 import models.domain.product.{Product, ProductCreate}
+import models.domain.report.{Report, ReportCreate}
 import models.domain.subcategory.{Subcategory, SubcategoryCreate}
 import models.domain.supplier.location.{Location, LocationCreate}
 import models.domain.supplier.{Supplier, SupplierCreate}
@@ -24,8 +25,8 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
 
   def createUsers(): List[User] = {
     var users: List[User] = List()
-    users = User.saveOrUpdate(User(UserCreate("Sebas", "Belaustegui", "sebas@gmail.com", "sebasb", "123456"))).get :: users
-    users = User.saveOrUpdate(User(UserCreate("Lucas", "Manzanelli", "lucas@gmail.com", "lmanza", "123456"))).get :: users
+    users = User.saveOrUpdate(UserCreate("Sebas", "Belaustegui", "sebas@gmail.com", "sebasb", "123456", Option(1)).toUser).get :: users
+    users = User.saveOrUpdate(UserCreate("Lucas", "Manzanelli", "lucas@gmail.com", "lmanza", "123456", Option(2)).toUser).get :: users
     users
   }
 
@@ -57,7 +58,7 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     categories
   }
 
-  def createSuppliersLocation(): List[Location] = {
+  def createLocation(): List[Location] = {
     var suppliers: List[Location] = List()
     suppliers = Location.saveOrUpdate(Location(LocationCreate(-58.885, -34.448))).get :: suppliers
     suppliers = Location.saveOrUpdate(Location(LocationCreate(-58.894, -34.454))).get :: suppliers
@@ -116,6 +117,13 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     carts
   }
 
+  def createReports(): List[Report] = {
+    var reports: List[Report] = List()
+    reports = Report.saveOrUpdate(Report(ReportCreate(1, "Falta el Eco de Pilar."))).get :: reports
+    reports = Report.saveOrUpdate(Report(ReportCreate(1, "Falta el Dia de Pilar."))).get :: reports
+    reports
+  }
+
   def createCartProducts(): List[CartProduct] = {
     var carts: List[CartProduct] = List()
     carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(1, 1))).get :: carts
@@ -129,15 +137,16 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     User.getByUsername("sebasb") match {
       case Some(_) =>
       case None =>
+        createLocation()
         createUsers()
         createAdmins()
         createCategories()
         createSubCategories()
-        createSuppliersLocation()
         createSuppliers()
         createProducts()
         createSuppliersProduct()
         createCarts()
+        createReports()
         createCartProducts()
     }
   }

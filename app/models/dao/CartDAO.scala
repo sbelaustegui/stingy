@@ -16,7 +16,9 @@ object CartDAO {
   def toEbean(cart: Cart): ECart = {
     new ECart(
       if(cart.id.isDefined) cart.id.get else null,
-      User.getById(cart.userId).get()
+      User.getById(cart.userId).get(),
+      cart.current,
+      cart.date.toDateTime
     )
   }
 

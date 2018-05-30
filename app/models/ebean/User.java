@@ -22,8 +22,9 @@ public class User extends AbstractUser{
 
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password) {
+    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, Optional<Location> location) {
         super(id, name, lastName, email, username, password);
+        this.location = location.orElse(null);
     }
 
     public static Optional<User> getById(Long id){

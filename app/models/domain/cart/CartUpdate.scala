@@ -6,7 +6,9 @@ case class CartUpdate(id: Long, userId: Long) {
   def toCart(cart: Cart): Cart = {
     Cart(
       Option(id),
-      cart.userId
+      cart.userId,
+      cart.current,
+      cart.date
     )
   }
 }
