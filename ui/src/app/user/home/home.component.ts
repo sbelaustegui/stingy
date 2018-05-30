@@ -16,32 +16,37 @@ import {BsModalService} from "ngx-bootstrap";
 import {SupplierProduct} from "../../shared/models/supplier-product.model";
 import {SupplierProductService} from "../../shared/services/supplierProduct.service";
 import {User} from "../../shared/models/user.model";
-import {forEach} from "@angular/router/src/utils/collection";
+import {Location} from "../../shared/models/location.model";
+import {LocationService} from "../../shared/services/location.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [SubcategoryService, CategoryService, ProductService,
-    SupplierService, SupplierProductService, CartProductService,
+    SupplierService, SupplierProductService, CartProductService, LocationService,
     UserAuthService, BsModalService]
 })
 export class HomeComponent implements OnInit {
 
   public subcategories: Subcategory[];
   public searchedProducts: Product[];
-  // public productsSuppliers: Map<number, Supplier>;
-  public supplierProducts: Map<number, SupplierProduct>;
-  public suppliersId: number[];
+  public supplierProducts: Map<number, SupplierProduct[]>;
+  public suppliers: Map<number, Supplier>;
   public selectedCategoryId: number;
   public searched: boolean;
   public productName: string;
   public selectedSubcategoryId: string;
   public categories: Category[];
   public user: User;
+  public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
 
 
   public alerts: {
+    user: {
+      loaded: boolean,
+      error: boolean,
+    },
     subcategories: {
       loading: boolean,
       error: boolean,
@@ -58,16 +63,21 @@ export class HomeComponent implements OnInit {
       loading: boolean,
       error: boolean,
     }
+    supplierProducts: {
+      empty: boolean,
+      loading: boolean,
+      error: boolean,
+    }
   };
 
   modalRef: BsModalRef;
-  latitude: number;
-  longitude: number;
+  location: Location;
+
 
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
-              public productService: ProductService, public suppliersService: SupplierService,
-              public supplierProductService: SupplierProductService,
+              public productService: ProductService, public supplierService: SupplierService,
+              public supplierProductService: SupplierProductService, public locationService: LocationService,
               public modalService: BsModalService,
               private titleService: Title) {
   }
@@ -75,6 +85,10 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('Búsqueda de Producto | Stingy');
     this.alerts = {
+      user: {
+        loaded: false,
+        error: false,
+      },
       subcategories: {
         loading: false,
         error: false,
@@ -91,13 +105,38 @@ export class HomeComponent implements OnInit {
         loading: false,
         error: false,
       },
+      supplierProducts: {
+        empty: true,
+        loading: false,
+        error: false,
+      },
     };
+    this.location = Location.empty();
     this.getUserData();
     this.subcategories = [];
     this.searchedProducts = [];
-    // this.productsSuppliers = new Map<number, Supplier>();
-    this.supplierProducts = new Map<number, SupplierProduct>();
+    this.supplierProducts = new Map<number, SupplierProduct[]>();
+    this.suppliers = new Map<number, Supplier>();
     this.getCategories();
+  }
+
+  /*
+  GETTERS
+   */
+
+  /**
+   * Gets users ids and last current location loaded at the database.
+   */
+  getUserData() {
+    this.userAuthService.loggedUser.then(res => {
+      this.user = res;
+      this.locationService.getLocationById(res.locationId).then(l => {
+        this.location = l;
+      });
+      this.findCurrentGeoLocation();
+    }).catch(() => {
+      this.alerts.user.error;
+    })
   }
 
   getSubcategories() {
@@ -124,6 +163,59 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  getSupplierProductsMap(productId: number): SupplierProduct[] {
+    return this.supplierProducts.has(productId) ? this.supplierProducts.get(productId) : [];
+  }
+
+  getSupplierMap(supplierId: number): Supplier {
+    return this.suppliers.has(supplierId) ?
+      this.suppliers.get(supplierId) : null;
+  }
+
+  /**
+   * Gets ProductSupplier array and save it in a map with productId as key. The array is sort by SupplierProduct's price.
+   * @param {number} productId
+   * @param {number} userId
+   */
+  getSupplierProducts(productId: number, userId: number) {
+    this.supplierProductService.getSuppliersProductsByUserLocation(productId, userId)
+      .then(res => {
+          this.supplierProducts.set(productId, res.sort((n1, n2) => {
+            if (n1.price > n2.price)
+              return 1;
+            else if (n1.price < n2.price)
+              return -1;
+            else
+              return 0;
+          })); //Add SuppliersP. to map
+          res.forEach(sp => {
+            this.supplierService.getSupplierById(sp.id).then(s => {
+              this.suppliers.set(s.id, s);
+            });
+          }); //Add Suppliers. to map.
+          this.alerts.location.error = false;
+        }
+      )
+      .catch(error => {
+        switch (error.message) {
+          case "No product for that id":
+            break;
+          case "No location for that user":
+            this.alerts.location.error = true;
+            break;
+          case "No user for that id":
+            this.alerts.user.error = true;
+            break;
+          case "Invalid Data":
+            break;
+        }
+      })
+  }
+
+  /*
+  FUNCTIONAL
+ */
+
   search() {
     if (this.productName && this.productName !== '' && this.selectedSubcategoryId) {
       this.productService.searchProduct({
@@ -132,8 +224,10 @@ export class HomeComponent implements OnInit {
       }).then(res => {
         this.searchedProducts = res;
         this.searched = true;
+        this.supplierProducts.clear();
+        this.suppliers.clear();
         this.searchedProducts.forEach(p => {
-          // this.getProductSupplier(p.id, p.supplierId)
+          this.getSupplierProducts(p.id, this.user.id);
         });
         //TODO agregar loader y mensaje de error
         this.alerts.search.error = false;
@@ -146,41 +240,21 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // getProductSupplier(productId: number, supplierId: number) {
-  //   this.suppliersService.getSupplierById(supplierId).then(res => {
-  //     this.productsSuppliers.set(productId, res);
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
-
-
-  addToCart(supplierIdProduct: number) {
-    // this.cartProductService.addCartProduct(new CartProduct(this.user.id, productId));
-  }
-
-  /**
-   * Gets users ids and last current location loaded at the database.
-   */
-  private getUserData() {
-    this.userAuthService.loggedUser.then(res => {
-      this.user = res;
-      // TODO SEBASTIAN SERVICE AND ROUTES!
-      // this.locationService.getById(res.idLocation).then( loc => {
-      //   this.location = loc;
-      // })
-    }).catch(() => {
-      //TODO user dont logged errors
-    })
+  addToCart(productId: number) {
+    if (this.supplierProducts.has(productId)) {
+      this.supplierProducts.get(productId).forEach(sp => {
+        this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id));
+      })
+    }
   }
 
   public findCurrentGeoLocation() {
     try {
       this.alerts.location.loading = true;
       navigator.geolocation.getCurrentPosition(position => {
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
-        //TODO SEBASTIAN UPDATE USER LOCATION BY LOCATION SERVICE
+        this.location.latitude = position.coords.latitude;
+        this.location.longitude = position.coords.longitude;
+        this.locationService.updateLocation(this.location);
       });
       this.alerts.location.loading = false;
       this.alerts.location.error = false;
@@ -198,12 +272,4 @@ export class HomeComponent implements OnInit {
     this.modalRef.hide();
   }
 
-  private getSupplierByLocation(supplier: number) {
-    this.supplierProductService.getSuppliersProductsByUserLocation().then(res => {
-        for (var s in res) {
-          // this.supplierProducts.set() TODO --> THINK STRUCTURE TO SAVE AND SHOW PRODUCTS WITH SUPPLIER_PRODUCTS DATA.
-        }
-      }
-    )
-  }
 }

@@ -2,6 +2,7 @@ import {SupplierProduct} from "../models/supplier-product.model";
 import {Injectable} from "@angular/core";
 import {HttpService} from "./http.service";
 import {SupplierProductLocation} from "../models/supplier-product-location-model";
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 /*
@@ -31,7 +32,15 @@ export class SupplierProductService {
     return this._allSupplierProductsLoaded ? Promise.resolve(this.allSupplierProductsToArray()) : this.requestSupplierProducts();
   }
 
-  public getSuppliersProductsBySupplierId(supplierId: number): Promise<SupplierProduct[]> {
+  // public getSupplierProductBySupIdAndProdId(supplierId: number, productId: number): Promise<SupplierProduct>{
+  //    return this.getSupplierProductsBySupplierId(supplierId)
+  //      .then(res => {
+  //        forEach(sp => )
+  //      }
+  //    )
+  // }
+
+  public getSupplierProductsBySupplierId(supplierId: number): Promise<SupplierProduct[]> {
     return this.http.get('/api/supplier/product/supplier/' + supplierId).then(
       res => {
         return res.data;

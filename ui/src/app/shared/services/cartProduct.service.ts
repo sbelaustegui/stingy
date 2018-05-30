@@ -92,4 +92,9 @@ export class CartProductService {
         return res.data;
       });
   }
+
+  deleteCartProductByCartIdAndSPId(supplierId: number, productIdToDelete: number): Promise<any> {
+    //TODO SEBASTIAN ROUTES
+    return;
+  }
 }

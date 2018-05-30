@@ -98,7 +98,7 @@ export class UploadProductComponent implements OnInit {
       this.newProduct.isValidated = false;
       this.newProduct.userId = this.userId;
       this.newProduct.subcategoryId = parseInt(String(this.newProduct.subcategoryId));
-      this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId));
+      // this.newProduct.supplierId = parseInt(String(this.newProduct.supplierId)); //TODO SEBASTIAN CHANGE with supplierProduct
       this.productService.addProduct(this.newProduct).then( res => {
         this.productService.addProductImage(res.id, this.file).then(() => {
           this.addingProduct = false;

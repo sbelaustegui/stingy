@@ -8,7 +8,7 @@ export class Supplier{
 
 class Location {
   static empty(): Location{
-    return new Location(-34.4, -58.8)
+    return new Location(0, 0)
   }
   constructor(public latitude: number, public longitude: number, public id?: number) {}
 }

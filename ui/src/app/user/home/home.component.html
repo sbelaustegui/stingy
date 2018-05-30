@@ -60,17 +60,22 @@
       </div>
       <ul class="list-group list-group-flush">
         <!--<li class="list-group-item">-->
-          <!--<span style="font-weight: bold">Precio:</span> ${{product.price}}-->
+        <!--<span style="font-weight: bold">Precio:</span> ${{product.price}}-->
         <!--</li>-->
         <!--<li class="list-group-item">-->
-          <!--<span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}-->
+        <!--<span style="font-weight: bold">Proveedor:</span> {{productsSuppliers.get(product.id)?.name}}-->
         <!--</li>-->
-        <li class="list-group-item">
 
-        </li>
+        <div class="supplierProducts-items" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
+          <li class="list-group-item" >
+            <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
+            <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId).name}}</span>
+          </li>
+        </div>
+
         <li class="list-group-item">
-          <!--<a class="btn btn-primary">Agregar al carrito</a>-->
-          <a class="btn btn-primary" (click)="addToCart(product.id)">Agregar al carrito</a>
+          <button class="btn btn-primary" (click)="addToCart(product.id)"
+                  *ngIf="supplierProducts.get(product.id).length > 0">Agregar al carrito</button>
         </li>
       </ul>
     </div>
@@ -90,8 +95,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <agm-map [latitude]="latitude" [longitude]="longitude" *ngIf="!alerts.location.error && !alerts.location.loading">
-      <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+    <agm-map [latitude]="location.latitude" [longitude]="location.longitude" *ngIf="!alerts.location.error && !alerts.location.loading">
+      <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
     </agm-map>
     <div class="alert alert-danger text-center" *ngIf="alerts.location.error">
       <div class="card-block">

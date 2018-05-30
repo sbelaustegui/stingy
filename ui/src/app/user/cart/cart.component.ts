@@ -7,35 +7,34 @@ import {Cart} from "../../shared/models/cart.model";
 import {CartProductService} from "../../shared/services/cartProduct.service";
 import {UserService} from "../../shared/services/user.service";
 import {UserAuthService} from "../../shared/auth/user/user-auth.service";
-import {User} from "../../shared/models/user.model";
-import {Product} from "../../shared/models/product.model";
-import {CartProduct} from "../../shared/models/cartProduct.model";
 import {ProductService} from "../../shared/services/product.service";
 import {SupplierService} from "../../shared/services/supplier.service";
-import {Supplier} from "../../shared/models/supplier.model";
+import {CartBag} from "../../shared/models/cart-bag.model";
+import {SupplierProductService} from "../../shared/services/supplierProduct.service";
+import {SupplierProduct} from "../../shared/models/supplier-product.model";
+import {Product} from "../../shared/models/product.model";
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  providers: [CartService, CartProductService, UserService, UserAuthService,ProductService,SupplierService]
+  providers: [CartService, CartProductService, UserService,
+    UserAuthService, ProductService, SupplierService,
+    SupplierProductService]
 })
 
 export class CartComponent implements OnInit {
 
-  public newCart: Cart;
-  public cartProducts: CartProduct[];
-  public products: Product[];
-  public suppliers: Map<number, string>;
-  // public productsPage: number = 1;
+  public currentCart: Cart;
+  public cartBags: CartBag[];
+  public productsPage: number = 1;
   public alerts: {
-    cartProducts: {
-      error: boolean,
+    cartBags: {
+      check: boolean,
       loading: boolean,
-      deleting: boolean,
       deletingError: boolean,
-
-    };
+      deletingProducts: boolean,
+    },
     cart: {
       error: boolean,
       loading: boolean,
@@ -46,31 +45,31 @@ export class CartComponent implements OnInit {
       error: boolean;
       loading: boolean;
     },
-    addCart: {
-      error: boolean,
-      loading: boolean,
-    },
     success: boolean
   };
+
+  public cartBagIndex: number;
+  public productToDelete: Product;
+
+  public supProdAux: SupplierProduct;
+
   modalRef: BsModalRef;
 
   constructor(public cartService: CartService, public cartProductService: CartProductService,
               public userService: UserService, public authService: UserAuthService,
-              public productService: ProductService,
-              public supplierService: SupplierService,
+              public productService: ProductService, public supplierService: SupplierService,
+              public supplierProductService: SupplierProductService,
               public router: Router, private titleService: Title, private modalService: BsModalService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('ABM Categorias | Stingy');
-    this.newCart = Cart.empty();
-    this.suppliers = new Map<number, string>();
+    this.titleService.setTitle('ABM Tu carrito | Stingy');
     this.alerts = {
-      cartProducts:{
-        error: false,
-        loading: true,
-        deleting: false,
+      cartBags: {
+        check: true,
+        loading: false,
         deletingError: false,
+        deletingProducts: false,
       },
       cart: {
         error: false,
@@ -82,20 +81,18 @@ export class CartComponent implements OnInit {
         error: false,
         loading: true
       },
-      addCart: {
-        error: false,
-        loading:
-          false,
-      }
-      ,
       success: false
     };
+
+    this.cartBags = [];
+    this.cartBagIndex = -1;
+    this.productToDelete = undefined;
     this.getUser();
   }
 
   getUser() {
     this.authService.loggedUser.then(res => {
-      this.getCart(res.id);
+      this.getCurrentCart(res.id);
       this.alerts.user.loading = false;
       this.alerts.user.error = false;
     }).catch(() => {
@@ -105,9 +102,9 @@ export class CartComponent implements OnInit {
     })
   }
 
-  getCart(userId: number) {
-    this.cartService.getCartByUserId(userId).then(res => {
-        this.newCart = res;
+  getCurrentCart(userId: number) {
+    this.cartService.getCartByUserId(userId).then(res => { //TODO GET CURRENT CART BY DATE OR BOOLEAN
+        this.currentCart = res;
         this.alerts.cart.loading = false;
         this.alerts.cart.error = false;
         this.getCartProducts();
@@ -121,63 +118,99 @@ export class CartComponent implements OnInit {
   }
 
   private getCartProducts() {
-    this.cartProductService.getAllCartProductsByCartId(this.newCart.id).then(res => {
-        this.cartProducts = res;
-        this.alerts.cartProducts.loading = false;
-        this.alerts.cartProducts.error = false;
-        res.forEach(p => {
-          this.getProduct(p.id)
-        })
-      }
-    ).catch(err => {
-      console.log(err);
-      this.alerts.cartProducts.error = true;
-      this.alerts.cartProducts.loading = false;
+    this.cartProductService.getAllCartProductsByCartId(this.currentCart.id).then(res => {
+      res.forEach(cp => {
+        this.getSupplierProduct(cp.supplierProductId);
+      })
     })
   }
 
-  private getProduct(id: number) {
-    this.productService.getProductById(id).then( res => {
-      if (!this.suppliers.has(res.supplierId)) {
-        this.supplierService.getSupplierById(res.supplierId).then(sup => {
-          this.suppliers.set(res.supplierId, sup.name)
-        })
-      }
-      this.products.push(res);
+  private getSupplierProduct(id: number) {
+    this.supplierProductService.getSupplierProductById(id).then(res => {
+      this.checkCartBag(res);
     })
   }
 
-  public getSuppliersArray(){
-    return this.suppliers.values();
+  private checkCartBag(supplierProduct: SupplierProduct): void {
+    this.cartBags.forEach(cb => {
+      if (cb.idSupplier == supplierProduct.supplierId) {
+        this.alerts.cartBags.check = true;
+        this.addProductToCartBag(cb, supplierProduct);
+        return;
+      }
+    });
+    this.createCartBag(supplierProduct);
   }
 
-  // deleteProduct() {
-  //   this.alerts.cartProducts.deleting = true;
-  //   this.cartProductService.deleteCartProduct(this.productToDelete.id).then(res => {
-  //     this.cartProducts.splice(this.productIndexToDelete,1);
-  //     //TODO mostrar mensajes de error/success/ y loader
-  //     this.alerts.products.deleting = false;
-  //     this.alerts.products.deletingError = false;
-  //     this.modalRef.hide();
-  //     this.alerts.success = true;
-  //     setTimeout(() => {this.alerts.success = false;},2500);
-  //   }).catch(() => {
-  //     this.alerts.products.deleting = false;
-  //     this.alerts.products.deletingError = true;
-  //     setTimeout(() => {this.alerts.products.deletingError = false;},5000);
-  //   })
-  // }
-  //
-  // openProductDeleteModal(template: TemplateRef<any>, product, i) {
-  //   this.cartProductToDelete = product;
-  //   this.cartProductIndexToDelete = i;
-  //   this.modalRef = this.modalService.show(template);
-  // }
-  //
-  // resetDeleteModal(){
-  //   this.productToDelete = undefined;
-  //   this.productIndexToDelete = -1;
-  // }
+  private addProductToCartBag(cartBag: CartBag, supplierProduct: SupplierProduct): void {
+    this.productService.getProductById(supplierProduct.productId)
+      .then(p => {
+        cartBag.addProduct(supplierProduct, p);
+      })
+      .catch(error => {
+        //TODO
+      })
+  }
 
+  private createCartBag(supplierProduct: SupplierProduct): void {
+    this.supplierService.getSupplierById(supplierProduct.id)
+      .then(s => {
+        this.cartBags.push(
+          new CartBag(s.id, s.name, 100)
+        )
+      })
+      .catch(error => {
+        //TODO
+      })
+  }
 
+  public getCartBags(): CartBag[] {
+    return this.cartBags.sort((cb1, cb2) => {
+      if (cb1.getTotalPrice() > cb2.getTotalPrice())
+        return 1;
+      else if (cb1.getTotalPrice() == cb2.getTotalPrice()) {
+        if (cb1.getDistance() > cb2.getDistance())
+          return 1;
+        else if (cb1.getDistance() < cb2.getDistance())
+          return -1;
+        return 0;
+      }
+      return -1;
+
+    })
+  }
+
+  deleteProduct() {
+    this.alerts.cartBags.deletingProducts = true;
+    this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
+      this.cartBags[this.cartBagIndex].getSupplierId(), this.productToDelete.id)
+      .then(res => {
+        this.cartBagIndex[this.cartBagIndex].removeProduct(this.productToDelete.id);
+        this.alerts.cartBags.deletingProducts = false;
+        this.modalRef.hide();
+        this.alerts.success = true;
+        setTimeout(() => {
+          this.alerts.success = false;
+        }, 2500);
+      })
+      .catch(() => {
+          this.alerts.cartBags.deletingProducts = false;
+          this.alerts.cartBags.deletingError = true;
+          setTimeout(() => {
+            this.alerts.cartBags.deletingError = false;
+          }, 5000);
+        }
+      )
+  }
+
+  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, product: Product) {
+    this.cartBagIndex = cartBagIndex;
+    this.productToDelete = product;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetDeleteModal() {
+    this.cartBagIndex = -1;
+    this.productToDelete = undefined;
+  }
 }

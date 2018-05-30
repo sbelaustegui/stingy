@@ -3,5 +3,5 @@ export class CartProduct{
   static empty(): CartProduct{
     return new CartProduct( undefined, undefined, undefined)
   }
-  constructor(public userId: number ,public productId: number ,public id?: number) {}
+  constructor(public cartId: number ,public supplierProductId: number ,public id?: number) {}
 }
