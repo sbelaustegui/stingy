@@ -23,7 +23,7 @@ export class CategoryService {
   }
 
   get categories(): Promise<Category[]> {
-    return this._allCategoriesLoaded ? Promise.resolve(this.allCategorysToArray()) : this.requestCategorys();
+    return this._allCategoriesLoaded ? Promise.resolve(this.allCategoriesToArray()) : this.requestCategories();
   }
 
   public getCategoryById(id: number): Promise<Category> {
@@ -60,18 +60,18 @@ export class CategoryService {
       });
   }
 
-  private allCategorysToArray(): Category[] {
+  private allCategoriesToArray(): Category[] {
     return Array.from(this._categoriesById.values());
   }
 
-  private requestCategorys(): Promise<Category[]> {
+  private requestCategories(): Promise<Category[]> {
     return this.http
       .get('/api/category/all')
       .then(res => {
         const categories = res.data as Category[];
         categories.forEach(category => this._categoriesById = this._categoriesById.set(category.id, category));
         this._allCategoriesLoaded = true;
-        return this.allCategorysToArray();
+        return this.allCategoriesToArray();
       });
   }
 

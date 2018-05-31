@@ -1,6 +1,6 @@
 <div class="suppliers">
   <div class="row">
-    <!--SUPPLIER TABLE-->
+    <!--SUPPLIERS TABLE-->
     <div class="col-12 col-md-8 mx-auto">
       <div class="row">
         <div class="col-8">
@@ -69,16 +69,87 @@
       </div>
     </div>
 
+    <!--REPORTS TABLE-->
+    <div class="col-12 col-md-8 mx-auto">
+      <div class="row">
+        <div class="col-8">
+          <h2>Reportes</h2>
+        </div>
+      </div>
+      <table class="table table-striped" *ngIf="!alerts.reports.loading">
+        <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Reclamador</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
+          <th scope="row">{{report.id}}</th>
+          <td>
+            <a  (click)="openUserDetailModal(userDetailModal, getRequesterFromMap(report.userId))">
+              {{getRequesterFromMap(report.userId)}}
+            </a>
+          </td>
+          <td>{{report.description}}</td>
+          <td>{{report.date}}</td>
+          <td>
+            <div class="upload-button">
+              <button type="button" class="btn btn-light"  (click)="openSupplierReportModal(newSupplierModal,report.id)">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="remove-button">
+              <button type="submit" class="btn btn-danger" (click)="openSupplierDeleteModal(deleteModal, report, i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <pagination-controls id="reports"
+                           class="paginator"
+                           (pageChange)="reportsPage = $event"
+                           autoHide="true"
+                           previousLabel="Anterior"
+                           nextLabel="Siguiente">
+      </pagination-controls>
+    </div>
+
+    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+      <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center" *ngIf="alerts.success ">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>¡Operación realizada con éxito!</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+
     <!--New supplier Modal-->
     <ng-template #newSupplierModal>
-      <div class="modal-header" (keyup.esc)="resetModal()">
+      <div class="modal-header" (keyup.esc)="resetSupplierModal()">
         <h4 class="modal-title pull-left">
           <span *ngIf="!newSupplier.id">Nuevo Proveedor</span>
           <span *ngIf="newSupplier.id">Editar Proveedor {{newSupplier.name}}</span>
         </h4>
-        <!--<button type="button" class="close pull-right" aria-label="Close" (click)="resetModal()">-->
-          <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetSupplierModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <form [formGroup]="supplierFormGroup">
@@ -125,7 +196,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-secondary" (click)="resetModal()">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetSupplierModal()">Cancelar</button>
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}" (click)="uploadSupplier()">Guardar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.error">
@@ -137,7 +208,7 @@
       </div>
     </ng-template>
 
-    <!--Delete confirmation modal-->
+    <!--Delete Supplier confirmation modal-->
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetDeleteModal()">
         <h4 class="modal-title pull-left">Eliminar
@@ -158,6 +229,31 @@
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>Hubo un error al agregar al eliminar el proveedor.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
+    <!--Detail User Modal-->
+    <ng-template #userDetailModal>
+      <div class="modal-header" (keyup.esc)="resetUserDetailModal()">
+        <h4 class="modal-title pull-left">
+          <span *ngIf="requester.id">Editar Proveedor {{requester.name}}</span>
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetUserDetailModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" (click)="resetSupplierModal()">Volver</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.requester.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al cargar los datos del Reclamador.</p>
           </blockquote>
         </div>
       </div>

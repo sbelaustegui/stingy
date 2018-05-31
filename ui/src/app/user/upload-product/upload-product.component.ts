@@ -68,7 +68,7 @@ export class UploadProductComponent implements OnInit {
     success: boolean,
   };
 
-  public reportSupplier: Report;
+  public newReportSupplier: Report;
   public reportFormGroup: FormGroup;
   modalRef;
 
@@ -83,7 +83,6 @@ export class UploadProductComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Carga de Producto | Stingy');
-
     this.initializeEmptyObjects();
     this.uploadProductError = false;
     this.userAuthService.loggedUser.then(res => this.userId = res.id);
@@ -217,7 +216,7 @@ export class UploadProductComponent implements OnInit {
   }
 
   private initializeEmptyObjects() {
-    this.reportSupplier = Report.empty();
+    this.newReportSupplier = Report.empty();
     this.newProduct = Product.empty();
     this.newSupplierProduct = SupplierProduct.empty();
     this.newSupplierProduct.productId = this.newProduct.id;
@@ -245,7 +244,7 @@ export class UploadProductComponent implements OnInit {
   };
 
   public openReportModal(template: TemplateRef<any>) {
-    this.reportSupplier = Report.empty();
+    this.newReportSupplier = Report.empty();
     this.createReportFormControl();
     this.modalRef = this.modalService.show(template);
 
@@ -258,7 +257,9 @@ export class UploadProductComponent implements OnInit {
   }
 
   public sendReport() {
-    this.reportService.addReport(this.reportSupplier)
+    this.alerts.adding.report = true;
+    this.newReportSupplier.userId = this.userId;
+    this.reportService.addReport(this.newReportSupplier)
       .then(res => {
         this.alerts.adding.report = false;
         this.alerts.success = true;
@@ -272,16 +273,17 @@ export class UploadProductComponent implements OnInit {
           this.alerts.adding.reportError = false;
         }, 5000);
       });
+
+    this.alerts.adding.report = false;
   }
 
   resetModal() {
-    this.reportSupplier = Report.empty();
+    this.newReportSupplier = Report.empty();
     this.modalRef.hide();
   }
 
   uploadImage() {
     //TODO pegarle con un objeto multipartformdata con productid y el file a la ruta de add product image
   }
-
 
 }

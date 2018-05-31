@@ -47,6 +47,7 @@ import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.compone
     AdminProfileComponent,
     ProductsComponent,
     SuppliersComponent,
+
   ],
   imports: [
     BrowserModule,
