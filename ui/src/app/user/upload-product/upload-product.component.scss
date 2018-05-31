@@ -11,10 +11,19 @@
       margin: 2.5%;
     }
 
-    #register-button{
-      background-color: #58bee0;
-      font-weight: bold;
-      color: white;
+    .register-button {
+      #register-button {
+        width: 100%;
+        font-weight: bold;
+        background-color: #58bee0;
+        color: white;
+      }
+    }
+
+    .report-button {
+      #report-button {
+        font-weight: bold;
+      }
     }
 
   }

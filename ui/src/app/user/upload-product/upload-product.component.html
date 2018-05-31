@@ -78,7 +78,7 @@
                    placeholder="Precio"
                    aria-label="Price"
                    aria-describedby="basic-addon1"
-                   [(ngModel)]="newProduct.price"
+                   [(ngModel)]="newSupplierProduct.price"
                    required>
             <div class="form-control-feedback"
                  *ngIf="formGroup.controls['price'].errors && (formGroup.controls['price'].dirty || formGroup.controls['price'].touched)">
@@ -90,7 +90,7 @@
 
         <!--SELECT SUPPLIER-->
         <fieldset>
-          <select class="custom-select custom-select mb-3" [(ngModel)]="newProduct.supplierId"
+          <select class="custom-select custom-select mb-3" [(ngModel)]="newSupplierProduct.supplierId"
                   formControlName="supplierId"
                   [formGroup]="formGroup" (ngModelChange)="getSuppliers()" *ngIf="!alerts.suppliers.loading">
             <option [value]="undefined" selected>Seleccione un Proveedor</option>
@@ -130,6 +130,7 @@
         </fieldset>
       </div>
 
+      <!--ALERT MESSAGE-->
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
       <div class="alert alert-danger text-center" *ngIf="uploadProductError">
         <div class="card-block">
@@ -145,7 +146,7 @@
           </blockquote>
         </div>
       </div>
-      <div class="alert alert-success text-center" *ngIf="addingProductSuccess">
+      <div class="alert alert-success text-center" *ngIf="alerts.success">
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>¡Operación realizada con éxito!</p>
@@ -154,15 +155,70 @@
       </div>
       </div>
 
+      <!--BUTTONS-->
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-        <div class="register-button col-4 offset-4" align="center">
-          <button type="submit" class="btn btn-light" id="register-button"
-                  [disabled]="formGroup.invalid || addingProduct || !file">
-            <span *ngIf="!addingProduct">Agregar</span>
-            <span *ngIf="addingProduct"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-          </button>
+        <div class="row">
+          <div class="report-button col-4 col-md-6" align="right">
+            <button type="button" class="btn btn-danger" id="report-button" (click)="openReportModal(reportSupplierModal)">
+              <span *ngIf="!alerts.adding.report">Reportar Proveedor</span>
+              <span *ngIf="alerts.adding.report"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+            </button>
+          </div>
+          <div class="register-button col-8 col-md-6" align="center">
+            <button type="submit" class="btn btn-light" id="register-button"
+                    [disabled]="formGroup.invalid || alerts.adding.product || !file">
+              <span *ngIf="!alerts.adding.product">Agregar</span>
+              <span *ngIf="alerts.adding.product"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+            </button>
+          </div>
         </div>
+
+
       </div>
+
     </div>
   </form>
+
+  <!--ReportSupplier Modal-->
+  <ng-template #reportSupplierModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">
+        ¡Reporte el Proveedor faltante!
+      </h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="reportFormGroup">
+        <fieldset>
+          <div class="form-group">
+            <input type="text"
+                   class="form-control"
+                   formControlName="description"
+                   [formGroup]="reportFormGroup"
+                   placeholder="Descripción"
+                   aria-label="Description"
+                   aria-describedby="basic-addon1"
+                   [(ngModel)]="reportSupplier.description"
+                   required>
+            <div class="form-control-feedback"
+                 *ngIf="reportFormGroup.controls['description'].errors && (reportFormGroup.controls['description'].dirty || reportFormGroup.controls['description'].touched)">
+              <p class="error" *ngIf="reportFormGroup.controls['description'].errors.required">Es requerido</p>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': reportFormGroup.invalid}" (click)="sendReport()">Enviar Reporte</button>
+    </div>
+    <div class="alert alert-danger text-center" *ngIf="alerts.adding.reportError">
+      <div class="card-block">
+        <blockquote class="card-blockquote">
+          <p>Hubo un error al enviar tu Reporte.</p>
+        </blockquote>
+      </div>
+    </div>
+  </ng-template>
 </div>
