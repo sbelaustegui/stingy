@@ -38,7 +38,7 @@ export class ReportService {
 
 
   public getUnresolveReports(): Promise<Report[]> {
-    return this.http.get('/api/report/unresolved/')
+    return this.http.get('/api/report/unresolved')
       .then(res => {
         return res.data;
       })

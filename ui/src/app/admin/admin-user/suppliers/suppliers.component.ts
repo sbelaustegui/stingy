@@ -38,6 +38,7 @@ export class SuppliersComponent implements OnInit {
   public requesters: Map<number, User>;
   public alerts: {
     reports: {
+      success: boolean;
       error: boolean,
       loading: boolean,
       deleting: boolean,
@@ -73,9 +74,10 @@ export class SuppliersComponent implements OnInit {
     this.newSupplier = Supplier.empty();
     this.report = Report.empty();
     this.requester = User.empty();
-    this.requesters = new Map<number,User>();
+    this.requesters = new Map<number, User>();
     this.alerts = {
       reports: {
+        success: false,
         error: false,
         loading: true,
         deleting: false,
@@ -126,7 +128,7 @@ export class SuppliersComponent implements OnInit {
           this.getRequester(r.userId);
         });
         this.alerts.reports.error;
-        this.alerts.reports.loading = true;
+        this.alerts.reports.loading = false;
       })
       .catch(error => {
         console.log(error.message,);
@@ -210,7 +212,7 @@ export class SuppliersComponent implements OnInit {
 
   deleteSupplier() {
     this.alerts.suppliers.deleting = true;
-    this.supplierService.deleteSupplier(this.supplierToDelete.id).then(res => {
+    this.supplierService.deleteSupplier(this.supplierToDelete.id).then(() => {
       this.suppliersArray.splice(this.supplierIndexToDelete, 1);
       // this.deleteSubSuppliers();
       //TODO mostrar mensajes de error/success/ y loader
@@ -230,47 +232,39 @@ export class SuppliersComponent implements OnInit {
     })
   }
 
-  private createFormControls() {
-    this.supplierFormGroup = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required]
+  uploadSupplierBySolvingReport() {
+    this.uploadSupplier();
+    this.report.solved = true;
+    this.reportService.updateReport(this.report)
+      .catch(res => {
+        this.alerts.reports.error = true;
+        setTimeout(() => {
+          this.alerts.reports.error = false;
+        }, 5000);
+      })
+  }
+
+
+  deleteReport() {
+    this.alerts.reports.deleting = true;
+    this.reportService.deleteReport(this.reportToDelete.id).then(() => {
+      this.unresolvedReports.splice(this.reportIndexToDelete, 1);
+      // this.deleteSubSuppliers();
+      //TODO mostrar mensajes de error/success/ y loader
+      this.alerts.reports.deleting = false;
+      this.alerts.reports.deletingError = false;
+      this.modalRef.hide();
+      this.alerts.reports.success = true;
+      setTimeout(() => {
+        this.alerts.reports.success = false;
+      }, 2500);
+    }).catch(() => {
+      this.alerts.reports.deleting = false;
+      this.alerts.reports.deletingError = true;
+      setTimeout(() => {
+        this.alerts.reports.deletingError = false;
+      }, 5000);
     })
-  }
-
-  openSupplierModal(template: TemplateRef<any>, supplier?) {
-    if (supplier) this.newSupplier = Object.assign({}, supplier);
-    this.modalRef = this.modalService.show(template);
-  }
-
-  resetSupplierModal() {
-    this.newSupplier = Supplier.empty();
-    this.supplierFormGroup.reset();
-    this.modalRef.hide();
-  }
-
-  openSupplierDeleteModal(template: TemplateRef<any>, supplier, i) {
-    this.supplierToDelete = supplier;
-    this.supplierIndexToDelete = i;
-    this.modalRef = this.modalService.show(template);
-  }
-
-  resetDeleteModal() {
-    this.supplierToDelete = undefined;
-    this.supplierIndexToDelete = -1;
-  }
-
-  openUserDetailModal(template: TemplateRef<any>, requester) {
-    if (requester) this.requester = Object.assign({}, requester);
-    this.modalRef = this.modalService.show(template);
-  }
-
-  resetUserDetailModal() {
-    this.requester = User.empty();
-    this.modalRef.hide();
-  }
-
-  uploadSupplierByReport() {
-
   }
 
   placeMarker($event) {
@@ -278,7 +272,67 @@ export class SuppliersComponent implements OnInit {
     this.newSupplier.location.longitude = $event.coords.lng;
   }
 
-  openSupplierReportModal(template: TemplateRef<any>, reportId: number) {
-    // if (this.getRequesterFromMap(reportId))
+  private createFormControls() {
+    this.supplierFormGroup = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required]
+    })
   }
+
+  openModal(template: TemplateRef<any>, modalReference: string, object, index ?: number) {
+
+    if (object) {
+      switch (modalReference.toUpperCase()) {
+        case "SUPPLIER":
+          this.newSupplier = Object.assign({}, object);
+          break;
+
+        case "SUPPLIERDELETE":
+          this.supplierToDelete = Object.assign({}, object);
+          this.supplierIndexToDelete = index;
+          break;
+
+        case "REQUESTER":
+          this.newSupplier = Object.assign({}, Supplier.empty());
+          break;
+
+        case "REPORT":
+          this.report = Object.assign({}, object);
+          break;
+        case "REPORTDELETE":
+          this.reportToDelete = Object.assign({}, object);
+          this.reportIndexToDelete = index;
+          break;
+      }
+    }
+    // if (supplier) this.newSupplier = Object.assign({}, supplier);
+    // else if (report) this.report = Object.assign({}, this.report);
+    // else if (requester) this.requester = Object.assign({}, requester);
+    // else this.newSupplier = Object.assign({}, Supplier.empty());
+
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetModal(reference: string) {
+    this.modalRef.hide();
+    switch (reference.toUpperCase()) {
+      case "SUPPLIER":
+        this.newSupplier = Supplier.empty();
+        this.report = Report.empty();
+        break;
+      case "SUPPLIERDELETE":
+        this.supplierToDelete = undefined;
+        this.supplierIndexToDelete = -1;
+        break;
+      case "REQUESTER":
+        this.requester = User.empty();
+        break;
+
+      case "REPORTDELETE":
+        this.reportToDelete = undefined;
+        this.reportIndexToDelete = -1;
+        break;
+    }
+  }
+
 }

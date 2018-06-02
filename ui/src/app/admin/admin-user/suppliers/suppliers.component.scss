@@ -19,55 +19,81 @@
     table {
       text-align: center;
       background-color: white;
-      tr{
-        th{
+      tr {
+        th {
           vertical-align: middle;
         }
-        td{
+        td {
           vertical-align: middle;
-          .upload-button, .remove-button{
+          .upload-button {
             button {
               font-size: 26px;
               background-color: transparent;
               color: black;
               border: none;
             }
+            i {
+              color: #cc6600;
+            }
           }
+          .view-button {
+            button {
+              font-size: 26px;
+              background-color: transparent;
+              color: black;
+              border: none;
+            }
+            i {
+              color: limegreen;
+            }
+          }
+          .remove-button {
+            button {
+              font-size: 26px;
+              background-color: transparent;
+              color: black;
+              border: none;
+            }
+            i {
+              color: red;
+            }
+          }
+          #requester-detail{
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+          }
+
         }
       }
-    }
-    .paginator /deep/ .ngx-pagination {
-      text-align: center;
-      li{
-        color: white;
-        &.current{
-          background-color: white;
-          color: black;
-        }
-        & :hover(:not(.disabled)){
-          background-color: white;
-          color: black;
-        }
-        &.disabled{
-          cursor: not-allowed;
-        }
-        a{
+      .paginator /deep/ .ngx-pagination {
+        text-align: center;
+        li {
           color: white;
-          & :hover{
+          &.current {
             background-color: white;
             color: black;
           }
+          & :hover(:not(.disabled)) {
+            background-color: white;
+            color: black;
+          }
+          &.disabled {
+            cursor: not-allowed;
+          }
+          a {
+            color: white;
+            & :hover {
+              background-color: white;
+              color: black;
+            }
+          }
         }
       }
-    }
 
-    .remove-button{
-      i{
-        color: red;
-      }
     }
   }
-}
-agm-map {
-  height: 300px;
+  agm-map {
+    height: 300px;
+  }
 }
