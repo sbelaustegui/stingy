@@ -262,6 +262,7 @@ export class UploadProductComponent implements OnInit {
     this.reportService.addReport(this.newReportSupplier)
       .then(res => {
         this.alerts.adding.report = false;
+        this.modalRef.hide();
         this.alerts.success = true;
         setTimeout(() => {
           this.alerts.success = false;

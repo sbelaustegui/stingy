@@ -1,5 +1,6 @@
 <div class="suppliers">
   <div class="row">
+
     <!--SUPPLIERS TABLE-->
     <div class="col-12 col-md-8 mx-auto">
       <div class="row">
@@ -7,9 +8,16 @@
           <h2>Proveedores</h2>
         </div>
         <div class="add-button col-4">
-          <button type="button" class="btn btn-light" (click)="openModal(newSupplierModal,'Supplier')">
+          <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',emptySupplier())">
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
+
+        <!--LOADING ANIMATION-->
+        <div class="col-md-4 offset-md-4 col-2 offset-5">
+          <span *ngIf="alerts.suppliers.loading" class="mx-auto"><i
+            class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+        </div>
+
       </div>
       <table class="table table-striped" *ngIf="!alerts.suppliers.loading">
         <thead>
@@ -22,20 +30,22 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
+        <tr
+          *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
           <th scope="row">{{supplier.id}}</th>
-          <td >{{supplier.name}}</td>
+          <td>{{supplier.name}}</td>
           <td>{{supplier.description}}</td>
           <td>
             <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openModal(newSupplierModal,'Supplier',supplier)">
+              <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',supplier)">
                 <i class="fa fa-pencil"></i>
               </button>
             </div>
           </td>
           <td>
             <div class="remove-button">
-              <button type="submit" class="btn btn-danger" (click)="openModal(deleteModal,'SupplierDelete', supplier,i)">
+              <button type="submit" class="btn btn-danger"
+                      (click)="openSupplierModal(deleteModal,'SupplierDelete', supplier,i)">
                 <i class="fa fa-trash"></i>
               </button>
             </div>
@@ -52,11 +62,19 @@
       </pagination-controls>
     </div>
 
+    <!--ALERTS SUPPLIERS-->
     <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
       <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.suppliers.loading && alerts.suppliers.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al obtener los datos.</p>
           </blockquote>
         </div>
       </div>
@@ -75,54 +93,64 @@
         <div class="col-8">
           <h2>Reportes</h2>
         </div>
+
+        <!--LOADING ANIMATION-->
+        <div class="col-md-4 offset-md-4 col-2 offset-5">
+          <span *ngIf="alerts.reports.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+        </div>
       </div>
-      <table class="table table-striped" *ngIf="!alerts.reports.loading">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Reclamador</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
-          <th scope="row">{{report.id}}</th>
-          <td>
-            <a  (click)="openModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))" id="requester-detail">
-              {{getRequesterFromMap(report.userId).name}}
-            </a>
-          </td>
-          <td>{{report.description}}</td>
-          <td>{{report.date}}</td>
-          <td>
-            <div class="view-button">
-              <button type="button" class="btn btn-light"  (click)="openModal(newSupplierModal,'Report',report)">
-                <i class="fa fa-plus"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <div class="remove-button">
-              <button type="submit" class="btn btn-danger" (click)="openModal(deleteReportModal,'ReportDelete', report,i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <pagination-controls id="reports"
-                           class="paginator"
-                           (pageChange)="reportsPage = $event"
-                           autoHide="true"
-                           previousLabel="Anterior"
-                           nextLabel="Siguiente">
-      </pagination-controls>
+
+        <table class="table table-striped" *ngIf="!alerts.reports.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Reclamador</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
+            <th scope="row">{{report.id}}</th>
+            <td>
+              <a (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))"
+                 id="requester-detail">
+                {{getRequesterFromMap(report.userId).name}}
+              </a>
+            </td>
+            <td>{{report.description}}</td>
+            <td>{{report.date}}</td>
+            <td>
+              <div class="view-button">
+                <button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div class="remove-button">
+                <button type="submit" class="btn btn-danger"
+                        (click)="openReportModal(deleteReportModal,'ReportDelete', report,i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="reports"
+                             class="paginator"
+                             (pageChange)="reportsPage = $event"
+                             autoHide="true"
+                             previousLabel="Anterior"
+                             nextLabel="Siguiente">
+        </pagination-controls>
     </div>
 
+    <!--ALERTS REPORTS-->
     <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
       <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
         <div class="card-block">
@@ -131,7 +159,14 @@
           </blockquote>
         </div>
       </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.success ">
+      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.reports.loading && alerts.reports.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al obtener los datos.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center" *ngIf="alerts.reports.success ">
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>¡Operación realizada con éxito!</p>
@@ -140,8 +175,8 @@
       </div>
     </div>
 
-    <!--New supplier Modal-->
-    <ng-template #newSupplierModal>
+    <!--SUPPLIER MODAL-->
+    <ng-template #newSupplierModal id="newSupplierModal">
       <div class="modal-header" (keyup.esc)="resetModal('Supplier')">
         <h4 class="modal-title pull-left">
           <span *ngIf="!newSupplier.id">Nuevo Proveedor</span>
@@ -152,7 +187,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div align="center" >
+        <div align="center">
           <span *ngIf="report.id"><em><b>Descripción: </b>"{{report.description}}"</em></span>
 
         </div>
@@ -194,15 +229,22 @@
             </div>
           </fieldset>
 
-          <agm-map [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude" (mapClick)="placeMarker($event)">
-            <agm-marker [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"></agm-marker>
+          <agm-map [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"
+                   (mapClick)="placeMarker($event)">
+            <agm-marker [latitude]="newSupplier.location.latitude"
+                        [longitude]="newSupplier.location.longitude"></agm-marker>
           </agm-map>
+
         </form>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-secondary" (click)="resetModal('Supplier')">Cancelar</button>
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}" (click)="uploadSupplier()" *ngIf="!report.id">Guardar</button>
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}" (click)="uploadSupplierBySolvingReport()" *ngIf="report.id">Guardar Y Realizar </button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}"
+                (click)="uploadSupplier()" *ngIf="!report.id">Guardar
+        </button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': supplierFormGroup.invalid}"
+                (click)="uploadSupplierBySolvingReport()" *ngIf="report.id">Guardar Y Realizar
+        </button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.error">
         <div class="card-block">
@@ -213,13 +255,14 @@
       </div>
     </ng-template>
 
-    <!--Delete Supplier confirmation modal-->
+    <!--DELETE SUPPLIER CONFIRMATION MODAL-->
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetModal('SupplierDelete')">
         <h4 class="modal-title pull-left">Eliminar
           <span>Proveedor {{supplierToDelete.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('SupplierDelete'); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close"
+                (click)="resetModal('SupplierDelete'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -228,7 +271,8 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteSupplier()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetModal('Supplier'); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('Supplier'); modalRef.hide();">Cancelar
+        </button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.deletingError">
         <div class="card-block">
@@ -239,7 +283,7 @@
       </div>
     </ng-template>
 
-    <!--Detail User Modal-->
+    <!--DETAIL USER MODAL-->
     <ng-template #userDetailModal>
       <div class="modal-header" (keyup.esc)="resetModal('Requester')">
         <h4 class="modal-title pull-left">
@@ -277,13 +321,14 @@
       </div>
     </ng-template>
 
-    <!--Delete Report confirmation modal-->
+    <!--DELETE REPORT CONFIRMATION MODALDelete-->
     <ng-template #deleteReportModal>
       <div class="modal-header" (keyup.esc)="resetModal('Report')">
         <h4 class="modal-title pull-left">Eliminar
           <span>Reporte</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('Report'); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close"
+                (click)="resetModal('Report'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -292,7 +337,8 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteReport()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetModal('Report'); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('Report'); modalRef.hide();">Cancelar
+        </button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.reports.deletingError">
         <div class="card-block">

@@ -7,12 +7,12 @@ import {Router} from "@angular/router";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {Supplier} from "../../../shared/models/supplier.model";
 import {MapsAPILoader} from "@agm/core";
-import {} from 'googlemaps';
 import {google} from "@agm/core/services/google-maps-types";
 import {ReportService} from "../../../shared/services/report.service";
 import {Report} from "../../../shared/models/report.model";
 import {User} from "../../../shared/models/user.model";
 import {UserService} from "../../../shared/services/user.service";
+import {Location} from "../../../shared/models/location.model";
 
 @Component({
   selector: 'app-suppliers',
@@ -63,6 +63,7 @@ export class SuppliersComponent implements OnInit {
     success: boolean
   };
   modalRef: BsModalRef;
+  public location: Location;
 
   constructor(public fb: FormBuilder, public router: Router, private titleService: Title, private modalService: BsModalService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone,
               public supplierService: SupplierService, public reportService: ReportService, public userService: UserService
@@ -70,6 +71,8 @@ export class SuppliersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.location = Location.empty();
+
     this.titleService.setTitle('ABM Categorias | Stingy');
     this.newSupplier = Supplier.empty();
     this.report = Report.empty();
@@ -103,23 +106,23 @@ export class SuppliersComponent implements OnInit {
     };
     this.createFormControls();
     this.getSuppliers();
-    this.getReports();
+    this.getUnresolveReports();
   }
 
   getSuppliers() {
     this.supplierService.suppliers.then(res => {
+      this.alerts.suppliers.loading = true;
       this.suppliersArray = res;
 
       this.alerts.suppliers.error = false;
       this.alerts.suppliers.loading = false;
     }).catch(err => {
-      //TODO mostrar en el front mensaje de error
       this.alerts.suppliers.error = true;
       this.alerts.suppliers.loading = false;
     })
   }
 
-  getReports() {
+  getUnresolveReports() {
     this.reportService.getUnresolveReports()
       .then(res => {
         this.alerts.reports.loading = true;
@@ -233,10 +236,14 @@ export class SuppliersComponent implements OnInit {
   }
 
   uploadSupplierBySolvingReport() {
-    this.uploadSupplier();
     this.report.solved = true;
     this.reportService.updateReport(this.report)
-      .catch(res => {
+      .then( res => {
+        this.getUnresolveReports();
+        this.uploadSupplier();
+      })
+      .catch(error => {
+        console.log(error.message);
         this.alerts.reports.error = true;
         setTimeout(() => {
           this.alerts.reports.error = false;
@@ -249,8 +256,6 @@ export class SuppliersComponent implements OnInit {
     this.alerts.reports.deleting = true;
     this.reportService.deleteReport(this.reportToDelete.id).then(() => {
       this.unresolvedReports.splice(this.reportIndexToDelete, 1);
-      // this.deleteSubSuppliers();
-      //TODO mostrar mensajes de error/success/ y loader
       this.alerts.reports.deleting = false;
       this.alerts.reports.deletingError = false;
       this.modalRef.hide();
@@ -279,37 +284,87 @@ export class SuppliersComponent implements OnInit {
     })
   }
 
-  openModal(template: TemplateRef<any>, modalReference: string, object, index ?: number) {
+  // openModal(template: TemplateRef<any>, modalReference: string,
+  //           report?: Report, supplier?: Supplier, requester?: User, index ?: number) {
+  //
+  //   if (report || supplier || requester) {
+  //     switch (modalReference.toUpperCase()) {
+  //       case "SUPPLIER":
+  //         this.newSupplier = supplier;
+  //         break;
+  //
+  //       case "SUPPLIERDELETE":
+  //         this.supplierToDelete = supplier;
+  //         this.supplierIndexToDelete = index;
+  //         break;
+  //
+  //       case "REQUESTER":
+  //         this.newSupplier = Supplier.empty();
+  //         break;
+  //
+  //       case "REPORT":
+  //         this.report = report;
+  //         break;
+  //       case "REPORTDELETE":
+  //         this.reportToDelete = report;
+  //         this.reportIndexToDelete = index;
+  //         break;
+  //     }
+  //   }
+  //   // if (supplier) this.newSupplier = Object.assign({}, supplier);
+  //   // else if (report) this.report = Object.assign({}, this.report);
+  //   // else if (requester) this.requester = Object.assign({}, requester);
+  //   // else this.newSupplier = Object.assign({}, Supplier.empty());
+  //
+  //   this.modalRef = this.modalService.show(template);
+  // }
 
-    if (object) {
+
+  openReportModal(template: TemplateRef<any>, modalReference: string,
+                  report: Report, index?: number) {
+
+    if (report) {
       switch (modalReference.toUpperCase()) {
-        case "SUPPLIER":
-          this.newSupplier = Object.assign({}, object);
-          break;
-
-        case "SUPPLIERDELETE":
-          this.supplierToDelete = Object.assign({}, object);
-          this.supplierIndexToDelete = index;
-          break;
-
-        case "REQUESTER":
-          this.newSupplier = Object.assign({}, Supplier.empty());
-          break;
-
         case "REPORT":
-          this.report = Object.assign({}, object);
+          this.report = report;
           break;
         case "REPORTDELETE":
-          this.reportToDelete = Object.assign({}, object);
+          this.reportToDelete = report;
           this.reportIndexToDelete = index;
           break;
       }
     }
-    // if (supplier) this.newSupplier = Object.assign({}, supplier);
-    // else if (report) this.report = Object.assign({}, this.report);
-    // else if (requester) this.requester = Object.assign({}, requester);
-    // else this.newSupplier = Object.assign({}, Supplier.empty());
+    this.modalRef = this.modalService.show(template);
+  }
 
+  openSupplierModal(template: TemplateRef<any>, modalReference: string,
+                    supplier: Supplier, index?: number) {
+    if (supplier) {
+      switch (modalReference.toUpperCase()) {
+        case "SUPPLIER":
+          this.newSupplier = supplier;
+          break;
+
+        case "SUPPLIERDELETE":
+          this.supplierToDelete = supplier;
+          this.supplierIndexToDelete = index;
+          break;
+      }
+    }
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openRequesterModal(template: TemplateRef<any>, modalReference: string,
+                     requester: User, index?: number) {
+
+    if (requester) {
+      switch (modalReference.toUpperCase()) {
+        case "REQUESTER":
+          this.requester = requester;
+          this.newSupplier = Supplier.empty();
+          break;
+      }
+    }
     this.modalRef = this.modalService.show(template);
   }
 
@@ -321,7 +376,7 @@ export class SuppliersComponent implements OnInit {
         this.report = Report.empty();
         break;
       case "SUPPLIERDELETE":
-        this.supplierToDelete = undefined;
+        this.supplierToDelete = Supplier.empty();
         this.supplierIndexToDelete = -1;
         break;
       case "REQUESTER":
@@ -329,10 +384,13 @@ export class SuppliersComponent implements OnInit {
         break;
 
       case "REPORTDELETE":
-        this.reportToDelete = undefined;
+        this.reportToDelete = Report.empty();
         this.reportIndexToDelete = -1;
         break;
     }
   }
 
+  emptySupplier(): Supplier {
+    return Supplier.empty();
+  }
 }

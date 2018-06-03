@@ -71,7 +71,7 @@ export class ReportService {
           return res.data;
         });
     } else {
-      this.requestReport(report.id).then(res => this.updateReport(report));
+      this.requestReport(report.id).then(() => this.updateReport(report));
     }
   }
 
