@@ -260,6 +260,7 @@ export class HomeComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
+        //TODO mostrar un toast o snackbar que se actualizo la location
         this.locationService.updateLocation(this.location);
       });
       this.alerts.location.loading = false;

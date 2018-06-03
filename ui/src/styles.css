@@ -9,3 +9,7 @@
 .disabled{
   pointer-events: none;
 }
+
+body{
+  overflow-x: hidden;
+}

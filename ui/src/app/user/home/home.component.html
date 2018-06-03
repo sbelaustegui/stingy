@@ -49,27 +49,30 @@
       <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
     </span>
   </div>
-  <div class="col-md-12" style="margin-bottom: 50px" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
-    <div class="card col-md-3 offset-md-1" *ngFor="let product of searchedProducts">
-      <img class="card-img-top" [src]="product.imageUrl" alt="Product img">
-      <div class="card-body">
-        <h5 class="card-title">{{product.name}}</h5>
-        <p class="card-text">
-          {{product.description}}
-        </p>
+  <div class="col-md-12" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
+    <div class="row products-row">
+      <div class="col-md-4 col-sm-6 col-12 col-lg-3" *ngFor="let product of searchedProducts">
+        <div class="card">
+          <img class="card-img-top mx-auto" [src]="product.imageUrl" alt="Product img">
+          <div class="card-body">
+            <h5 class="card-title">{{product.name}}</h5>
+            <p class="card-text">
+              {{product.description}}
+            </p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
+              <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
+              <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId)?.name}}</span>
+            </li>
+            <li class="list-group-item">
+              <button class="btn btn-primary" (click)="addToCart(product.id)"
+                      *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
+              <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
+            </li>
+          </ul>
+        </div>
       </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
-          <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
-          <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId)?.name}}</span>
-        </li>
-
-        <li class="list-group-item">
-          <button class="btn btn-primary" (click)="addToCart(product.id)"
-                  *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
-          <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
-        </li>
-      </ul>
     </div>
   </div>
   <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
@@ -99,7 +102,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-light" (click)="this.findCurrentGeoLocation()">Posicioname</button>
+    <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicioname</button>
   </div>
 </ng-template>
 
