@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-1" style="text-align: center">
               <button class="btn btn-light my-2 my-sm-0 location-button"
-                    (click)="openLocationModal(locationModal)">
+                    (click)="openModal(locationModal)">
             <i class="fa fa-road" aria-hidden="true"></i>
               </button>
             </div>
@@ -61,9 +61,10 @@
             </p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id)">
-              <span style="font-weight: bold">Precio:$ {{supplierProduct.price}}</span>
-              <span style="font-weight: bold">Proovedor: {{getSupplierMap(supplierProduct.supplierId)?.name}}</span>
+            <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
+              <span style="font-weight: bold">{{getSupplierMap(supplierProduct.supplierId)?.name}}: </span>
+              <span style="font-weight: bold">$ {{supplierProduct.price}}</span>
+              <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
             </li>
             <li class="list-group-item">
               <button class="btn btn-primary" (click)="addToCart(product.id)"
@@ -96,13 +97,45 @@
     <div class="alert alert-danger text-center" *ngIf="alerts.location.error">
       <div class="card-block">
         <blockquote class="card-blockquote">
-          <p>¡Es necesario habilitar su Ubicacion!</p>
+          <p>¡Es necesario habilitar su ubicación!</p>
         </blockquote>
       </div>
     </div>
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicioname</button>
+  </div>
+</ng-template>
+
+<ng-template #priceModal>
+  <div class="modal-header" (keyup.esc)="resetModal()">
+    <h4 class="modal-title pull-left">
+      <span>Actualizar precio</span>
+    </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
+      </div>
+      <input type="number" class="form-control" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
+    </div>
+    <div class="alert alert-danger text-center" *ngIf="alerts.price.error">
+      <div class="card-block">
+        <blockquote class="card-blockquote">
+          <p>Hubo un error al actualizar el precio del proveedor</p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary" (click)="priceUpdate()">
+      <span *ngIf="!alerts.price.loading">Aceptar</span>
+      <span *ngIf="alerts.price.loading"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+    </button>
   </div>
 </ng-template>
 

@@ -7,10 +7,8 @@ import io.ebean.annotation.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import org.joda.time.DateTime;
 
 
@@ -56,16 +54,23 @@ public class SupplierProduct extends Model {
 
     public static List<SupplierProduct> getSupplierProductByLocation(Long productId, Location userLocation){
         List<SupplierProduct> products = getSupplierProductByProductId(productId);
-        List<SupplierProduct> filteredProducts = new ArrayList<>();
+        Map<Long, SupplierProduct> filteredProductsMap = new HashMap<>();
         products.forEach(p -> {
             Double latitude1 = Supplier.getSupplierById(p.supplierId).get().getLocation().getLatitude();
             Double latitude2 = userLocation.getLatitude();
             Double longitude1 = Supplier.getSupplierById(p.supplierId).get().getLocation().getLongitude();
             Double longitude2 = userLocation.getLongitude();
             if (Location.distance(latitude1, longitude1, latitude2, longitude2, 'K') <= 15){
-                filteredProducts.add(p);
+                if(filteredProductsMap.containsKey(p.supplierId)){
+                    if (filteredProductsMap.get(p.supplierId).date.isBefore(p.date)) {
+                        filteredProductsMap.put(p.supplierId, p);
+                    }
+                } else {
+                    filteredProductsMap.put(p.supplierId, p);
+                }
             }
         });
+        ArrayList<SupplierProduct> filteredProducts = new ArrayList<>(filteredProductsMap.values());
         filteredProducts.sort((o1, o2) -> {
             if(o1.price > o2.price) {
                 return -1;

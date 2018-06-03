@@ -62,7 +62,11 @@ export class HomeComponent implements OnInit {
     location: {
       loading: boolean,
       error: boolean,
-    }
+    },
+    price: {
+      loading: boolean,
+      error: boolean,
+    },
     supplierProducts: {
       empty: boolean,
       loading: boolean,
@@ -72,6 +76,9 @@ export class HomeComponent implements OnInit {
 
   modalRef: BsModalRef;
   location: Location;
+
+  selectedSupplierProduct: SupplierProduct;
+  selectedSupplierProductIndex: number;
 
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
@@ -100,6 +107,10 @@ export class HomeComponent implements OnInit {
         error: false,
       },
       location: {
+        loading: false,
+        error: false,
+      },
+      price: {
         loading: false,
         error: false,
       },
@@ -195,7 +206,7 @@ export class HomeComponent implements OnInit {
               return 0;
           })); //Add SuppliersP. to map
           res.forEach(sp => {
-            this.supplierService.getSupplierById(sp.id).then(s => {
+            this.supplierService.getSupplierById(sp.supplierId).then(s => {
               this.suppliers.set(s.id, s);
             });
           }); //Add Suppliers. to map.
@@ -271,8 +282,26 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public openLocationModal(template: TemplateRef<any>) {
+  public openModal(template: TemplateRef<any>, supplierProduct, supplierProductIndex) {
+    if(supplierProduct){
+      this.selectedSupplierProduct = supplierProduct;
+      this.selectedSupplierProductIndex = supplierProductIndex;
+    }
     this.modalRef = this.modalService.show(template);
+  }
+
+  priceUpdate(){
+    this.alerts.price.loading = true;
+    this.supplierProductService.addSupplierProduct(new SupplierProduct(this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
+        .then(res => {
+          this.supplierProducts.get(res.productId)[this.selectedSupplierProductIndex] = res;
+          this.alerts.price.loading = false;
+          this.alerts.price.error = false;
+          this.resetModal();
+        }).catch(() => {
+          this.alerts.price.loading = false;
+          this.alerts.price.error = true;
+        });
   }
 
   resetModal() {
