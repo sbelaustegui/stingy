@@ -11,40 +11,42 @@
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
-      <table class="table table-striped" *ngIf="!alerts.admins.loading">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre y Apellido</th>
-          <th scope="col">Email</th>
-          <th scope="col">Usuario</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let admin of (adminsArray | paginate: { itemsPerPage: 10, currentPage: adminsPage, id: 'admins' }); let i=index">
-          <th scope="row">{{admin.id}}</th>
-          <td>{{admin.name}} {{admin.lastName}}</td>
-          <td>{{admin.email}}</td>
-          <td>{{admin.username}}</td>
-          <td>
-            <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openAdminModal(newAdminModal, admin)">
-                <i class="fa fa-pencil"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <div class="remove-button">
-              <button type="submit" class="btn btn-danger" (click)="openAdminDeleteModal(deleteModal, admin, i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div style="overflow-x:auto;">
+        <table class="table table-striped" *ngIf="!alerts.admins.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre y Apellido</th>
+            <th scope="col">Email</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let admin of (adminsArray | paginate: { itemsPerPage: 10, currentPage: adminsPage, id: 'admins' }); let i=index">
+            <th scope="row">{{admin.id}}</th>
+            <td>{{admin.name}} {{admin.lastName}}</td>
+            <td>{{admin.email}}</td>
+            <td>{{admin.username}}</td>
+            <td>
+              <div class="upload-button">
+                <button type="button" class="btn btn-light"  (click)="openAdminModal(newAdminModal, admin)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div class="remove-button">
+                <button type="submit" class="btn btn-danger" (click)="openAdminDeleteModal(deleteModal, admin, i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <pagination-controls id="admins"
                            class="paginator"
                            (pageChange)="adminsPage = $event"

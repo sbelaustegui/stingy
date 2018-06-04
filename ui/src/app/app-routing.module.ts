@@ -39,7 +39,6 @@ const routes: Routes =[
       },
       {path: 'admin',                                                 component: AdminComponent,
         children: [
-          {path:  '*',  redirectTo:'login', pathMatch:'full'},
           {path: 'login',  canActivate: [ReverseAdminAuthGuard],      component: AdminLoginComponent},
           {path: 'admin-user', canActivate: [AdminAuthGuard],         component: AdminUserComponent,
             children: [

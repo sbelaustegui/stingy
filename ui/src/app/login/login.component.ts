@@ -35,12 +35,14 @@ export class LoginComponent implements OnInit {
     this.loginLoading = true;
     this.authUserService.login(this.loginUser).then(() => {
       window.location.reload();
+      // this.router.navigate(['user', 'home'])
       this.loginUserError = false;
     }).catch(() => {
       this.loginUserError = true;
       this.loginLoading = false;
     });
   }
+
   goRegister(){
     this.router.navigate(['new-user']);
   }

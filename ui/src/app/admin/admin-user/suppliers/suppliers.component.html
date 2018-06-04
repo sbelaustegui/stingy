@@ -19,40 +19,43 @@
         </div>
 
       </div>
-      <table class="table table-striped" *ngIf="!alerts.suppliers.loading">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr
-          *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
-          <th scope="row">{{supplier.id}}</th>
-          <td>{{supplier.name}}</td>
-          <td>{{supplier.description}}</td>
-          <td>
-            <div class="upload-button">
-              <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',supplier)">
-                <i class="fa fa-pencil"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <div class="remove-button">
-              <button type="submit" class="btn btn-danger"
-                      (click)="openSupplierModal(deleteModal,'SupplierDelete', supplier,i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div style="overflow-x:auto;">
+
+        <table class="table table-striped" *ngIf="!alerts.suppliers.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
+            <th scope="row">{{supplier.id}}</th>
+            <td>{{supplier.name}}</td>
+            <td>{{supplier.description}}</td>
+            <td>
+              <div class="upload-button">
+                <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',supplier)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div class="remove-button">
+                <button type="submit" class="btn btn-danger"
+                        (click)="openSupplierModal(deleteModal,'SupplierDelete', supplier,i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <pagination-controls id="suppliers"
                            class="paginator"
                            (pageChange)="suppliersPage = $event"
@@ -100,47 +103,49 @@
         </div>
       </div>
         <h3 *ngIf="unresolvedReports.length <= 0">No hay reportes que solucionar.</h3>
+      <div style="overflow-x:auto;">
         <table class="table table-striped" *ngIf="!alerts.reports.loading && unresolvedReports.length > 0">
-          <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Reclamador</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr
-            *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
-            <th scope="row">{{report.id}}</th>
-            <td>
-              <a (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))"
-                 id="requester-detail">
-                {{getRequesterFromMap(report.userId).name}}
-              </a>
-            </td>
-            <td>{{report.description}}</td>
-            <td>{{report.date.toStringDate()}}</td>
-            <td>
-              <div class="view-button">
-                <button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">
-                  <i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </td>
-            <td>
-              <div class="remove-button">
-                <button type="submit" class="btn btn-danger"
-                        (click)="openReportModal(deleteReportModal,'ReportDelete', report,i)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Reclamador</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
+          <th scope="row">{{report.id}}</th>
+          <td>
+            <a (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))"
+               id="requester-detail">
+              {{getRequesterFromMap(report.userId).name}}
+            </a>
+          </td>
+          <td>{{report.description}}</td>
+          <td>{{report.date.toStringDate()}}</td>
+          <td>
+            <div class="view-button">
+              <button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </td>
+          <td>
+            <div class="remove-button">
+              <button type="submit" class="btn btn-danger"
+                      (click)="openReportModal(deleteReportModal,'ReportDelete', report,i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
         <pagination-controls id="reports"
                              class="paginator"
                              (pageChange)="reportsPage = $event"

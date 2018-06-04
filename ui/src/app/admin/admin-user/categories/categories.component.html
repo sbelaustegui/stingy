@@ -11,36 +11,38 @@
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
-      <table class="table table-striped" *ngIf="!alerts.categories.loading">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">
-          <th scope="row">{{category.id}}</th>
-          <td>{{category.name}}</td>
-          <td>
-            <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openCategoryModal(newCategoryModal, i, category)">
-                <i class="fa fa-pencil"></i>
+      <div style="overflow-x:auto;">
+        <table class="table table-striped" *ngIf="!alerts.categories.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">
+            <th scope="row">{{category.id}}</th>
+            <td>{{category.name}}</td>
+            <td>
+              <div class="upload-button">
+                <button type="button" class="btn btn-light"  (click)="openCategoryModal(newCategoryModal, i, category)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div class="remove-button">
+              <button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">
+                <i class="fa fa-trash"></i>
               </button>
             </div>
-          </td>
-          <td>
-            <div class="remove-button">
-            <button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <pagination-controls id="categories"
                            class="paginator"
                            (pageChange)="categoriesPage = $event"
@@ -60,38 +62,40 @@
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
-      <table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">
-          <th scope="row">{{subcategory.id}}</th>
-          <td>{{subcategory.name}}</td>
-          <td>{{categories.get(subcategory.categoryId).name}}</td>
-          <td>
-            <div class="upload-button">
-              <button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">
-                <i class="fa fa-pencil"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <div class="remove-button">
-              <button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div style="overflow-x:auto;">
+        <table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
+          <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">
+            <th scope="row">{{subcategory.id}}</th>
+            <td>{{subcategory.name}}</td>
+            <td>{{categories.get(subcategory.categoryId).name}}</td>
+            <td>
+              <div class="upload-button">
+                <button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              </div>
+            </td>
+            <td>
+              <div class="remove-button">
+                <button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <pagination-controls id="subcategories"
                            class="paginator"
                            (pageChange)="subcategoriesPage = $event"
