@@ -13,6 +13,7 @@ import {CartBag} from "../../shared/models/cart-bag.model";
 import {SupplierProductService} from "../../shared/services/supplierProduct.service";
 import {SupplierProduct} from "../../shared/models/supplier-product.model";
 import {Product} from "../../shared/models/product.model";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-cart',
@@ -25,8 +26,11 @@ import {Product} from "../../shared/models/product.model";
 
 export class CartComponent implements OnInit {
 
+  public userId: number;
   public currentCart: Cart;
-  public cartBags: CartBag[];
+  // public cartBags: CartBag[];
+  public cartBags: Map<number, CartBag>;
+  public cartBagsAugury: CartBag[];
   public productsPage: number = 1;
   public alerts: {
     cartBags: {
@@ -84,14 +88,20 @@ export class CartComponent implements OnInit {
       success: false
     };
 
-    this.cartBags = [];
+    // this.cartBags = [];
+    this.cartBags = new Map<number, CartBag>();
+    this.cartBagsAugury = [];
     this.cartBagIndex = -1;
     this.productToDelete = undefined;
-    this.getUser();
+    this.getUserId();
   }
 
-  getUser() {
+  /***
+   * Gets user id and calls the current Cart.
+   */
+  private getUserId() {
     this.authService.loggedUser.then(res => {
+      this.userId = res.id;
       this.getCurrentCart(res.id);
       this.alerts.user.loading = false;
       this.alerts.user.error = false;
@@ -102,81 +112,84 @@ export class CartComponent implements OnInit {
     })
   }
 
+  /***
+   * Get and save the current cart and calls SupplierProduct to create, by checking first, creates a new Cart .
+   * @param {number} userId
+   */
   getCurrentCart(userId: number) {
-    this.cartService.getCartByUserId(userId).then(res => {
+    this.cartService.getCartByUserId(userId)
+      .then(res => {
         this.currentCart = res;
         this.alerts.cart.loading = false;
         this.alerts.cart.error = false;
-        this.getCartProducts();
-      }
-    ).catch(err => {
-      console.log(err);
-      this.alerts.cart.error = true;
-      this.alerts.cart.loading = false;
-    })
-  }
-
-  private getCartProducts() {
-    this.cartProductService.getAllCartProductsByCartId(this.currentCart.id).then(res => {
-      res.forEach(cp => {
-        this.getSupplierProduct(cp.supplierProductId);
+        this.getCartSupplierProducts();
       })
-    })
+      .catch(err => {
+        console.log(err);
+        this.alerts.cart.error = true;
+        this.alerts.cart.loading = false;
+      })
   }
 
-  private getSupplierProduct(id: number) {
-    this.supplierProductService.getSupplierProductById(id).then(res => {
-      this.checkCartBag(res);
-    })
-  }
-
-  private checkCartBag(supplierProduct: SupplierProduct): void {
-    this.cartBags.forEach(cb => {
-      if (cb.idSupplier == supplierProduct.supplierId) {
-        this.alerts.cartBags.check = true;
-        this.addProductToCartBag(cb, supplierProduct);
-        return;
-      }
-    });
-    this.createCartBag(supplierProduct);
-  }
-
-  private addProductToCartBag(cartBag: CartBag, supplierProduct: SupplierProduct): void {
-    this.productService.getProductById(supplierProduct.productId)
-      .then(p => {
-        cartBag.addProduct(supplierProduct, p);
+  /***
+   * Ge
+   */
+  private getCartSupplierProducts() {
+    //Gets all supplier-products for that current Cart.
+    this.cartProductService.getAllCartProductsByCartId(this.currentCart.id)
+      .then(res => {
+        res.forEach(cartProduct => {
+          //Get a specific supplier-product and check with cartBags.
+          this.supplierProductService.getSupplierProductById(cartProduct.supplierProductId)
+            .then(supplierProduct => {
+              // this.checkCartBag(supplierProduct);
+              this.addToCartBag(supplierProduct);
+            })
+            .catch(error => {
+              //TODO
+            })
+        })
       })
       .catch(error => {
         //TODO
       })
   }
 
-  private createCartBag(supplierProduct: SupplierProduct): void {
-    this.supplierService.getSupplierById(supplierProduct.id)
-      .then(s => {
-        this.cartBags.push(
-          new CartBag(s.id, s.name, 100)
-        )
-      })
-      .catch(error => {
-        //TODO
-      })
+  private addToCartBag(sp: SupplierProduct) {
+    if (this.cartBags.has(sp.supplierId) == true) {
+      this.productService.getProductById(sp.productId)
+        .then(p => {
+          // this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
+          this.cartBags.get(sp.supplierId).addProduct(sp);
+        })
+    }
+    else {
+      this.supplierService.getSupplierById(sp.supplierId)
+        .then(s => {
+          const cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
+          this.cartBagsAugury.push(); //TODO DELETE THIS IS JUST FOR TESTING
+          this.cartBags.set(sp.supplierId, cartBagAux);
+          this.addToCartBag(sp);
+        });
+
+    }
   }
 
   public getCartBags(): CartBag[] {
-    return this.cartBags.sort((cb1, cb2) => {
-      if (cb1.getTotalPrice() > cb2.getTotalPrice())
+
+    return Array.from(this.cartBags.values()).sort((cB1, cB2) => {
+      if (cB1.getTotalPrice() > cB2.getTotalPrice())
         return 1;
-      else if (cb1.getTotalPrice() == cb2.getTotalPrice()) {
-        if (cb1.getDistance() > cb2.getDistance())
+      else if (cB1.getTotalPrice() == cB2.getTotalPrice()) {
+        if (cB1.getDistance() > cB2.getDistance())
           return 1;
-        else if (cb1.getDistance() < cb2.getDistance())
+        else if (cB1.getDistance() < cB2.getDistance())
           return -1;
         return 0;
       }
       return -1;
 
-    })
+    });
   }
 
   deleteProduct() {
