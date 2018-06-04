@@ -19,66 +19,69 @@
     table {
       text-align: center;
       background-color: white;
-      tr{
-        th{
+      tr {
+        th {
           vertical-align: middle;
         }
-        td{
+        td {
           vertical-align: middle;
-          .upload-button{
+          .upload-button {
             button {
               font-size: 26px;
               background-color: transparent;
               color: black;
               border: none;
             }
-            i{
+            i {
               color: yellowgreen;
             }
           }
-          .remove-button{
+          .remove-button {
             button {
               font-size: 26px;
               background-color: transparent;
               color: black;
               border: none;
             }
-            i{
+            i {
               color: red;
-            }
-          }
-          &.product-image{
-            .product-img{
-              max-width: 70px;
-              max-height: 50px;
             }
           }
         }
       }
     }
+
     .paginator /deep/ .ngx-pagination {
       text-align: center;
-      li{
+      li {
         color: white;
-        &.current{
+        &.current {
           background-color: white;
           color: black;
         }
-        & :hover(:not(.disabled)){
+        & :hover(:not(.disabled)) {
           background-color: white;
           color: black;
         }
-        &.disabled{
+        &.disabled {
           cursor: not-allowed;
         }
-        a{
+        a {
           color: white;
-          & :hover{
+          & :hover {
             background-color: white;
             color: black;
           }
         }
       }
     }
+  }
+}
+.product-image {
+  padding: 2%;
+  margin-left: 25%;
+  .product-img {
+    max-width: 200px;
+    max-height: 200px;
   }
 }

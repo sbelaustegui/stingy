@@ -14,6 +14,9 @@ import {SupplierProductService} from "../../shared/services/supplierProduct.serv
 import {SupplierProduct} from "../../shared/models/supplier-product.model";
 import {Product} from "../../shared/models/product.model";
 import {forEach} from "@angular/router/src/utils/collection";
+import {Report} from "../../shared/models/report.model";
+import {Supplier} from "../../shared/models/supplier.model";
+import {User} from "../../shared/models/user.model";
 
 @Component({
   selector: 'app-cart',
@@ -33,6 +36,10 @@ export class CartComponent implements OnInit {
   public cartBagsAugury: CartBag[];
   public productsPage: number = 1;
   public alerts: {
+    details: {
+      loading: boolean,
+      error: boolean,
+    },
     cartBags: {
       check: boolean,
       loading: boolean,
@@ -55,7 +62,8 @@ export class CartComponent implements OnInit {
   public cartBagIndex: number;
   public productToDelete: Product;
 
-  public supProdAux: SupplierProduct;
+  public productModal: Product;
+  public supplierProductModal: SupplierProduct;
 
   modalRef: BsModalRef;
 
@@ -69,6 +77,10 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('ABM Tu carrito | Stingy');
     this.alerts = {
+      details: {
+        loading: false,
+        error: false,
+      },
       cartBags: {
         check: true,
         loading: false,
@@ -132,7 +144,7 @@ export class CartComponent implements OnInit {
   }
 
   /***
-   * Ge
+   *
    */
   private getCartSupplierProducts() {
     //Gets all supplier-products for that current Cart.
@@ -215,14 +227,29 @@ export class CartComponent implements OnInit {
       )
   }
 
+  openProductModal(template: TemplateRef<any>, product: Product, supplierProduct: SupplierProduct) {
+    this.supplierProductModal = supplierProduct;
+    this.productModal = product;
+    this.modalRef = this.modalService.show(template);
+  }
+
   openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, product: Product) {
     this.cartBagIndex = cartBagIndex;
     this.productToDelete = product;
     this.modalRef = this.modalService.show(template);
   }
 
-  resetDeleteModal() {
-    this.cartBagIndex = -1;
-    this.productToDelete = undefined;
+  resetModal(reference : string) {
+    this.modalRef.hide();
+    switch (reference.toUpperCase()) {
+      case "PRODUCT":
+        this.supplierProductModal = SupplierProduct.empty();
+        this.productModal = Product.empty();
+        break;
+      case "PRODUCTDELETE":
+        this.cartBagIndex = -1;
+        this.productToDelete = undefined;
+        break;
+    }
   }
 }

@@ -1,9 +1,9 @@
 <div class="cart">
   <div class="row">
     <!--PRODUCTS TABLE-->
-    <div class="col-12">
+    <div class="col-8 offset-2">
       <div class="row">
-        <div class="col-8">
+        <div class="col-12">
           <h2>Productos</h2>
         </div>
       </div>
@@ -27,10 +27,13 @@
             <!--{{setAuxSupplierProduct(cartBag.getSupplierProduct(product.id))}}-->
             <!--<th scope="row">{{product.id}}</th>-->
             <td>{{product.name}}</td>
-            <!--<td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>-->
-            <td>Detalle</td>
+            <td>
+              <i class="fa fa-eye" (click)="openProductModal(productDetailModal,product,cartBag.getSupplierProduct(product.id))"
+                   id="detail">
+            </i>
+            </td>
             <td>{{cartBag.getSupplierProduct(product.id).date}}</td>
-            <td>{{cartBag.getSupplierProduct(product.id).price}}</td>
+            <td>${{cartBag.getSupplierProduct(product.id).price}}</td>
             <td>
               <div class="remove-button">
                 <button type="submit" class="btn btn-danger"
@@ -52,13 +55,54 @@
       </pagination-controls>
     </div>
 
+    <!--DETAIL USER MODAL-->
+    <ng-template #productDetailModal>
+      <div class="modal-header" (keyup.esc)="resetModal('PRODUCT')">
+        <h4 class="modal-title pull-left">
+          <span *ngIf="productModal.id">Detalles del Producto: {{productModal.name}}</span>
+        </h4>
+
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('PRODUCT')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8 offset-md-2" *ngIf="productModal.id">
+            <!--<td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>-->
+            <div class="product-image"><img class="product-img" [src]="productModal.imageUrl" alt="Product Image"></div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Nombre: </b><span>{{productModal.name}}</span></li>
+              <li class="list-group-item"><b>Decripcion: </b><span>{{productModal.description}}</span></li>
+              <li class="list-group-item"><b>Cargado por: </b><span>{{productModal.userId}}</span></li>
+              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate}}</span></li>
+              <li class="list-group-item"><b>Fecha de Actualización: </b><span>{{supplierProductModal.date}}</span></li>
+              <li class="list-group-item"><b>Precio: </b><span>${{supplierProductModal.price}}</span></li>
+
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('PRODUCT')">Volver</button>
+      </div>
+      <div class="alert alert-danger text-center" *ngIf="alerts.details.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al cargar los datos del Proovedor.</p>
+          </blockquote>
+        </div>
+      </div>
+    </ng-template>
+
     <!--Delete confirmation modal-->
     <ng-template #deleteModal>
-      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
+      <div class="modal-header" (keyup.esc)="resetModal()">
         <h4 class="modal-title pull-left">Eliminar
           <span *ngIf="productToDelete">Producto {{productToDelete.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -67,7 +111,7 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal(); modalRef.hide();">Cancelar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.cartBags.deletingError">
         <div class="card-block">
