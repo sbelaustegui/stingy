@@ -147,28 +147,30 @@
           </div>
         </fieldset>
       </div>
-      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.updating.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al actualizar el usuario. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
+      <div class="col-12">
+        <div class="alert alert-danger text-center mx-auto" style="max-width: 500px;" *ngIf="alerts.updating.error">
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <p>Hubo un error al actualizar el usuario. Revise los datos e inténtelo nuevamente.</p>
+            </blockquote>
+          </div>
         </div>
-      </div>
-      <div class="alert alert-success text-center mx-auto" *ngIf="alerts.updating.success">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>El usuario se actualizo correctamente.</p>
-          </blockquote>
+        <div class="alert alert-success text-center mx-auto" style="max-width: 500px;" *ngIf="alerts.updating.success">
+          <div class="card-block">
+            <blockquote class="card-blockquote">
+              <p>El usuario se actualizo correctamente.</p>
+            </blockquote>
+          </div>
         </div>
       </div>
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <div class="row">
-          <div class="back-button col-4 col-md-6" align="right">
-            <button type="button" class="btn btn-danger" id="delete-button" (click)="openDeleteModal(deleteModal)">
+          <div class="back-button col-12 col-md-6" align="right">
+            <button type="button" class="btn btn-danger" id="delete-button" style="width: 100%;" (click)="openDeleteModal(deleteModal)">
               ELIMINAR CUENTA
             </button>
           </div>
-          <div class="register-button col-8 col-md-6" align="center">
+          <div class="register-button col-12 col-md-6" align="center">
             <button type="submit" class="btn btn-light" id="register-button" [disabled]="formGroup.invalid">
               <span *ngIf="!alerts.updating.loading">Guardar</span>
               <span *ngIf="alerts.updating.loading"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>

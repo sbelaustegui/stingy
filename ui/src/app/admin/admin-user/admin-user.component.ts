@@ -15,10 +15,12 @@ export class AdminUserComponent implements OnInit {
 
   public imgSource = require('../../../assets/stingy-icon.svg');
   public user: User;
+  public isCollapsed: boolean;
 
   constructor(public authService: AdminAuthService, public router: Router, public userAuthService: UserAuthService) { }
 
   ngOnInit() {
+    this.isCollapsed = true;
     this.user = User.empty();
     this.getUser();
   }

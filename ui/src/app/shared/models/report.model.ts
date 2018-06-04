@@ -1,4 +1,5 @@
 import {DateModel} from "./date-model";
+import {isNullOrUndefined} from "util";
 
 export class Report {
 
@@ -8,7 +9,7 @@ export class Report {
 
   public static from(jsonObject: any): Report {
     if (!jsonObject || !jsonObject.userId || !jsonObject.description
-      || !jsonObject.date || !jsonObject.solved ) {
+      || !jsonObject.date || isNullOrUndefined(jsonObject.solved) ) {
       throw new Error('Failed to instantiate Report from given jsonObject');
     }
     return new Report(jsonObject.userId, jsonObject.description, DateModel.from(jsonObject.date),jsonObject.solved, jsonObject.id);

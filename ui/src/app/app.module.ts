@@ -28,6 +28,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { AgmCoreModule } from '@agm/core';
 import {TruncateModule} from 'ng2-truncate';
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
+import { CollapseModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.compone
     HttpModule,
     ModalModule.forRoot(),
     NgxPaginationModule,
+    CollapseModule.forRoot(),
     TruncateModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'

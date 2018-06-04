@@ -14,10 +14,12 @@ export class UserComponent implements OnInit {
 
   public imgSource = require('../../assets/stingy-icon.svg');
   public user: User;
+  public isCollapsed: boolean;
 
   constructor(public authService: UserAuthService, public router: Router) { }
 
   ngOnInit() {
+    this.isCollapsed = true;
     this.user = User.empty();
     this.getUser();
   }

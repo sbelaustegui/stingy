@@ -15,7 +15,7 @@ export class ReverseAdminAuthGuard implements CanActivate {
 
     public checkLogin(url: string): boolean {
       if (!this.authService.isLoggedIn) { return true; }
-      this.router.navigate(['admin', 'admin-user']);
+      this.router.navigate(['admin', 'admin-user', 'categories']);
       return false;
     }
 }

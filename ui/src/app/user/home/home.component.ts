@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Subcategory} from "../../shared/models/subcategory.model";
 import {SubcategoryService} from "../../shared/services/subcategory.service";
 import {Category} from "../../shared/models/category.model";
@@ -79,6 +79,8 @@ export class HomeComponent implements OnInit {
 
   selectedSupplierProduct: SupplierProduct;
   selectedSupplierProductIndex: number;
+
+  @ViewChild('results') el:ElementRef;
 
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
@@ -234,7 +236,7 @@ export class HomeComponent implements OnInit {
  */
 
   search() {
-    if (this.productName && this.productName !== '' && this.selectedSubcategoryId) {
+    if (this.productName && this.productName !== '' && this.selectedSubcategoryId && this.location.id) {
       this.productService.searchProduct({
         name: this.productName,
         subcategoryId: this.selectedSubcategoryId ? parseInt(this.selectedSubcategoryId) : 0
@@ -249,11 +251,15 @@ export class HomeComponent implements OnInit {
         //TODO agregar loader y mensaje de error
         this.alerts.search.error = false;
         this.alerts.search.loading = false;
+        setTimeout(() =>  this.el.nativeElement.scrollIntoView(), 1000);
       }).catch(err => {
         console.log(err);
         this.alerts.search.error = true;
         this.alerts.search.loading = false;
       })
+    }else {
+      if(!this.location.id){
+      }
     }
   }
 
@@ -272,7 +278,7 @@ export class HomeComponent implements OnInit {
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
         //TODO mostrar un toast o snackbar que se actualizo la location
-        this.locationService.updateLocation(this.location);
+        this.locationService.updateLocation(this.location).then(this.modalRef ? this.modalRef.hide : undefined);
       });
       this.alerts.location.loading = false;
       this.alerts.location.error = false;
@@ -282,7 +288,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public openModal(template: TemplateRef<any>, supplierProduct, supplierProductIndex) {
+  public openModal(template: TemplateRef<any>, supplierProduct?, supplierProductIndex?) {
     if(supplierProduct){
       this.selectedSupplierProduct = supplierProduct;
       this.selectedSupplierProductIndex = supplierProductIndex;

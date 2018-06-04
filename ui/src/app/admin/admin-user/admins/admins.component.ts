@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {User} from "../../../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../../../shared/validators/equal-validator.directive";
+import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
 
 @Component({
   selector: 'app-admins',
@@ -18,6 +19,7 @@ export class AdminsComponent implements OnInit {
 
   public adminFormGroup: FormGroup;
   public newAdmin: User;
+  public loggedAdmin: User;
   public adminToDelete: User;
   public adminIndexToDelete: number;
   public adminsArray: User[];
@@ -28,6 +30,7 @@ export class AdminsComponent implements OnInit {
       loading: boolean,
       deleting: boolean,
       deletingError: boolean,
+      deletingErrorLogged: boolean,
     },
     addAdmin: {
       error: boolean,
@@ -37,18 +40,24 @@ export class AdminsComponent implements OnInit {
   };
   modalRef: BsModalRef;
 
-  constructor(public fb: FormBuilder, public adminService: AdminService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  constructor(public fb: FormBuilder, public adminService: AdminService, public router: Router, private titleService: Title, private modalService: BsModalService, public authService: AdminAuthService) {
   }
 
   ngOnInit() {
     this.titleService.setTitle('ABM Categorias | Stingy');
     this.newAdmin = User.empty();
+    this.authService.loggedUser.then(user => {
+      this.loggedAdmin = user;
+    }).catch(err => {
+      this.alerts.admins.error = true;
+    });
     this.alerts = {
       admins: {
         error: false,
         loading: true,
         deleting: false,
         deletingError: false,
+        deletingErrorLogged: false,
       },
       addAdmin: {
         error: false,
@@ -120,6 +129,12 @@ export class AdminsComponent implements OnInit {
   }
 
   deleteAdmin() {
+    if(this.adminToDelete.id === this.loggedAdmin.id){
+      this.alerts.admins.deletingErrorLogged = true;
+      setTimeout(() => this.alerts.admins.deletingErrorLogged = false, 3000);
+      return;
+    }
+    this.alerts.admins.deletingErrorLogged = false;
     this.alerts.admins.deleting = true;
     this.adminService.deleteUser(this.adminToDelete.id).then(res => {
       this.adminsArray.splice(this.adminIndexToDelete,1);

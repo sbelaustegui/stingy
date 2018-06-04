@@ -72,7 +72,7 @@ export class SuppliersComponent implements OnInit {
 
   ngOnInit() {
     this.location = Location.empty();
-
+    this.unresolvedReports = [];
     this.titleService.setTitle('ABM Categorias | Stingy');
     this.newSupplier = Supplier.empty();
     this.report = Report.empty();
@@ -126,8 +126,8 @@ export class SuppliersComponent implements OnInit {
     this.reportService.getUnresolveReports()
       .then(res => {
         this.alerts.reports.loading = true;
-        this.unresolvedReports = res;
         res.forEach(r => {
+          this.unresolvedReports.push(Report.from(r));
           this.getRequester(r.userId);
         });
         this.alerts.reports.error;
@@ -237,8 +237,9 @@ export class SuppliersComponent implements OnInit {
 
   uploadSupplierBySolvingReport() {
     this.report.solved = true;
-    this.reportService.updateReport(this.report)
-      .then( res => {
+    this.reportService.resolveReport(this.report.id)
+      .then( () => {
+        this.unresolvedReports.splice(this.unresolvedReports.findIndex(r => r.id == this.report.id), 1);
         this.getUnresolveReports();
         this.uploadSupplier();
       })

@@ -1,4 +1,4 @@
-<section id="home" scroll="no" class="helpr-section helpr-layout-1 section section-inverse-color">
+<section id="home" class="helpr-section helpr-layout-1 section section-inverse-color">
   <div class="container">
     <div class="helpr-content" data-stellar-offset-parent="true">
       <div class="helpr-text" data-wow-duration="1s" data-wow-delay="0.5s">
@@ -25,14 +25,14 @@
                 <option *ngFor="let subcategory of subcategories" [value]="subcategory.id">{{subcategory.name}}</option>
               </select>
             </div>
-            <div class="col-md-1" style="text-align: center">
-              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search()">Buscar
+            <div class="col-md-2" style="text-align: center">
+              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search(); location.id ? undefined : openModal(locationModal)" [disabled]="!this.productName || this.productName === '' || !this.selectedSubcategoryId">Buscar
               </button>
             </div>
-            <div class="col-md-1" style="text-align: center">
+            <div class="col-md-1" style="text-align: center; padding-top: 5px;">
               <button class="btn btn-light my-2 my-sm-0 location-button"
                     (click)="openModal(locationModal)">
-            <i class="fa fa-road" aria-hidden="true"></i>
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -40,46 +40,45 @@
       </div>
     </div>
   </div>
-</section>
-
-<div class="row results">
-  <h3 class="col-12" *ngIf="searched">Productos encontrados</h3>
-  <div class="col-12 loader">
+  <div class="row results">
+    <h3 class="col-12" *ngIf="searched" #results>Productos encontrados</h3>
+    <div class="col-12 loader">
     <span *ngIf="alerts.search.loading" class="mx-auto">
       <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
     </span>
-  </div>
-  <div class="col-md-12" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
-    <div class="row products-row">
-      <div class="col-md-4 col-sm-6 col-12 col-lg-3" *ngFor="let product of searchedProducts">
-        <div class="card">
-          <img class="card-img-top mx-auto" [src]="product.imageUrl" alt="Product img">
-          <div class="card-body">
-            <h5 class="card-title">{{product.name}}</h5>
-            <p class="card-text">
-              {{product.description}}
-            </p>
+    </div>
+    <div class="col-md-12" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
+      <div class="row products-row">
+        <div class="col-md-4 col-sm-6 col-12 col-lg-3" *ngFor="let product of searchedProducts">
+          <div class="card">
+            <img class="card-img-top mx-auto" [src]="product.imageUrl" alt="Product img">
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text">
+                {{product.description}}
+              </p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
+                <span style="font-weight: bold">{{getSupplierMap(supplierProduct.supplierId)?.name}}: </span>
+                <span style="font-weight: bold">$ {{supplierProduct.price}}</span>
+                <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
+              </li>
+              <li class="list-group-item">
+                <button class="btn btn-primary" (click)="addToCart(product.id)"
+                        *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
+                <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
+              </li>
+            </ul>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
-              <span style="font-weight: bold">{{getSupplierMap(supplierProduct.supplierId)?.name}}: </span>
-              <span style="font-weight: bold">$ {{supplierProduct.price}}</span>
-              <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
-            </li>
-            <li class="list-group-item">
-              <button class="btn btn-primary" (click)="addToCart(product.id)"
-                      *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
-              <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
+    <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
+    <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
+    <h3 class="col-12 no-results" *ngIf="searched && alerts.location.error">Hubo un error al obtener su ubicación.</h3>
   </div>
-  <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
-  <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
-  <h3 class="col-12 no-results" *ngIf="searched && alerts.location.error">Hubo un error al obtener su ubicación.</h3>
-</div>
+</section>
 
 <ng-template #locationModal>
   <div class="modal-header" (keyup.esc)="resetModal()">
@@ -121,7 +120,8 @@
       <div class="input-group-prepend">
         <span class="input-group-text">$</span>
       </div>
-      <input type="number" class="form-control" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
+      <label for="input">Nuevo Precio: </label>
+      <input id="input" type="number" class="form-control" placeholder="Ingrese nuevo precio" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
     </div>
     <div class="alert alert-danger text-center" *ngIf="alerts.price.error">
       <div class="card-block">

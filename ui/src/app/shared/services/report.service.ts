@@ -83,6 +83,14 @@ export class ReportService {
       });
   }
 
+  public resolveReport(id: number): Promise<any> {
+    return this.http.get('/api/report/resolve/' + id)
+      .then(res => {
+        this._reportsById.set(id, res.data);
+        return res;
+      });
+  }
+
   private allReportsToArray(): Report[] {
     return Array.from(this._reportsById.values());
   }

@@ -117,7 +117,8 @@ export class CategoriesComponent implements OnInit {
     this.alerts.addCategory.loading = true;
     if(this.newCategory.id) {
       this.categoryService.updateCategory(this.newCategory).then(res => {
-        this.categories[this.categoryIndexUpdate] = res;
+        this.categories.set(res.id, res);
+        this.categoriesArray[this.categoryIndexUpdate] = res;
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
@@ -143,7 +144,6 @@ export class CategoriesComponent implements OnInit {
         this.alerts.addCategory.success = true;
         setTimeout(() => {this.alerts.addCategory.success = false;},2500);
         // this.router.navigate(['categories']);
-
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;

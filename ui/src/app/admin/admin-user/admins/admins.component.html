@@ -246,10 +246,17 @@
         <button type="submit" class="btn btn-danger" (click)="this.deleteAdmin()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
       </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.admins.deletingError">
+      <div class="alert alert-danger text-center" style="margin: 10px" *ngIf="alerts.admins.deletingError">
         <div class="card-block">
           <blockquote class="card-blockquote">
             <p>Hubo un error al agregar al Eliminar el adminstrador.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-danger text-center" style="margin: 10px" *ngIf="alerts.admins.deletingErrorLogged">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Error. No te puedes eliminar a ti mismo.</p>
           </blockquote>
         </div>
       </div>

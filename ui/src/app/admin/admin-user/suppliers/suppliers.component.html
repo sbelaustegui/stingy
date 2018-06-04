@@ -99,8 +99,8 @@
           <span *ngIf="alerts.reports.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
         </div>
       </div>
-
-        <table class="table table-striped" *ngIf="!alerts.reports.loading">
+        <h3 *ngIf="unresolvedReports.length <= 0">No hay reportes que solucionar.</h3>
+        <table class="table table-striped" *ngIf="!alerts.reports.loading && unresolvedReports.length > 0">
           <thead>
           <tr>
             <th scope="col">Id</th>
@@ -122,7 +122,7 @@
               </a>
             </td>
             <td>{{report.description}}</td>
-            <td>{{report.date}}</td>
+            <td>{{report.date.toStringDate()}}</td>
             <td>
               <div class="view-button">
                 <button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">
@@ -187,9 +187,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <div align="center">
+        <div align="center" style="margin-bottom: 15px;">
           <span *ngIf="report.id"><em><b>Descripción: </b>"{{report.description}}"</em></span>
-
         </div>
         <form [formGroup]="supplierFormGroup">
           <fieldset>
@@ -228,8 +227,8 @@
               </div>
             </div>
           </fieldset>
-
-          <agm-map [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"
+          <label for="map">Ubicación</label>
+          <agm-map id="map" [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"
                    (mapClick)="placeMarker($event)">
             <agm-marker [latitude]="newSupplier.location.latitude"
                         [longitude]="newSupplier.location.longitude"></agm-marker>
@@ -296,14 +295,13 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-8 offset-md-2">
+          <div style="width: 100%">
             <ul class="list-group list-group-flush" *ngIf="requester.id">
               <li class="list-group-item"><b>ID: </b><span>{{requester.id}}</span></li>
               <li class="list-group-item"><b>Nombre: </b><span>{{requester.name}}</span></li>
               <li class="list-group-item"><b>Apellido: </b><span>{{requester.lastName}}</span></li>
               <li class="list-group-item"><b>Usuario: </b><span>{{requester.username}}</span></li>
               <li class="list-group-item"><b>Email: </b><span>{{requester.email}}</span></li>
-
             </ul>
           </div>
         </div>
