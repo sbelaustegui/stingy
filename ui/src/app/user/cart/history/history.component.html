@@ -21,6 +21,7 @@
         </div>
       </div>
       <div *ngIf="!alerts.supplierProducts.loading">
+        <h3 *ngIf="carts.length <= 0">No posee carritos anteriores al catual.</h3>
         <div *ngFor="let cartId of cartsIds()">
           <h3>Carrito del {{getCartById(cartId).date.toStringDate()}}</h3>
           <table class="table table-striped">
