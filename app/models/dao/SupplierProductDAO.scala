@@ -54,6 +54,14 @@ object SupplierProductDAO {
     ESupplierProduct.getSupplierProductByProductId(id).map(SupplierProduct.apply).toList
   }
 
+  def getByUserId(id: Long) : List[SupplierProduct] = {
+    ESupplierProduct.getSupplierProductByUserId(id).map(SupplierProduct.apply).toList
+  }
+
+  def getByCartId(id: Long) : List[SupplierProduct] = {
+    ESupplierProduct.getSupplierProductByCartId(id).map(SupplierProduct.apply).toList
+  }
+
   def getByLocation(productId: Long, userLocation: Location) : List[SupplierProduct] = {
     ESupplierProduct.getSupplierProductByLocation(productId, ELocation.getLocationById(userLocation.id.get).get()).map(SupplierProduct.apply).toList
   }

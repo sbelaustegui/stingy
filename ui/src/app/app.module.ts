@@ -29,6 +29,7 @@ import { AgmCoreModule } from '@agm/core';
 import {TruncateModule} from 'ng2-truncate';
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 import { CollapseModule } from 'ngx-bootstrap';
+import { HistoryComponent } from './user/cart/history/history.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { CollapseModule } from 'ngx-bootstrap';
     AdminProfileComponent,
     ProductsComponent,
     SuppliersComponent,
+    HistoryComponent,
 
   ],
   imports: [

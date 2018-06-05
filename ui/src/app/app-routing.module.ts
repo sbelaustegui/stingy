@@ -20,6 +20,7 @@ import {AdminsComponent} from "./admin/admin-user/admins/admins.component";
 import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-profile.component";
 import {ProductsComponent} from "./admin/admin-user/products/products.component";
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
+import {HistoryComponent} from "./user/cart/history/history.component";
 
 const routes: Routes =[
   {
@@ -33,7 +34,12 @@ const routes: Routes =[
           {path: '', pathMatch: 'full', redirectTo: 'home'},
           {path: 'home',                                              component: HomeComponent},
           {path: 'profile',                                           component: ProfileComponent},
-          {path: 'cart',                                              component: CartComponent},
+          {path: 'cart',
+            children: [
+              {path: '',                                              component: CartComponent},
+              {path: 'history',                                       component: HistoryComponent},
+            ]
+          },
           {path: 'upload-product',                                    component: UploadProductComponent},
         ]
       },

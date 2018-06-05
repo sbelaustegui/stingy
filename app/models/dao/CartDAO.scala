@@ -53,6 +53,10 @@ object CartDAO {
     }
   }
 
+  def getCartsByUserId(id: Long) : List[Cart] = {
+    ECart.getCartsByUserId(id).map(Cart.apply).toList
+  }
+
   def getAllCarts: List[Cart] = {
     ECart.getAllCarts.map(Cart.apply).toList
   }

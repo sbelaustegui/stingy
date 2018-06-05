@@ -51,6 +51,10 @@ public class Cart extends Model {
         return Optional.ofNullable(Ebean.find(Cart.class).where().eq("user_id", id).and().eq("current", 1).findOne());
     }
 
+    public static List<Cart> getCartsByUserId(Long id){
+        return Ebean.find(Cart.class).where().eq("user_id", id).findList();
+    }
+
     public static List<Cart> getAllCarts() {
         return finder.all();
     }

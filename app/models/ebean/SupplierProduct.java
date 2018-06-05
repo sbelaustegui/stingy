@@ -52,6 +52,20 @@ public class SupplierProduct extends Model {
         return Ebean.find(SupplierProduct.class).where().eq("product_id", id).findList();
     }
 
+    public static List<SupplierProduct> getSupplierProductByUserId(Long id){
+        List<SupplierProduct> supplierProducts = new ArrayList<>();
+        Ebean.find(Cart.class).where().eq("user_id", id).findList().forEach(cart -> {
+            Ebean.find(CartProduct.class).where().eq("cart_id", cart.getId()).findList().forEach(cartProduct -> supplierProducts.add(cartProduct.getSupplierProduct()));
+        });
+        return supplierProducts;
+    }
+
+    public static List<SupplierProduct> getSupplierProductByCartId(Long id){
+        List<SupplierProduct> supplierProducts = new ArrayList<>();
+        Ebean.find(CartProduct.class).where().eq("cart_id", id).findList().forEach(cartProduct -> supplierProducts.add(cartProduct.getSupplierProduct()));
+        return supplierProducts;
+    }
+
     public static List<SupplierProduct> getSupplierProductByLocation(Long productId, Location userLocation){
         List<SupplierProduct> products = getSupplierProductByProductId(productId);
         Map<Long, SupplierProduct> filteredProductsMap = new HashMap<>();

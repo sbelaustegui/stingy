@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {HttpService} from "./http.service";
 import {SupplierProductLocation} from "../models/supplier-product-location-model";
 import {forEach} from "@angular/router/src/utils/collection";
+import {SupplierProductCart} from "../models/supplier-product-cart.model";
 
 
 /*
@@ -50,6 +51,20 @@ export class SupplierProductService {
 
   public getSupplierProductsByProductId(productId: number): Promise<SupplierProduct[]> {
     return this.http.get('/api/supplier/product/' + productId).then(res => {
+        return res.data;
+      }
+    )
+  }
+
+  public getSupplierProductsByUserId(userId: number): Promise<SupplierProduct[]> {
+    return this.http.get('/api/supplier/product/user/' + userId).then(res => {
+        return res.data;
+      }
+    )
+  }
+
+  public getSupplierProductsByCartId(cartId: number): Promise<SupplierProductCart[]> {
+    return this.http.get('/api/supplier/product/cart/' + cartId).then(res => {
         return res.data;
       }
     )

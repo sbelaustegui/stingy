@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 import models.domain.cart._
+import models.domain.user.User
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -105,6 +106,27 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
           Json.toJson(
             ResponseGenerated(
               BAD_REQUEST, "No cart for that user id"
+            )
+          )
+        )
+    }
+  }
+
+  def getCartsByUserId(id: Long) = Action {
+    User.getById(id) match {
+      case Some(_) =>
+        Ok(
+          Json.toJson(
+            ResponseGenerated(
+              OK, "Carts founded", Json.toJson(Cart.getCartsByUserId(id))
+            )
+          )
+        )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(
+              BAD_REQUEST, "No user for that id"
             )
           )
         )

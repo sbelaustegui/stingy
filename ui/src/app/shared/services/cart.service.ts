@@ -35,6 +35,14 @@ export class CartService {
       });
   }
 
+  public getCartsByUserId(userId: number): Promise<Cart[]>{
+    return this.http
+      .get('/api/carts/user/' + userId)
+      .then(res => {
+        return res.data;
+      });
+  }
+
   public getCartById(id: number): Promise<Cart> {
     return this._cartsById.get(id) ? Promise.resolve(this._cartsById.get(id)) : this.requestCart(id);
   }

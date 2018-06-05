@@ -144,6 +144,26 @@ class SupplierProductController @Inject()(cc: ControllerComponents) extends Abst
     )
   }
 
+  def getByUserId(id: Long) = Action {
+    Ok(
+      Json.toJson(
+        ResponseGenerated(
+          OK, "SupplierProducts", Json.toJson(SupplierProduct.getByUserId(id))
+        )
+      )
+    )
+  }
+
+  def getByCartId(id: Long) = Action {
+    Ok(
+      Json.toJson(
+        ResponseGenerated(
+          OK, "SupplierProducts", Json.toJson(SupplierProduct.getByCartId(id))
+        )
+      )
+    )
+  }
+
   def getAll = Action{
     Ok(
       Json.toJson(

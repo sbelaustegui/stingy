@@ -44,6 +44,10 @@ object Cart extends CartJsonFormat {
     CartDAO.getByUserId(id)
   }
 
+  def getCartsByUserId(id : Long) : List[Cart] = {
+    CartDAO.getCartsByUserId(id)
+  }
+
   def getAll: List[Cart] = {
     CartDAO.getAllCarts
   }

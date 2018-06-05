@@ -113,6 +113,7 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
   def createCarts(): List[Cart] = {
     var carts: List[Cart] = List()
     carts = Cart.saveOrUpdate(Cart(CartCreate(1))).get :: carts
+    carts = Cart.saveOrUpdate(Cart(CartCreate(1))).get :: carts
     carts
   }
 
@@ -129,6 +130,10 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
     carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(1, 4))).get :: carts
     carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(1, 6))).get :: carts
     carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(1, 8))).get :: carts
+    carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(2, 2))).get :: carts
+    carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(2, 3))).get :: carts
+    carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(2, 5))).get :: carts
+    carts = CartProduct.saveOrUpdate(CartProduct(CartProductCreate(2, 7))).get :: carts
     carts
   }
 

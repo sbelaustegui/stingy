@@ -22,7 +22,7 @@ import {User} from "../../shared/models/user.model";
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  providers: [CartService, CartProductService, UserService,
+  providers: [CartService, CartProductService,
     UserAuthService, ProductService, SupplierService,
     SupplierProductService]
 })
@@ -67,15 +67,14 @@ export class CartComponent implements OnInit {
 
   modalRef: BsModalRef;
 
-  constructor(public cartService: CartService, public cartProductService: CartProductService,
-              public userService: UserService, public authService: UserAuthService,
+  constructor(public cartService: CartService, public cartProductService: CartProductService, public authService: UserAuthService,
               public productService: ProductService, public supplierService: SupplierService,
               public supplierProductService: SupplierProductService,
               public router: Router, private titleService: Title, private modalService: BsModalService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('ABM Tu carrito | Stingy');
+    this.titleService.setTitle('Tu carrito | Stingy');
     this.alerts = {
       details: {
         loading: false,
