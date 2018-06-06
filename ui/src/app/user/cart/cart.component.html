@@ -4,10 +4,12 @@
     <div class="col-8 offset-2">
       <button class="btn btn-light my-2 my-sm-0 history-button" type="button" (click)="goToHistory()">Historial </button>
 
-      <div class="row">
-        <!--<div class="col-12">-->
-          <!--<h2>Productos</h2>-->
-        <!--</div>-->
+      <div class="row" *ngIf="alerts.cartBags.loading">
+          <div class="col-12" style="text-align: center;">
+            <span class="mx-auto">
+              <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
+            </span>
+          </div>
       </div>
       <div class="suppliers" *ngFor="let cartBag of getCartBags(); let  cartBagIndex = index">
         <!--TODO supplier name -> think tittle or table with total price and distance -->
@@ -79,9 +81,6 @@
               <li class="list-group-item"><b>Decripcion: </b><span>{{productModal.description}}</span></li>
               <li class="list-group-item"><b>Cargado por: </b><span>{{productModal.userId}}</span></li>
               <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate.toStringDate()}}</span></li>
-              <li class="list-group-item"><b>Fecha de Actualización: </b><span *ngIf="supplierProductModal.date">{{supplierProductModal.date.toStringDate()}}</span><span *ngIf="!supplierProductModal.date">Sin actualización</span></li>
-              <li class="list-group-item"><b>Precio: </b><span>${{supplierProductModal.price}}</span></li>
-
             </ul>
           </div>
         </div>

@@ -59,6 +59,10 @@ object SupplierProduct extends SupplierProductJsonFormat {
     SupplierProductDAO.getByCartId(id).map(SupplierProductCart.apply)
   }
 
+  def getSupplierProductsByCartId(id : Long) : List[SupplierProduct] = {
+    SupplierProductDAO.getByCartId(id)
+  }
+
   def getByLocation(productId: Long, userLocation: Location) : List[SupplierProduct] = {
     SupplierProductDAO.getByLocation(productId, userLocation)
   }
