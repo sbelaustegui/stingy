@@ -114,7 +114,7 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetModal(); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETEPRODUCT'); modalRef.hide();">Cancelar</button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.cartBags.deletingError">
         <div class="card-block">

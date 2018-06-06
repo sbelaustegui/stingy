@@ -17,6 +17,7 @@ import {forEach} from "@angular/router/src/utils/collection";
 import {Report} from "../../shared/models/report.model";
 import {Supplier} from "../../shared/models/supplier.model";
 import {User} from "../../shared/models/user.model";
+import {CartProduct} from "../../shared/models/cartProduct.model";
 
 @Component({
   selector: 'app-cart',
@@ -127,7 +128,7 @@ export class CartComponent implements OnInit {
   }
 
   /***
-   * Get and save the current cart and calls SupplierProduct to create, by checking first, creates a new Cart .
+   * Get and saveImage the current cart and calls SupplierProduct to create, by checking first, creates a new Cart .
    * @param {number} userId
    */
   getCurrentCart(userId: number) {
@@ -158,8 +159,8 @@ export class CartComponent implements OnInit {
           this.supplierProductService.getSupplierProductById(cartProduct.supplierProductId)
             .then(sp => {
 
-              // this.addToCartBag(sp);
-              this.addToCartBag2(sp);
+              this.addToCartBag(sp);
+              // this.addToCartBag2(sp);
 
             })
             .catch(error => {
@@ -252,10 +253,11 @@ export class CartComponent implements OnInit {
     });
   }
 
-  deleteProduct() {
+  deleteProduct(cartProduct: CartProduct) {
     this.alerts.cartBags.deletingProducts = true;
-    this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
-      this.cartBags[this.cartBagIndex].getSupplierId(), this.productToDelete.id)
+    this.cartProductService.getCartProductById(cartProduct.id)
+    // this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
+    //   this.cartBags[this.cartBagIndex].getSupplierId(), this.productToDelete.id)
       .then(res => {
         this.cartBagIndex[this.cartBagIndex].removeProduct(this.productToDelete.id);
         this.alerts.cartBags.deletingProducts = false;
