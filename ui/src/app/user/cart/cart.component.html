@@ -77,7 +77,6 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>Nombre: </b><span>{{productModal.name}}</span></li>
               <li class="list-group-item"><b>Decripcion: </b><span>{{productModal.description}}</span></li>
-              <li class="list-group-item"><b>Cargado por: </b><span>{{productModal.userId}}</span></li>
               <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate.toStringDate()}}</span></li>
               <li class="list-group-item"><b>Fecha de Actualización: </b><span *ngIf="supplierProductModal.date">{{supplierProductModal.date.toStringDate()}}</span><span *ngIf="!supplierProductModal.date">Sin actualización</span></li>
               <li class="list-group-item"><b>Precio: </b><span>${{supplierProductModal.price}}</span></li>
