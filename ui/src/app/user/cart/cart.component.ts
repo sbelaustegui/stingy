@@ -41,7 +41,7 @@ export class CartComponent implements OnInit {
       error: boolean,
     },
     cartBags: {
-      check: boolean,
+      error: boolean,
       loading: boolean,
       deletingError: boolean,
       deletingProducts: boolean,
@@ -58,6 +58,8 @@ export class CartComponent implements OnInit {
     },
     success: boolean
   };
+
+  public auxSPs : SupplierProduct[];
 
   public cartBagIndex: number;
   public productToDelete: Product;
@@ -81,7 +83,7 @@ export class CartComponent implements OnInit {
         error: false,
       },
       cartBags: {
-        check: true,
+        error: false,
         loading: false,
         deletingError: false,
         deletingProducts: false,
@@ -104,6 +106,7 @@ export class CartComponent implements OnInit {
     this.cartBagsAugury = [];
     this.cartBagIndex = -1;
     this.productToDelete = undefined;
+    this.auxSPs = [];
     this.getUserId();
   }
 
@@ -149,29 +152,75 @@ export class CartComponent implements OnInit {
     //Gets all supplier-products for that current Cart.
     this.cartProductService.getAllCartProductsByCartId(this.currentCart.id)
       .then(res => {
+        this.alerts.cartBags.loading = true;
         res.forEach(cartProduct => {
-          //Get a specific supplier-product and check with cartBags.
+          //Get a specific supplier-product and error with cartBags.
           this.supplierProductService.getSupplierProductById(cartProduct.supplierProductId)
-            .then(supplierProduct => {
-              // this.checkCartBag(supplierProduct);
-              this.addToCartBag(supplierProduct);
+            .then(sp => {
+
+              // this.addToCartBag(sp);
+              this.addToCartBag2(sp);
+
             })
             .catch(error => {
               //TODO
             })
-        })
+        });
+        this.alerts.cartBags.loading = false;
       })
       .catch(error => {
-        //TODO
+        this.alerts.cartBags.loading = false;
+        this.alerts.cartBags.error = true;
+        setTimeout(() => {
+          this.alerts.cartBags.error = false;
+        }, 2500);
+
       })
   }
 
+  private addToCartBag2(sp: SupplierProduct){
+    if (Array.from(this.cartBags.keys()).length == 0 || !this.cartBags.has(sp.supplierId)) {
+      this.addCartBag(sp);
+    }
+    else if(this.cartBags.has(sp.supplierId)){
+      this.addProduct(sp);
+    }
+  }
+
+  private addCartBag(sp: SupplierProduct) {
+    this.supplierService.getSupplierById(sp.supplierId)
+      .then(s => {
+        const cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
+        this.cartBagsAugury.push(); //TODO DELETE THIS IS JUST FOR TESTING
+        this.cartBags.set(sp.supplierId, cartBagAux);
+        this.addProduct(sp);
+      })
+    .catch(error => {
+      console.log(error.message);
+    });
+  }
+
+  private addProduct(sp: SupplierProduct) {
+    this.productService.getProductById(sp.productId)
+      .then(p => {
+        this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
+      })
+      .catch( error => {
+        console.log(error.message);
+      })
+  }
+
+  /**
+   * Takes supId from SupplierProduct and error if it´s necessary creates a new CartBag with that supId and add it to
+   * the CartBag. If it's not necessary to create another, just add the supplierProduct into the respected CartBag.
+   * @param {SupplierProduct} sp
+   */
   private addToCartBag(sp: SupplierProduct) {
     if (this.cartBags.has(sp.supplierId) == true) {
       this.productService.getProductById(sp.productId)
         .then(p => {
-          // this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
-          this.cartBags.get(sp.supplierId).addProduct(sp);
+          this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
+          // this.cartBags.get(sp.supplierId).addProduct(sp);
         })
     }
     else {
@@ -251,4 +300,17 @@ export class CartComponent implements OnInit {
         break;
     }
   }
+
+  goToHistory(){
+    this.router.navigate(['user/cart/history']);
+  }
+
+  deleteCart(){
+
+  }
+
+  generateCart(){
+    // this.cartService.addCart()
+  }
+
 }

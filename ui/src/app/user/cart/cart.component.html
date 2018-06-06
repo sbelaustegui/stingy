@@ -2,14 +2,17 @@
   <div class="row">
     <!--PRODUCTS TABLE-->
     <div class="col-8 offset-2">
+      <button class="btn btn-light my-2 my-sm-0 history-button" type="button" (click)="goToHistory()">Historial </button>
+
       <div class="row">
-        <div class="col-12">
-          <h2>Productos</h2>
-        </div>
+        <!--<div class="col-12">-->
+          <!--<h2>Productos</h2>-->
+        <!--</div>-->
       </div>
       <div class="suppliers" *ngFor="let cartBag of getCartBags(); let  cartBagIndex = index">
         <!--TODO supplier name -> think tittle or table with total price and distance -->
-        <span> {{cartBag.getSupplierName()}}</span> <span> {{cartBag.getTotalPrice()}}</span>
+        <!--<span> {{cartBag.getSupplierName()}}</span> <span> {{cartBag.getTotalPrice()}}</span>-->
+        <h2>{{cartBag.getSupplierName()}}      ${{cartBag.getTotalPrice()}}</h2>
         <table class="table table-striped" *ngIf="!alerts.cartBags.loading">
           <thead>
           <tr>
