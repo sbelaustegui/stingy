@@ -80,7 +80,7 @@ export class CartBag {
   }
 
   getSupplierProduct(productId: number): SupplierProduct {
-    return this._supplierProducts.get(productId); //TODO possible exception.
+    return SupplierProduct.from(this._supplierProducts.get(productId)); //TODO possible exception.
   }
 
   getTotalPrice(): number {

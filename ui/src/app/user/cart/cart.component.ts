@@ -276,8 +276,8 @@ export class CartComponent implements OnInit {
   }
 
   openProductModal(template: TemplateRef<any>, product: Product, supplierProduct: SupplierProduct) {
-    this.supplierProductModal = supplierProduct;
-    this.productModal = product;
+    this.supplierProductModal = SupplierProduct.from(supplierProduct);
+    this.productModal = Product.from(product);
     this.modalRef = this.modalService.show(template);
   }
 

@@ -35,7 +35,7 @@
                    id="detail">
             </i>
             </td>
-            <td>{{cartBag.getSupplierProduct(product.id).date}}</td>
+            <td>{{cartBag.getSupplierProduct(product.id).date.toStringDate()}}</td>
             <td>${{cartBag.getSupplierProduct(product.id).price}}</td>
             <td>
               <div class="remove-button">
@@ -71,15 +71,15 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-8 offset-md-2" *ngIf="productModal.id">
+          <div class="detail-modal" *ngIf="productModal.id">
             <!--<td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>-->
             <div class="product-image"><img class="product-img" [src]="productModal.imageUrl" alt="Product Image"></div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>Nombre: </b><span>{{productModal.name}}</span></li>
               <li class="list-group-item"><b>Decripcion: </b><span>{{productModal.description}}</span></li>
               <li class="list-group-item"><b>Cargado por: </b><span>{{productModal.userId}}</span></li>
-              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate}}</span></li>
-              <li class="list-group-item"><b>Fecha de Actualización: </b><span>{{supplierProductModal.date}}</span></li>
+              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate.toStringDate()}}</span></li>
+              <li class="list-group-item"><b>Fecha de Actualización: </b><span *ngIf="supplierProductModal.date">{{supplierProductModal.date.toStringDate()}}</span><span *ngIf="!supplierProductModal.date">Sin actualización</span></li>
               <li class="list-group-item"><b>Precio: </b><span>${{supplierProductModal.price}}</span></li>
 
             </ul>

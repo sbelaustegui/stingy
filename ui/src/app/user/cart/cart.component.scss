@@ -25,6 +25,9 @@
           vertical-align: middle;
         }
         td {
+          .fa-eye{
+            cursor: pointer;
+          }
           vertical-align: middle;
           .upload-button {
             button {
@@ -75,6 +78,10 @@
           }
         }
       }
+    }
+    .detail-modal{
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 }
