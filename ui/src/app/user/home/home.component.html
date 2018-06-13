@@ -65,8 +65,9 @@
                 <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
               </li>
               <li class="list-group-item">
-                <button class="btn btn-primary" (click)="addToCart(product.id)"
-                        *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
+                <button class="btn btn-primary" (click)="addToCart(product.id); productsAdded.set(product.id, true)"
+                        *ngIf="supplierProducts.get(product.id)?.length > 0 && !productsAdded.get(product.id)">Agregar al carrito</button>
+                <span *ngIf="productsAdded.get(product.id)">Agregado.</span>
                 <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
               </li>
             </ul>

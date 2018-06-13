@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   public selectedSubcategoryId: string;
   public categories: Category[];
   public user: User;
+  public productsAdded: Map<number, boolean>;
   public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
 
   public alerts: {
@@ -129,6 +130,7 @@ export class HomeComponent implements OnInit {
     this.supplierProducts = new Map<number, SupplierProduct[]>();
     this.suppliers = new Map<number, Supplier>();
     this.getCategories();
+    this.productsAdded = new Map<number, boolean>();
   }
 
   /*
