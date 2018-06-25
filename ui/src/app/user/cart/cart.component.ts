@@ -5,7 +5,6 @@ import {CartService} from "../../shared/services/cart.service";
 import {Router} from "@angular/router";
 import {Cart} from "../../shared/models/cart.model";
 import {CartProductService} from "../../shared/services/cartProduct.service";
-import {UserService} from "../../shared/services/user.service";
 import {UserAuthService} from "../../shared/auth/user/user-auth.service";
 import {ProductService} from "../../shared/services/product.service";
 import {SupplierService} from "../../shared/services/supplier.service";
@@ -13,10 +12,6 @@ import {CartBag} from "../../shared/models/cart-bag.model";
 import {SupplierProductService} from "../../shared/services/supplierProduct.service";
 import {SupplierProduct} from "../../shared/models/supplier-product.model";
 import {Product} from "../../shared/models/product.model";
-import {forEach} from "@angular/router/src/utils/collection";
-import {Report} from "../../shared/models/report.model";
-import {Supplier} from "../../shared/models/supplier.model";
-import {User} from "../../shared/models/user.model";
 import {CartProduct} from "../../shared/models/cartProduct.model";
 
 @Component({
@@ -154,20 +149,20 @@ export class CartComponent implements OnInit {
     this.cartProductService.getAllCartProductsByCartId(this.currentCart.id)
       .then(res => {
         this.alerts.cartBags.loading = true;
-        res.forEach(cartProduct => {
+        res.forEach((cartProduct, index) => {
           //Get a specific supplier-product and error with cartBags.
           this.supplierProductService.getSupplierProductById(cartProduct.supplierProductId)
             .then(sp => {
-
               this.addToCartBag(sp);
               // this.addToCartBag2(sp);
-
+              if(index == res.length-1){
+                this.alerts.cartBags.loading = false;
+              }
             })
             .catch(error => {
               //TODO
             })
-        });
-        this.alerts.cartBags.loading = false;
+          });
       })
       .catch(error => {
         this.alerts.cartBags.loading = false;
@@ -191,7 +186,7 @@ export class CartComponent implements OnInit {
   private addCartBag(sp: SupplierProduct) {
     this.supplierService.getSupplierById(sp.supplierId)
       .then(s => {
-        const cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
+        var cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
         this.cartBagsAugury.push(); //TODO DELETE THIS IS JUST FOR TESTING
         this.cartBags.set(sp.supplierId, cartBagAux);
         this.addProduct(sp);
@@ -228,9 +223,8 @@ export class CartComponent implements OnInit {
       this.supplierService.getSupplierById(sp.supplierId)
         .then(s => {
           const cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
-          this.cartBagsAugury.push(); //TODO DELETE THIS IS JUST FOR TESTING
+          cartBagAux.addProduct(sp);
           this.cartBags.set(sp.supplierId, cartBagAux);
-          this.addToCartBag(sp);
         });
 
     }

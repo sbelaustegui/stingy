@@ -65,8 +65,9 @@
                 <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
               </li>
               <li class="list-group-item">
-                <button class="btn btn-primary" (click)="addToCart(product.id)"
-                        *ngIf="supplierProducts.get(product.id)?.length > 0">Agregar al carrito</button>
+                <button class="btn btn-primary" (click)="addToCart(product.id); productsAdded.set(product.id, true)"
+                        *ngIf="supplierProducts.get(product.id)?.length > 0 && !productsAdded.get(product.id)">Agregar al carrito</button>
+                <span *ngIf="productsAdded.get(product.id)">Agregado.</span>
                 <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
               </li>
             </ul>
@@ -102,7 +103,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicioname</button>
+    <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicionarme</button>
   </div>
 </ng-template>
 
@@ -121,7 +122,7 @@
         <span class="input-group-text">$</span>
       </div>
       <!--<label for="input">Nuevo Precio: </label>-->
-      <input id="input" type="number" class="form-control" placeholder="Ingrese nuevo precio" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
+      <input id="input" type="number" [min]="0" class="form-control" placeholder="Ingrese nuevo precio" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
     </div>
     <div class="alert alert-danger text-center" *ngIf="alerts.price.error">
       <div class="card-block">

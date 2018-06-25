@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   public selectedSubcategoryId: string;
   public categories: Category[];
   public user: User;
+  public productsAdded: Map<number, boolean>;
   public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
 
   public alerts: {
@@ -129,6 +130,7 @@ export class HomeComponent implements OnInit {
     this.supplierProducts = new Map<number, SupplierProduct[]>();
     this.suppliers = new Map<number, Supplier>();
     this.getCategories();
+    this.productsAdded = new Map<number, boolean>();
   }
 
   /*
@@ -297,17 +299,21 @@ export class HomeComponent implements OnInit {
   }
 
   priceUpdate(){
-    this.alerts.price.loading = true;
-    this.supplierProductService.addSupplierProduct(new SupplierProduct(this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
+    if(this.selectedSupplierProduct.price <= 0) {
+      this.alerts.price.loading = true;
+      this.supplierProductService.addSupplierProduct(new SupplierProduct(this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
         .then(res => {
           this.supplierProducts.get(res.productId)[this.selectedSupplierProductIndex] = res;
           this.alerts.price.loading = false;
           this.alerts.price.error = false;
           this.resetModal();
         }).catch(() => {
-          this.alerts.price.loading = false;
-          this.alerts.price.error = true;
-        });
+        this.alerts.price.loading = false;
+        this.alerts.price.error = true;
+      });
+    } else {
+      this.alerts.price.error = true;
+    }
   }
 
   resetModal() {
