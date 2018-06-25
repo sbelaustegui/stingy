@@ -71,7 +71,7 @@ export class CategoriesComponent implements OnInit {
       addCategory: {
         error: false,
         loading: false,
-        success:false
+        success: false
       },
       subcategories: {
         error: false,
@@ -115,7 +115,7 @@ export class CategoriesComponent implements OnInit {
 
   uploadCategory() {
     this.alerts.addCategory.loading = true;
-    if(this.newCategory.id) {
+    if (this.newCategory.id) {
       this.categoryService.updateCategory(this.newCategory).then(res => {
         this.categories.set(res.id, res);
         this.categoriesArray[this.categoryIndexUpdate] = res;
@@ -125,11 +125,15 @@ export class CategoriesComponent implements OnInit {
         this.categoryFormGroup.reset();
         this.modalRef.hide();
         this.alerts.addCategory.success = true;
-        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
+        setTimeout(() => {
+          this.alerts.addCategory.success = false;
+        }, 2500);
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
-        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
+        setTimeout(() => {
+          this.alerts.addCategory.error = false;
+        }, 5000);
 
       })
     } else {
@@ -142,19 +146,23 @@ export class CategoriesComponent implements OnInit {
         this.categoryFormGroup.reset();
         this.modalRef.hide();
         this.alerts.addCategory.success = true;
-        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
+        setTimeout(() => {
+          this.alerts.addCategory.success = false;
+        }, 2500);
         // this.router.navigate(['categories']);
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
-        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
+        setTimeout(() => {
+          this.alerts.addCategory.error = false;
+        }, 5000);
       })
     }
   }
 
   uploadSubcategory() {
     this.alerts.addCategory.loading = true;
-    if(this.newSubcategory.id) {
+    if (this.newSubcategory.id) {
       this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
       this.subcategoryService.updateSubcategory(this.newSubcategory).then(res => {
         this.subcategories[this.subcategoryIndexUpdate] = res;
@@ -164,11 +172,15 @@ export class CategoriesComponent implements OnInit {
         this.subcategoryFormGroup.reset();
         this.modalRef.hide();
         this.alerts.addCategory.success = true;
-        setTimeout(() => {this.alerts.addCategory.success = false;},2500);
+        setTimeout(() => {
+          this.alerts.addCategory.success = false;
+        }, 2500);
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.addCategory.error = true;
-        setTimeout(() => {this.alerts.addCategory.error = false;},5000);
+        setTimeout(() => {
+          this.alerts.addCategory.error = false;
+        }, 5000);
 
       })
     } else {
@@ -183,7 +195,9 @@ export class CategoriesComponent implements OnInit {
       }).catch(() => {
         this.alerts.addCategory.loading = false;
         this.alerts.subcategories.error = true;
-        setTimeout(() => {this.alerts.subcategories.error = false;},5000);
+        setTimeout(() => {
+          this.alerts.subcategories.error = false;
+        }, 5000);
       })
     }
   }
@@ -191,33 +205,55 @@ export class CategoriesComponent implements OnInit {
   deleteCategory() {
     this.alerts.categories.deleting = true;
     this.categoryService.deleteCategory(this.categoryToDelete.id).then(res => {
-      this.categoriesArray.splice(this.categoryIndexToDelete,1);
+      this.deleteSubCategoriesByCatID(this.categoryToDelete.id);
+      this.categoriesArray.splice(this.categoryIndexToDelete, 1);
       this.categories.delete(this.categoryToDelete.id);
       this.alerts.categories.deleting = false;
       this.alerts.categories.deletingError = false;
       this.modalRef.hide();
-      this.alerts.deleteSuccess= true;
-      setTimeout(() => {this.alerts.deleteSuccess= false;},2500);
+      this.alerts.deleteSuccess = true;
+      setTimeout(() => {
+        this.alerts.deleteSuccess = false;
+      }, 2500);
     }).catch(() => {
       this.alerts.categories.deleting = false;
       this.alerts.categories.error = true;
-      setTimeout(() => {this.alerts.categories.error = false;},2500);
+      setTimeout(() => {
+        this.alerts.categories.error = false;
+      }, 2500);
     })
+  }
+
+  /**
+   * Private method to delete all products that match with the category deleted.
+   */
+  private deleteSubCategoriesByCatID(categoryId: number) {
+    let i = 0;
+    while (i < this.subcategories.length) {
+      if (this.subcategories[i].categoryId == categoryId)
+        this.subcategories.splice(i, 1);
+      else
+        i++;
+    }
   }
 
   deleteSubCategory() {
     this.alerts.subcategories.deleting = true;
     this.subcategoryService.deleteSubcategory(this.subcategoryToDelete.id).then(res => {
-      this.subcategories.splice(this.subcategoryIndexToDelete,1);
+      this.subcategories.splice(this.subcategoryIndexToDelete, 1);
       this.alerts.subcategories.deleting = false;
       this.alerts.subcategories.deletingError = false;
       this.modalRef.hide();
       this.alerts.addCategory.success = true;
-      setTimeout(() => {this.alerts.addCategory.success = false;},2500);
+      setTimeout(() => {
+        this.alerts.addCategory.success = false;
+      }, 2500);
     }).catch(() => {
       this.alerts.subcategories.deleting = false;
       this.alerts.subcategories.deletingError = true;
-      setTimeout(() => {this.alerts.subcategories.deletingError = false;},2500);
+      setTimeout(() => {
+        this.alerts.subcategories.deletingError = false;
+      }, 2500);
     })
   }
 
@@ -235,13 +271,13 @@ export class CategoriesComponent implements OnInit {
   }
 
   openCategoryModal(template: TemplateRef<any>, i, category?) {
-    if(category) this.newCategory = Object.assign({}, category);
+    if (category) this.newCategory = Object.assign({}, category);
     this.categoryIndexUpdate = i;
     this.modalRef = this.modalService.show(template);
   }
 
   openSubcategoryModal(template: TemplateRef<any>, i, subcategory?) {
-    if(subcategory) this.newSubcategory = Object.assign({}, subcategory);
+    if (subcategory) this.newSubcategory = Object.assign({}, subcategory);
     this.subcategoryIndexUpdate = i;
     this.modalRef = this.modalService.show(template);
   }
@@ -260,23 +296,12 @@ export class CategoriesComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  resetDeleteModal(){
+  resetDeleteModal() {
     this.categoryToDelete = undefined;
     this.categoryIndexToDelete = -1;
     this.subcategoryIndexToDelete = -1;
     this.subcategoryToDelete = undefined;
   }
 
-  /**
-   * Private method to delete all products that match with the category deleted.
-   */
-  private deleteSubCategories() {
-    for (let i = 0; i < this.subcategories.length; i++) {
-      if(this.subcategories[i].id == this.categoryToDelete.id){
-        this.subcategoryIndexToDelete=i;
-        this.subcategoryToDelete=this.subcategories[i];
-        this.deleteSubCategory();
-      }
-    }
-  }
+
 }
