@@ -4,15 +4,12 @@ import models.domain.supplier.Supplier
 import models.domain.supplierProduct.SupplierProduct
 import play.api.libs.json.{Json, OFormat}
 
-case class CartBag(supplierName: String, products: List[CartBagProduct])
+case class CartBag(supplierId: Long, products: List[CartBagProduct])
 
 object CartBag extends CartBagJsonFormat {
   def apply(supplierProducts: List[SupplierProduct]): CartBag = {
     new CartBag(
-      Supplier.getById(supplierProducts.head.supplierId) match {
-        case Some(supplier) =>
-          supplier.name
-      },
+      supplierProducts.head.supplierId,
       supplierProducts.map(CartBagProduct.apply)
     )
   }
