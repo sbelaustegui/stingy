@@ -64,6 +64,8 @@ export class UploadProductComponent implements OnInit {
     },
     file: {
       error: boolean,
+      sizeExceeded: boolean,
+      textSizeExceeded: boolean,
     },
     success: boolean,
   };
@@ -113,6 +115,9 @@ export class UploadProductComponent implements OnInit {
       },
       file: {
         error: false,
+        sizeExceeded: false,
+        textSizeExceeded: false,
+
       },
       success: false,
     };
@@ -171,7 +176,7 @@ export class UploadProductComponent implements OnInit {
             .then(() => {
               this.alerts.adding.product = false;
               this.uploadProductError = false;
-
+              this.saveImage(res.id);
               this.uploadSupplierProduct();
             })
             .catch(() => {
@@ -239,6 +244,23 @@ export class UploadProductComponent implements OnInit {
     }, {})
   }
 
+  saveImage(productId: number) {
+    if (this.formGroup.valid && this.file) {
+      this.alerts.file.sizeExceeded = false;
+      this.productService.addProductImage(productId, this.file)
+        .then((product: Product) => {
+          this.alerts.file.error = false;
+        })
+        .catch(err => {
+          //TODO alerts
+          this.uploadProductImageError = true;
+          setTimeout(() => {
+            this.uploadProductImageError = false;
+          }, 5000);
+        });
+    }
+  }
+
   imageSelect(event) {
     this.file = event.srcElement.files[0];
   };
@@ -282,9 +304,4 @@ export class UploadProductComponent implements OnInit {
     this.newReportSupplier = Report.empty();
     this.modalRef.hide();
   }
-
-  uploadImage() {
-    //TODO pegarle con un objeto multipartformdata con productid y el file a la ruta de add product image
-  }
-
 }

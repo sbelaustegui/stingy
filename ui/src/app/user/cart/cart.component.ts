@@ -1,3 +1,4 @@
+///<reference path="../../../../node_modules/@angular/router/src/router.d.ts"/>
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {Title} from "@angular/platform-browser";
@@ -8,10 +9,10 @@ import {CartProductService} from "../../shared/services/cartProduct.service";
 import {UserAuthService} from "../../shared/auth/user/user-auth.service";
 import {ProductService} from "../../shared/services/product.service";
 import {SupplierService} from "../../shared/services/supplier.service";
-import {CartBag} from "../../shared/models/cart-bag.model";
 import {SupplierProductService} from "../../shared/services/supplierProduct.service";
-import {SupplierProduct} from "../../shared/models/supplier-product.model";
-import {Product} from "../../shared/models/product.model";
+import {CartBag} from "../../shared/models/cart-bag.model";
+import {CartBagProduct} from "../../shared/models/cart-bag-product";
+import {Supplier} from "../../shared/models/supplier.model";
 import {CartProduct} from "../../shared/models/cartProduct.model";
 
 @Component({
@@ -25,11 +26,13 @@ import {CartProduct} from "../../shared/models/cartProduct.model";
 
 export class CartComponent implements OnInit {
 
+
+  public cartBags: CartBag[];
+  public cartBagsPrices: Map<number, number>; // <supplierId, totalPrice>
+  public suppliers: Map<number, Supplier>; // <supplierId, Supplier>
+
   public userId: number;
   public currentCart: Cart;
-  // public cartBags: CartBag[];
-  public cartBags: Map<number, CartBag>;
-  public cartBagsAugury: CartBag[];
   public productsPage: number = 1;
   public alerts: {
     details: {
@@ -55,13 +58,10 @@ export class CartComponent implements OnInit {
     success: boolean
   };
 
-  public auxSPs : SupplierProduct[];
-
   public cartBagIndex: number;
-  public productToDelete: Product;
-
-  public productModal: Product;
-  public supplierProductModal: SupplierProduct;
+  public cartBagProductToDelete: CartBagProduct;
+  private cartProductsToDelete: number[]; //CartProduct id
+  public cartBagProductModal: CartBagProduct;
 
   modalRef: BsModalRef;
 
@@ -97,18 +97,17 @@ export class CartComponent implements OnInit {
       success: false
     };
 
-    // this.cartBags = [];
-    this.cartBags = new Map<number, CartBag>();
-    this.cartBagsAugury = [];
     this.cartBagIndex = -1;
-    this.productToDelete = undefined;
-    this.auxSPs = [];
+    this.cartBagProductToDelete = undefined;
+    this.cartBags = [];
+    this.cartBagsPrices = new Map<number, number>();
+    this.suppliers = new Map<number, Supplier>();
     this.getUserId();
   }
 
-  /***
-   * Gets user id and calls the current Cart.
-   */
+
+  //GETTERS
+
   private getUserId() {
     this.authService.loggedUser.then(res => {
       this.userId = res.id;
@@ -122,17 +121,14 @@ export class CartComponent implements OnInit {
     })
   }
 
-  /***
-   * Get and saveImage the current cart and calls SupplierProduct to create, by checking first, creates a new Cart .
-   * @param {number} userId
-   */
-  getCurrentCart(userId: number) {
+  public getCurrentCart(userId: number) {
     this.cartService.getCartByUserId(userId)
       .then(res => {
+        this.alerts.cart.loading = true;
         this.currentCart = res;
         this.alerts.cart.loading = false;
         this.alerts.cart.error = false;
-        this.getCartSupplierProducts();
+        this.getCurrentCartBags();
       })
       .catch(err => {
         console.log(err);
@@ -141,172 +137,124 @@ export class CartComponent implements OnInit {
       })
   }
 
-  /***
-   *
-   */
-  private getCartSupplierProducts() {
-    //Gets all supplier-products for that current Cart.
-    this.cartProductService.getAllCartProductsByCartId(this.currentCart.id)
+  private getCurrentCartBags() {
+    this.cartService.getCartBagsById(this.currentCart.id)
       .then(res => {
         this.alerts.cartBags.loading = true;
-        res.forEach((cartProduct, index) => {
-          //Get a specific supplier-product and error with cartBags.
-          this.supplierProductService.getSupplierProductById(cartProduct.supplierProductId)
-            .then(sp => {
-              this.addToCartBag(sp);
-              // this.addToCartBag2(sp);
-              if(index == res.length-1){
-                this.alerts.cartBags.loading = false;
-              }
-            })
-            .catch(error => {
-              //TODO
-            })
-          });
+        this.cartBags = res;
+        this.saveSuppliersAndTotalPrice();
+        this.cartBags = this.sortCartBagByTotalPrice();
+        this.alerts.cartBags.loading = false;
       })
       .catch(error => {
-        this.alerts.cartBags.loading = false;
-        this.alerts.cartBags.error = true;
         setTimeout(() => {
           this.alerts.cartBags.error = false;
         }, 2500);
-
       })
   }
 
-  private addToCartBag2(sp: SupplierProduct){
-    if (Array.from(this.cartBags.keys()).length == 0 || !this.cartBags.has(sp.supplierId)) {
-      this.addCartBag(sp);
-    }
-    else if(this.cartBags.has(sp.supplierId)){
-      this.addProduct(sp);
-    }
+  public getSupplierNameBySupId(supplierId: number): string {
+    return this.suppliers.has(supplierId) ? this.suppliers.get(supplierId).name : "NO SUPPLIER";
   }
 
-  private addCartBag(sp: SupplierProduct) {
-    this.supplierService.getSupplierById(sp.supplierId)
-      .then(s => {
-        var cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
-        this.cartBagsAugury.push(); //TODO DELETE THIS IS JUST FOR TESTING
-        this.cartBags.set(sp.supplierId, cartBagAux);
-        this.addProduct(sp);
-      })
-    .catch(error => {
-      console.log(error.message);
-    });
+  public getCartBagTotalPriceBySupId(supplierId: number): number {
+    return this.cartBagsPrices.has(supplierId) ? this.cartBagsPrices.get(supplierId) : -1;
   }
 
-  private addProduct(sp: SupplierProduct) {
-    this.productService.getProductById(sp.productId)
-      .then(p => {
-        this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
-      })
-      .catch( error => {
-        console.log(error.message);
-      })
-  }
+  //INTERNAL METHODS
 
-  /**
-   * Takes supId from SupplierProduct and error if it´s necessary creates a new CartBag with that supId and add it to
-   * the CartBag. If it's not necessary to create another, just add the supplierProduct into the respected CartBag.
-   * @param {SupplierProduct} sp
-   */
-  private addToCartBag(sp: SupplierProduct) {
-    if (this.cartBags.has(sp.supplierId) == true) {
-      this.productService.getProductById(sp.productId)
-        .then(p => {
-          this.cartBags.get(sp.supplierId).addSupplierProduct(sp, p);
-          // this.cartBags.get(sp.supplierId).addProduct(sp);
-        })
-    }
-    else {
-      this.supplierService.getSupplierById(sp.supplierId)
-        .then(s => {
-          const cartBagAux: CartBag = new CartBag(s.id, s.name, 100, this.supplierProductService, this.productService);
-          cartBagAux.addProduct(sp);
-          this.cartBags.set(sp.supplierId, cartBagAux);
-        });
+  public sortCartBagByTotalPrice(): CartBag[] {
 
-    }
-  }
-
-  public getCartBags(): CartBag[] {
-
-    return Array.from(this.cartBags.values()).sort((cB1, cB2) => {
-      if (cB1.getTotalPrice() > cB2.getTotalPrice())
-        return 1;
-      else if (cB1.getTotalPrice() == cB2.getTotalPrice()) {
-        if (cB1.getDistance() > cB2.getDistance())
-          return 1;
-        else if (cB1.getDistance() < cB2.getDistance())
-          return -1;
+    return this.cartBags.sort((cB1, cB2) => {
+      if (!this.cartBagsPrices.has(cB1.supplierId)
+        || !this.cartBagsPrices.has(cB2.supplierId))
         return 0;
-      }
-      return -1;
 
+      let cB1_totalPrice = this.cartBagsPrices.get(cB1.supplierId);
+      let cB2_totalPrice = this.cartBagsPrices.get(cB2.supplierId);
+
+      if (cB1_totalPrice > cB2_totalPrice)
+        return 1;
+      else
+        return -1;
     });
   }
 
-  deleteProduct(cartProduct: CartProduct) {
-    this.alerts.cartBags.deletingProducts = true;
-    this.cartProductService.getCartProductById(cartProduct.id)
-    // this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
-    //   this.cartBags[this.cartBagIndex].getSupplierId(), this.productToDelete.id)
-      .then(res => {
-        this.cartBagIndex[this.cartBagIndex].removeProduct(this.productToDelete.id);
-        this.alerts.cartBags.deletingProducts = false;
-        this.modalRef.hide();
-        this.alerts.success = true;
-        setTimeout(() => {
-          this.alerts.success = false;
-        }, 2500);
-      })
-      .catch(() => {
-          this.alerts.cartBags.deletingProducts = false;
-          this.alerts.cartBags.deletingError = true;
-          setTimeout(() => {
-            this.alerts.cartBags.deletingError = false;
-          }, 5000);
-        }
-      )
+  public calculateTotalPrice(products: CartBagProduct[], supplierId: number): number {
+    let result = 0;
+    products.forEach(p => {
+      result += p.supplierProductPrice;
+    });
+    this.cartBagsPrices.set(supplierId, result);
+    return result;
   }
 
-  openProductModal(template: TemplateRef<any>, product: Product, supplierProduct: SupplierProduct) {
-    this.supplierProductModal = SupplierProduct.from(supplierProduct);
-    this.productModal = Product.from(product);
-    this.modalRef = this.modalService.show(template);
+  private saveSuppliersAndTotalPrice() {
+    this.cartBags.forEach(cb => {
+      this.calculateTotalPrice(cb.products, cb.supplierId);
+      this.supplierService.getSupplierById(cb.supplierId)
+        .then(res => {
+          this.suppliers.set(res.id, res);
+        })
+        .catch(error => {
+          //todo supplier
+        })
+    });
   }
 
-  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, product: Product) {
-    this.cartBagIndex = cartBagIndex;
-    this.productToDelete = product;
-    this.modalRef = this.modalService.show(template);
-  }
-
-  resetModal(reference : string) {
-    this.modalRef.hide();
-    switch (reference.toUpperCase()) {
-      case "PRODUCT":
-        this.supplierProductModal = SupplierProduct.empty();
-        this.productModal = Product.empty();
-        break;
-      case "PRODUCTDELETE":
-        this.cartBagIndex = -1;
-        this.productToDelete = undefined;
-        break;
-    }
-  }
-
-  goToHistory(){
+  // EXTERNAL METHODS
+  goToHistory() {
     this.router.navigate(['user/cart/history']);
   }
 
-  deleteCart(){
+  //MODAL METHODS
 
+  deleteProduct(cartBagProductIndex: number, cartBagIndex: number) {
+
+    this.alerts.cartBags.deletingProducts = true;
+    // this.cartProductsToDelete.push(this.cartBags[cartBagIndex].products[cartBagProductIndex].cartProductId);
+    this.cartBags[cartBagIndex].products.splice(cartBagProductIndex, 1);
+    // this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
+    //   .then(res => {
+    //     this.alerts.cartBags.deletingProducts = false;
+    //     this.modalRef.hide();
+    //     this.alerts.success = true;
+    //     setTimeout(() => {
+    //       this.alerts.success = false;
+    //     }, 2500);
+    //   })
+    //   .catch(() => {
+    //       this.alerts.cartBags.deletingProducts = false;
+    //       this.alerts.cartBags.deletingError = true;
+    //       setTimeout(() => {
+    //         this.alerts.cartBags.deletingError = false;
+    //       }, 5000);
+    //     }
+    //   )
   }
 
-  generateCart(){
-    // this.cartService.addCart()
+  openProductModal(template: TemplateRef<any>, cartBagProduct: CartBagProduct) {
+    // this.cartBagProductModal = CartBagProduct.from(cartBagProduct);
+    this.cartBagProductModal = cartBagProduct;
+    this.modalRef = this.modalService.show(template);
   }
 
+  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProduct: CartBagProduct) {
+    this.cartBagIndex = cartBagIndex;
+    this.cartBagProductToDelete = cartBagProduct;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  resetModal(reference: string) {
+    this.modalRef.hide();
+    switch (reference.toUpperCase()) {
+      case "PRODUCT":
+        this.cartBagProductModal = CartBagProduct.empty();
+        break;
+      case "PRODUCTDELETE":
+        this.cartBagIndex = -1;
+        this.cartBagProductToDelete = undefined;
+        break;
+    }
+  }
 }

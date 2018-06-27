@@ -1,6 +1,7 @@
 import {HttpService} from "./http.service";
 import {Injectable} from '@angular/core';
 import {Cart} from "../models/cart.model";
+import {CartBag} from "../models/cart-bag.model";
 
 /*
 # Cart
@@ -8,6 +9,8 @@ POST        /api/cart                                           controllers.Cart
 GET         /api/cart/all                                       controllers.CartController.getAll
 GET         /api/cart/id/:id                                    controllers.CartController.getById(id: Long)
 GET         /api/cart/user/:id                                  controllers.CartController.getByUserId(id: Long)
+GET         /api/carts/user/:id                                 controllers.CartController.getCartsByUserId(id: Long)
+GET         /api/cart/cartBags/:cartId                          controllers.CartController.getCartBagsByCartId(cartId: Long)
 PUT         /api/cart                                           controllers.CartController.update()
 DELETE      /api/cart/:id                                       controllers.CartController.delete(id: Long)
 */
@@ -27,7 +30,15 @@ export class CartService {
     return this._allCartsLoaded ? Promise.resolve(this.allCartsToArray()) : this.requestCarts();
   }
 
-  public getCartByUserId(userId: number): Promise<Cart>{
+  public getCartBagsById(cartId: number): Promise<CartBag[]> {
+    return this.http
+      .get("/api/cart/cartBags/" + cartId)
+      .then(res => {
+        return res.data;
+      });
+  }
+
+  public getCartByUserId(userId: number): Promise<Cart> {
     return this.http
       .get('/api/cart/user/' + userId)
       .then(res => {
@@ -35,7 +46,7 @@ export class CartService {
       });
   }
 
-  public getCartsByUserId(userId: number): Promise<Cart[]>{
+  public getCartsByUserId(userId: number): Promise<Cart[]> {
     return this.http
       .get('/api/carts/user/' + userId)
       .then(res => {
@@ -57,7 +68,7 @@ export class CartService {
   }
 
   public updateCart(cart: Cart): Promise<Cart> {
-    if(this._cartsById.get(cart.id)) {
+    if (this._cartsById.get(cart.id)) {
       return this.http
         .put('/api/cart', cart)
         .then(res => {
@@ -96,7 +107,7 @@ export class CartService {
     return this.http
       .get('/api/cart/id/' + id)
       .then(res => {
-        this._cartsById.set(id,res.data);
+        this._cartsById.set(id, res.data);
         return res.data;
       });
   }

@@ -1,5 +1,6 @@
 <div class="cart">
   <div class="row">
+
     <!--PRODUCTS TABLE-->
     <div class="col-8 offset-2">
       <button class="btn btn-light my-2 my-sm-0 history-button" type="button" (click)="goToHistory()">Historial </button>
@@ -11,38 +12,35 @@
             </span>
           </div>
       </div>
-      <div class="suppliers" *ngFor="let cartBag of getCartBags(); let  cartBagIndex = index">
+      <div class="suppliers" *ngFor="let cartBag of cartBags; let  cartBagIndex = index">
         <!--TODO supplier name -> think tittle or table with total price and distance -->
-        <!--<span> {{cartBag.getSupplierName()}}</span> <span> {{cartBag.getTotalPrice()}}</span>-->
-        <h2>{{cartBag.getSupplierName()}}      ${{cartBag.getTotalPrice()}}</h2>
+        <h2>
+          {{ getSupplierNameBySupId(cartBag.supplierId)}}    ${{getCartBagTotalPriceBySupId(cartBag.supplierId)}}
+        </h2>
         <table class="table table-striped" *ngIf="!alerts.cartBags.loading">
           <thead>
           <tr>
-            <th scope="col">Nombre</th>
+            <th scope="col" width="20%">Nombre</th>
             <th scope="col">Detalle</th>
             <th scope="col">Ultima Modificación</th>
-            <th scope="col">Precio</th>
+            <th scope="col" width="20%">Precio</th>
             <th scope="col">Remover</th>
           </tr>
           </thead>
           <tbody>
           <tr
-            *ngFor="let product of (cartBag.getProducts() | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }) ;">
+            *ngFor="let cartBagProduct of (cartBag.products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }) ;">
 
-            <!--{{setAuxSupplierProduct(cartBag.getSupplierProduct(product.id))}}-->
-            <!--<th scope="row">{{product.id}}</th>-->
-            <td>{{product.name}}</td>
+            <td>{{cartBagProduct.productName}}</td>
             <td>
-              <i class="fa fa-eye" (click)="openProductModal(productDetailModal,product,cartBag.getSupplierProduct(product.id))"
-                   id="detail">
-            </i>
+              <i class="fa fa-eye" (click)="openProductModal(productDetailModal,cartBagProduct)" id="detail"></i>
             </td>
-            <td>{{cartBag.getSupplierProduct(product.id).date.toStringDate()}}</td>
-            <td>${{cartBag.getSupplierProduct(product.id).price}}</td>
+            <td>{{cartBagProduct.productDate}}</td>
+            <td>${{cartBagProduct.supplierProductPrice}}</td>
             <td>
               <div class="remove-button">
                 <button type="submit" class="btn btn-danger"
-                        (click)="openProductDeleteModal(deleteModal, cartBagIndex, product)">
+                        (click)="openProductDeleteModal(deleteModal, cartBagIndex, cartBagProduct)">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>
@@ -60,11 +58,11 @@
       </pagination-controls>
     </div>
 
-    <!--DETAIL USER MODAL-->
+    <!--DETAIL CART-BAG-PRODUCT MODAL-->
     <ng-template #productDetailModal>
       <div class="modal-header" (keyup.esc)="resetModal('PRODUCT')">
         <h4 class="modal-title pull-left">
-          <span *ngIf="productModal.id">Detalles del Producto: {{productModal.name}}</span>
+          <span *ngIf="cartBagProductModal">Detalles del Producto: {{cartBagProductModal.productName}}</span>
         </h4>
 
         <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('PRODUCT')">
@@ -73,13 +71,16 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="detail-modal" *ngIf="productModal.id">
-            <!--<td class="product-image"><img class="product-img" [src]="product.imageUrl" alt="Product Image"></td>-->
-            <div class="product-image"><img class="product-img" [src]="productModal.imageUrl" alt="Product Image"></div>
+          <div class="detail-modal" *ngIf="cartBagProductModal">
+            <!--TODO SEBAS IMAGE FROM PRODUCT-->
+            <!--<td class="cartBagProduct-image"><img class="cartBagProduct-img" [src]="cartBagProduct.imageUrl" alt="Product Image"></td>-->
             <ul class="list-group list-group-flush">
-              <li class="list-group-item"><b>Nombre: </b><span>{{productModal.name}}</span></li>
-              <li class="list-group-item"><b>Decripcion: </b><span>{{productModal.description}}</span></li>
-              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{productModal.uploadDate.toStringDate()}}</span></li>
+              <li class="list-group-item"><b>Nombre: </b><span>{{cartBagProductModal.productName}}</span></li>
+              <li class="list-group-item"><b>Decripcion: </b><span >{{cartBagProductModal.productDescription}}</span></li>
+              <li class="list-group-item"><b>Aportado por: </b><span >{{cartBagProductModal.userName}}</span></li>
+              <li class="list-group-item"><b>Última Modificación: </b><span >{{cartBagProductModal.supplierProductDate}}</span></li>
+              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{cartBagProductModal.productDate}}</span></li>
+              <li class="list-group-item"><b>Precio: </b><span>${{cartBagProductModal.supplierProductPrice}}</span></li>
             </ul>
           </div>
         </div>
@@ -101,7 +102,7 @@
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetModal()">
         <h4 class="modal-title pull-left">Eliminar
-          <span *ngIf="productToDelete">Producto {{productToDelete.name}}</span>
+          <span *ngIf="cartBagProductToDelete">Producto {{cartBagProductToDelete.productName}}</span>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
