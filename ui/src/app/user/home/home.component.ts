@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
   public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
 
   public alerts: {
+    success: boolean;
     user: {
       loaded: boolean,
       error: boolean,
@@ -93,6 +94,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('Búsqueda de Producto | Stingy');
     this.alerts = {
+      success :false,
       user: {
         loaded: false,
         error: false,
@@ -269,6 +271,10 @@ export class HomeComponent implements OnInit {
     if (this.supplierProducts.has(productId)) {
       this.supplierProducts.get(productId).forEach(sp => {
         this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id));
+        this.alerts.success = true;
+        setTimeout( t => {
+          this.alerts.success = false;
+        }, 2500);
       })
     }
   }

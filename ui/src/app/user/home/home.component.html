@@ -78,6 +78,31 @@
     <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
     <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
     <h3 class="col-12 no-results" *ngIf="searched && alerts.location.error">Hubo un error al obtener su ubicación.</h3>
+
+    <!--ALERTS-->
+    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
+      <div class="alert alert-danger text-center" *ngIf="alerts.user.error || alerts.search.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.location.error">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>Hubo un error al obtener su ubicacion.</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="alert alert-success text-center" *ngIf="alerts.success ">
+        <div class="card-block">
+          <blockquote class="card-blockquote">
+            <p>¡Operación realizada con éxito!</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
