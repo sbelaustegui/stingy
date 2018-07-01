@@ -26,7 +26,6 @@ import {CartProduct} from "../../shared/models/cartProduct.model";
 
 export class CartComponent implements OnInit {
 
-
   public cartBags: CartBag[];
   public cartBagsPrices: Map<number, number>; // <supplierId, totalPrice>
   public suppliers: Map<number, Supplier>; // <supplierId, Supplier>
@@ -58,9 +57,8 @@ export class CartComponent implements OnInit {
     success: boolean
   };
 
-  public cartBagIndex: number;
-  public cartBagProductToDelete: CartBagProduct;
-  private cartProductsToDelete: number[]; //CartProduct id
+  private _CB_Index: number;
+  private _CBP_Index: number;
   public cartBagProductModal: CartBagProduct;
 
   modalRef: BsModalRef;
@@ -97,8 +95,8 @@ export class CartComponent implements OnInit {
       success: false
     };
 
-    this.cartBagIndex = -1;
-    this.cartBagProductToDelete = undefined;
+    this._CB_Index = -1;
+    this._CBP_Index = -1;
     this.cartBags = [];
     this.cartBagsPrices = new Map<number, number>();
     this.suppliers = new Map<number, Supplier>();
@@ -209,28 +207,10 @@ export class CartComponent implements OnInit {
 
   //MODAL METHODS
 
-  deleteProduct(cartBagProductIndex: number, cartBagIndex: number) {
+  deleteProduct() {
+  }
 
-    this.alerts.cartBags.deletingProducts = true;
-    // this.cartProductsToDelete.push(this.cartBags[cartBagIndex].products[cartBagProductIndex].cartProductId);
-    this.cartBags[cartBagIndex].products.splice(cartBagProductIndex, 1);
-    // this.cartProductService.deleteCartProductByCartIdAndSPId( //TODO SEBASTIAN
-    //   .then(res => {
-    //     this.alerts.cartBags.deletingProducts = false;
-    //     this.modalRef.hide();
-    //     this.alerts.success = true;
-    //     setTimeout(() => {
-    //       this.alerts.success = false;
-    //     }, 2500);
-    //   })
-    //   .catch(() => {
-    //       this.alerts.cartBags.deletingProducts = false;
-    //       this.alerts.cartBags.deletingError = true;
-    //       setTimeout(() => {
-    //         this.alerts.cartBags.deletingError = false;
-    //       }, 5000);
-    //     }
-    //   )
+  deleteAllProducts(){
   }
 
   openProductModal(template: TemplateRef<any>, cartBagProduct: CartBagProduct) {
@@ -239,9 +219,10 @@ export class CartComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProduct: CartBagProduct) {
-    this.cartBagIndex = cartBagIndex;
-    this.cartBagProductToDelete = cartBagProduct;
+  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProductIndex: number, cartBagProductToDelete: CartBagProduct) {
+    this._CB_Index = cartBagIndex;
+    this._CBP_Index = cartBagProductIndex;
+    this.cartBagProductModal = cartBagProductToDelete;
     this.modalRef = this.modalService.show(template);
   }
 
@@ -252,8 +233,8 @@ export class CartComponent implements OnInit {
         this.cartBagProductModal = CartBagProduct.empty();
         break;
       case "PRODUCTDELETE":
-        this.cartBagIndex = -1;
-        this.cartBagProductToDelete = undefined;
+        this._CB_Index = -1;
+        this._CBP_Index = -1;
         break;
     }
   }

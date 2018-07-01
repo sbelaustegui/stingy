@@ -62,7 +62,7 @@
               <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
                 <span style="font-weight: bold">{{getSupplierMap(supplierProduct.supplierId)?.name}}: </span>
                 <span style="font-weight: bold">$ {{supplierProduct.price}}</span>
-                <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"><i class="fa fa-info-circle"></i></span>
+                <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)" data-toggle="tooltip" data-placement="top" title="Modificar Precio"><i class="fa fa-info-circle"></i></span>
               </li>
               <li class="list-group-item">
                 <button class="btn btn-primary" (click)="addToCart(product.id); productsAdded.set(product.id, true)"

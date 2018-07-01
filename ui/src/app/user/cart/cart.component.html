@@ -29,7 +29,7 @@
           </thead>
           <tbody>
           <tr
-            *ngFor="let cartBagProduct of (cartBag.products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }) ;">
+            *ngFor="let cartBagProduct of (cartBag.products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let productIndex = index">
 
             <td>{{cartBagProduct.productName}}</td>
             <td>
@@ -40,7 +40,7 @@
             <td>
               <div class="remove-button">
                 <button type="submit" class="btn btn-danger"
-                        (click)="openProductDeleteModal(deleteModal, cartBagIndex, cartBagProduct)">
+                        (click)="openProductDeleteModal(deleteModal, cartBagIndex, productIndex,cartBagProduct)">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>
@@ -77,7 +77,7 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>Nombre: </b><span>{{cartBagProductModal.productName}}</span></li>
               <li class="list-group-item"><b>Decripcion: </b><span >{{cartBagProductModal.productDescription}}</span></li>
-              <li class="list-group-item"><b>Aportado por: </b><span >{{cartBagProductModal.userName}}</span></li>
+              <li class="list-group-item"><b>Aporte por: </b><span >{{cartBagProductModal.userName}}</span></li>
               <li class="list-group-item"><b>Última Modificación: </b><span >{{cartBagProductModal.supplierProductDate}}</span></li>
               <li class="list-group-item"><b>Fecha de Creación: </b><span>{{cartBagProductModal.productDate}}</span></li>
               <li class="list-group-item"><b>Precio: </b><span>${{cartBagProductModal.supplierProductPrice}}</span></li>
@@ -102,7 +102,7 @@
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetModal()">
         <h4 class="modal-title pull-left">Eliminar
-          <span *ngIf="cartBagProductToDelete">Producto {{cartBagProductToDelete.productName}}</span>
+          <span *ngIf="cartBagProductModal">Producto {{cartBagProductModal.productName}}</span>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
