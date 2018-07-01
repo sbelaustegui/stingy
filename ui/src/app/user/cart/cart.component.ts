@@ -56,7 +56,6 @@ export class CartComponent implements OnInit {
     },
     success: boolean
   };
-
   private _CB_Index: number;
   private _CBP_Index: number;
   public cartBagProductModal: CartBagProduct;
