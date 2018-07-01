@@ -219,7 +219,7 @@ export class CartComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProductIndex: number, cartBagProductToDelete: CartBagProduct) {
+  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProductIndex: number, cartBagProductToDelete: CartBagProduct)   {
     this._CB_Index = cartBagIndex;
     this._CBP_Index = cartBagProductIndex;
     this.cartBagProductModal = cartBagProductToDelete;

@@ -30,6 +30,8 @@ import {TruncateModule} from 'ng2-truncate';
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 import { CollapseModule } from 'ngx-bootstrap';
 import { HistoryComponent } from './user/cart/history/history.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -65,8 +67,11 @@ import { HistoryComponent } from './user/cart/history/history.component';
     TruncateModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'
-    })
-  ],
+    }),
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+],
   providers : [
     CookieService,
     HttpService,
