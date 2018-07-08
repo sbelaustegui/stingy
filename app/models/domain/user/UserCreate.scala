@@ -17,7 +17,8 @@ case class  UserCreate(name: String, lastName: String, email: String, username: 
         Location.getById(lId)
       case None => None
         Option(Location(None, 0, 0))
-    }
+    },
+    0.0
   )
 }
 

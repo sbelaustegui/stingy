@@ -7,7 +7,7 @@ import models.ebean.{User => EUser}
 import play.api.libs.json.{Json, OFormat}
 import utils.Encrypter
 
-case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String, location: Option[Location]) {
+case class User(id: Option[Long], name: String, lastName: String, email: String, username: String, password: String, location: Option[Location], rate: Double) {
   def equals(user: User): Boolean = {
     if(user.id.isDefined && id.isDefined) id.get.equals(user.id.get)
     else false
@@ -24,7 +24,8 @@ object User extends UserJsonFormat {
       user.getEmail,
       user.getUsername,
       user.getPassword,
-      if(user.getLocation != null) Option(Location.apply(user.getLocation)) else None
+      if(user.getLocation != null) Option(Location.apply(user.getLocation)) else None,
+      user.getRate
     )
   }
 

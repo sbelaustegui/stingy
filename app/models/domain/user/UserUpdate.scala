@@ -4,7 +4,7 @@ import models.domain.location.Location
 import play.api.libs.json.{Json, OFormat}
 import utils.Encrypter
 
-case class UserUpdate(id: Long, name: Option[String], username: Option[String], password: Option[String], lastName: Option[String], email: Option[String], location: Option[Location]) {
+case class UserUpdate(id: Long, name: Option[String], username: Option[String], password: Option[String], lastName: Option[String], email: Option[String], location: Option[Location], rate: Option[Double]) {
   def toUser(user: User): User = {
     User(
       Option(id),
@@ -13,7 +13,8 @@ case class UserUpdate(id: Long, name: Option[String], username: Option[String], 
       email.getOrElse(user.email),
       username.getOrElse(user.username),
       verifyPassword(user.password),
-      user.location
+      user.location,
+      rate.getOrElse(user.rate)
     )
   }
 

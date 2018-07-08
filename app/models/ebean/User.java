@@ -19,12 +19,14 @@ public class User extends AbstractUser{
     @OneToOne
     @Column(name = "location_id", nullable = true)
     private Location location;
+    private double rate;
 
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, Optional<Location> location) {
+    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, Optional<Location> location, double rate) {
         super(id, name, lastName, email, username, password);
         this.location = location.orElse(null);
+        this.rate = rate;
     }
 
     public static Optional<User> getById(Long id){
@@ -57,5 +59,9 @@ public class User extends AbstractUser{
 
     public Location getLocation() {
         return location;
+    }
+
+    public double getRate() {
+        return rate;
     }
 }
