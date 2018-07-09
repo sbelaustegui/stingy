@@ -25,7 +25,7 @@ object UserDAO {
       user.username,
       user.password,
       Optional.ofNullable(LocationDAO.toEbean(user.location.orNull)),
-      user.rate
+      Optional.ofNullable(user.rate)
     )
   }
 

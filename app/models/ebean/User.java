@@ -4,6 +4,7 @@ import io.ebean.Ebean;
 import utils.Encrypter;
 import io.ebean.Finder;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -19,14 +20,15 @@ public class User extends AbstractUser{
     @OneToOne
     @Column(name = "location_id", nullable = true)
     private Location location;
-    private double rate;
+    @Column(nullable = true)
+    private Double rate;
 
     private static Finder<Long, User> finder = new Finder<>(User.class);
 
-    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, Optional<Location> location, double rate) {
+    public User(@NotNull Long id, @NotNull String name, @NotNull String lastName, @NotNull String email, @NotNull String username, @NotNull String password, Optional<Location> location, Optional<Double> rate) {
         super(id, name, lastName, email, username, password);
         this.location = location.orElse(null);
-        this.rate = rate;
+        this.rate = rate.orElse(null);
     }
 
     public static Optional<User> getById(Long id){
@@ -61,7 +63,7 @@ public class User extends AbstractUser{
         return location;
     }
 
-    public double getRate() {
+    public Double getRate() {
         return rate;
     }
 }
