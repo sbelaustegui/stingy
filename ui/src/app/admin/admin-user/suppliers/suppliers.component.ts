@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit, TemplateRef} from '@angular/core';
+import {Component, NgZone, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {SupplierService} from "../../../shared/services/supplier.service";
 import {BsModalService} from "ngx-bootstrap/modal";
@@ -13,6 +13,9 @@ import {Report} from "../../../shared/models/report.model";
 import {User} from "../../../shared/models/user.model";
 import {UserService} from "../../../shared/services/user.service";
 import {Location} from "../../../shared/models/location.model";
+import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {identifierModuleUrl} from "@angular/compiler";
+import {DateModel} from "../../../shared/models/date-model";
 
 @Component({
   selector: 'app-suppliers',
@@ -22,6 +25,17 @@ import {Location} from "../../../shared/models/location.model";
 })
 
 export class SuppliersComponent implements OnInit {
+
+  @ViewChild(MatPaginator) paginator:  MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  supplier_Columns = ['id', 'name', 'description', 'update', 'remove'];
+  supplier_DataSource: MatTableDataSource<Supplier>;
+
+  report_Columns = ['id', 'userId', 'description','date', 'solve', 'remove'];
+  report_DataSource: MatTableDataSource<Report>;
+
+  public suppliersMap: Map<number,Supplier>;
+  public reportsMap: Map<number,Report>;
 
   public supplierFormGroup: FormGroup;
   public newSupplier: Supplier;
@@ -71,9 +85,12 @@ export class SuppliersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.suppliersMap = new Map<number, Supplier>();
+    this.reportsMap = new Map<number, Report>();
+
     this.location = Location.empty();
     this.unresolvedReports = [];
-    this.titleService.setTitle('ABM Categorias | Stingy');
+    this.titleService.setTitle('Provedores | Stingy');
     this.newSupplier = Supplier.empty();
     this.report = Report.empty();
     this.requester = User.empty();
@@ -112,7 +129,11 @@ export class SuppliersComponent implements OnInit {
   getSuppliers() {
     this.supplierService.suppliers.then(res => {
       this.alerts.suppliers.loading = true;
-      this.suppliersArray = res;
+
+      res.forEach( s => {
+        this.suppliersMap.set(s.id,s);
+      });
+      this.setSuppliersData();
 
       this.alerts.suppliers.error = false;
       this.alerts.suppliers.loading = false;
@@ -127,9 +148,11 @@ export class SuppliersComponent implements OnInit {
       .then(res => {
         this.alerts.reports.loading = true;
         res.forEach(r => {
-          this.unresolvedReports.push(Report.from(r));
+          // this.unresolvedReports.push(Report.from(r));
+          this.reportsMap.set(r.id,r);
           this.getRequester(r.userId);
         });
+        this.setReportsData();
         this.alerts.reports.error;
         this.alerts.reports.loading = false;
       })
@@ -163,8 +186,10 @@ export class SuppliersComponent implements OnInit {
       this.alerts.addSupplier.loading = true;
       this.supplierService.updateSupplier(this.newSupplier)
         .then(res => {
-          this.suppliersArray.splice(this.suppliersArray.findIndex(a => a.id === res.id), 1);
-          this.suppliersArray.push(res);
+          // this.suppliersArray.splice(this.suppliersArray.findIndex(a => a.id === res.id), 1);
+          // this.suppliersArray.push(res);
+          this.suppliersMap.set(res.id,res);
+          this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
           this.alerts.addSupplier.error = false;
           this.newSupplier = Supplier.empty();
@@ -189,7 +214,9 @@ export class SuppliersComponent implements OnInit {
       this.alerts.addSupplier.loading = true;
       this.supplierService.addSupplier(this.newSupplier)
         .then(res => {
-          this.suppliersArray.push(res);
+          // this.suppliersArray.push(res);
+          this.suppliersMap.set(res.id,res);
+          this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
           this.alerts.addSupplier.error = false;
           this.newSupplier = Supplier.empty();
@@ -216,9 +243,9 @@ export class SuppliersComponent implements OnInit {
   deleteSupplier() {
     this.alerts.suppliers.deleting = true;
     this.supplierService.deleteSupplier(this.supplierToDelete.id).then(() => {
-      this.suppliersArray.splice(this.supplierIndexToDelete, 1);
-      // this.deleteSubSuppliers();
-      //TODO mostrar mensajes de error/success/ y loader
+      // this.suppliersArray.splice(this.supplierIndexToDelete, 1);
+      this.suppliersMap.delete(this.supplierToDelete.id);
+      this.refreshSupplierTable();
       this.alerts.suppliers.deleting = false;
       this.alerts.suppliers.deletingError = false;
       this.modalRef.hide();
@@ -256,7 +283,9 @@ export class SuppliersComponent implements OnInit {
   deleteReport() {
     this.alerts.reports.deleting = true;
     this.reportService.deleteReport(this.reportToDelete.id).then(() => {
-      this.unresolvedReports.splice(this.reportIndexToDelete, 1);
+      // this.unresolvedReports.splice(this.reportIndexToDelete, 1);
+      this.reportsMap.delete(this.reportToDelete.id);
+      this.refreshReportsTable();
       this.alerts.reports.deleting = false;
       this.alerts.reports.deletingError = false;
       this.modalRef.hide();
@@ -286,16 +315,15 @@ export class SuppliersComponent implements OnInit {
   }
 
   openReportModal(template: TemplateRef<any>, modalReference: string,
-                  report: Report, index?: number) {
+                  id: number) {
 
-    if (report) {
+    if (id) {
       switch (modalReference.toUpperCase()) {
         case "REPORT":
-          this.report = report;
+          this.report = this.reportsMap.get(id);
           break;
         case "REPORTDELETE":
-          this.reportToDelete = report;
-          this.reportIndexToDelete = index;
+          this.reportToDelete = this.reportsMap.get(id);
           break;
       }
     }
@@ -303,17 +331,20 @@ export class SuppliersComponent implements OnInit {
   }
 
   openSupplierModal(template: TemplateRef<any>, modalReference: string,
-                    supplier: Supplier, index?: number) {
-    if (supplier) {
+                    id?: number) {
+    if (id) {
       switch (modalReference.toUpperCase()) {
         case "SUPPLIER":
-          this.newSupplier = supplier;
+          this.newSupplier = this.suppliersMap.get(id);
           break;
-
         case "SUPPLIERDELETE":
-          this.supplierToDelete = supplier;
-          this.supplierIndexToDelete = index;
+          this.supplierToDelete = this.suppliersMap.get(id);
           break;
+      }
+    }
+    else {
+      if (modalReference.toUpperCase() == "NEWSUPPLIER") {
+        this.newSupplier = this.emptySupplier();
       }
     }
     this.modalRef = this.modalService.show(template);
@@ -357,5 +388,32 @@ export class SuppliersComponent implements OnInit {
 
   emptySupplier(): Supplier {
     return Supplier.empty();
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.supplier_DataSource.filter = filterValue;
+    this.report_DataSource.filter = filterValue;
+  }
+
+  private setSuppliersData() {
+    this.supplier_DataSource = new MatTableDataSource(Array.from(this.suppliersMap.values()));
+    this.supplier_DataSource.paginator = this.paginator;
+    this.supplier_DataSource.sort = this.sort;
+  }
+
+  private refreshSupplierTable() {
+    this.supplier_DataSource.data = Array.from(this.suppliersMap.values());
+  }
+
+  private setReportsData() {
+    this.report_DataSource = new MatTableDataSource(Array.from(this.reportsMap.values()));
+    this.report_DataSource.paginator = this.paginator;
+    this.report_DataSource.sort = this.sort;
+  }
+
+  private refreshReportsTable() {
+    this.report_DataSource.data = Array.from(this.reportsMap.values());
   }
 }

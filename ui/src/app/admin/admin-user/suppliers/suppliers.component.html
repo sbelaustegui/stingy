@@ -2,67 +2,86 @@
   <div class="row">
 
     <!--SUPPLIERS TABLE-->
-    <div class="col-12 col-md-8 mx-auto">
-      <div class="row">
-        <div class="col-8">
-          <h2>Proveedores</h2>
+    <div class="col-lg-8 mx-auto">
+      <!--LOADING ANIMATION-->
+      <div class="loading" *ngIf="alerts.suppliers.loading">
+        <div class="col-lg-6 "><h2>Proovedores</h2></div>
+        <div class="col-md-4 offset-md-4 col-2 offset-5">
+        <span class="mx-auto"><i
+          class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
         </div>
-        <div class="add-button col-4">
-          <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',emptySupplier())">
+      </div>
+      <div class="row" *ngIf="!alerts.suppliers.loading">
+        <div class="col-lg-6 "><h2>Proovedores</h2></div>
+        <div class="header-table col-lg-4 col-8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Proveedor">
+          </mat-form-field>
+        </div>
+        <div class="add-button col-lg-2 col-4">
+          <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'NEWSUPPLIER')">
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
+        <div class="container-table col-lg-12">
 
-        <!--LOADING ANIMATION-->
-        <div class="col-md-4 offset-md-4 col-2 offset-5">
-          <span *ngIf="alerts.suppliers.loading" class="mx-auto"><i
-            class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+          <mat-table [dataSource]="supplier_DataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
+            </ng-container>
+
+
+            <!--Update Column-->
+            <ng-container matColumnDef="update">
+              <mat-header-cell *matHeaderCellDef align="center"><span><b>Actualizar</b></span></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="upload-button" align="center">
+                  <button mat-icon-button (click)="openSupplierModal(newSupplierModal,'SUPPLIER', row.id)">
+                    <mat-icon>
+                      <i class="fa fa-pencil"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!--Remove Column-->
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="remove-button" align="center">
+                  <button mat-icon-button (click)="openSupplierModal(deleteModal,'SUPPLIERDELETE',row.id)">
+                    <mat-icon>
+                      <i class="fa fa-trash"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="supplier_Columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: supplier_Columns;">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
       </div>
-      <div style="overflow-x:auto;">
-
-        <table class="table table-striped" *ngIf="!alerts.suppliers.loading">
-          <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr
-            *ngFor="let supplier of (suppliersArray | paginate: { itemsPerPage: 10, currentPage: suppliersPage, id: 'suppliers' }); let i=index">
-            <th scope="row">{{supplier.id}}</th>
-            <td>{{supplier.name}}</td>
-            <td>{{supplier.description}}</td>
-            <td>
-              <div class="upload-button">
-                <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'Supplier',supplier)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </div>
-            </td>
-            <td>
-              <div class="remove-button">
-                <button type="submit" class="btn btn-danger"
-                        (click)="openSupplierModal(deleteModal,'SupplierDelete', supplier,i)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <pagination-controls id="suppliers"
-                           class="paginator"
-                           (pageChange)="suppliersPage = $event"
-                           autoHide="true"
-                           previousLabel="Anterior"
-                           nextLabel="Siguiente">
-      </pagination-controls>
     </div>
 
     <!--ALERTS SUPPLIERS-->
@@ -90,69 +109,155 @@
       </div>
     </div>
 
-    <!--REPORTS TABLE-->
-    <div class="col-12 col-md-8 mx-auto">
-      <div class="row">
-        <div class="col-8">
-          <h2>Reportes</h2>
-        </div>
+    <!--&lt;!&ndash;REPORTS TABLE&ndash;&gt;-->
+    <!--<div class="col-12 col-md-8 mx-auto">-->
+      <!--<div class="row">-->
+        <!--<div class="col-8">-->
+          <!--<h2>Reportes</h2>-->
+        <!--</div>-->
 
-        <!--LOADING ANIMATION-->
+        <!--&lt;!&ndash;LOADING ANIMATION&ndash;&gt;-->
+        <!--<div class="col-md-4 offset-md-4 col-2 offset-5">-->
+          <!--<span *ngIf="alerts.reports.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<h3 *ngIf="unresolvedReports.length <= 0">No hay reportes que solucionar.</h3>-->
+      <!--<div style="overflow-x:auto;">-->
+        <!--<table class="table table-striped" *ngIf="!alerts.reports.loading && unresolvedReports.length > 0">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<th scope="col">Id</th>-->
+            <!--<th scope="col">Reclamador</th>-->
+            <!--<th scope="col">Descripción</th>-->
+            <!--<th scope="col">Fecha</th>-->
+            <!--<th scope="col">Editar</th>-->
+            <!--<th scope="col">Eliminar</th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr-->
+            <!--*ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">-->
+            <!--<th scope="row">{{report.id}}</th>-->
+            <!--<td>-->
+              <!--<a (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))"-->
+                 <!--id="requester-detail">-->
+                <!--{{getRequesterFromMap(report.userId).name}}-->
+              <!--</a>-->
+            <!--</td>-->
+            <!--<td>{{report.description}}</td>-->
+            <!--<td>{{report.date.toStringDate()}}</td>-->
+            <!--<td>-->
+              <!--<div class="view-button">-->
+                <!--<button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">-->
+                  <!--<i class="fa fa-plus"></i>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<div class="remove-button">-->
+                <!--<button type="submit" class="btn btn-danger"-->
+                        <!--(click)="openReportModal(deleteReportModal,'ReportDelete', report,i)">-->
+                  <!--<i class="fa fa-trash"></i>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+      <!--<pagination-controls id="reports"-->
+                           <!--class="paginator"-->
+                           <!--(pageChange)="reportsPage = $event"-->
+                           <!--autoHide="true"-->
+                           <!--previousLabel="Anterior"-->
+                           <!--nextLabel="Siguiente">-->
+      <!--</pagination-controls>-->
+    <!--</div>-->
+
+    <!--REPORTS TABLE-->
+    <div class="col-lg-8 mx-auto">
+      <!--LOADING ANIMATION-->
+      <div class="loading" *ngIf="alerts.reports.loading">
+        <div class="col-lg-6 "><h2>Reportes</h2></div>
         <div class="col-md-4 offset-md-4 col-2 offset-5">
-          <span *ngIf="alerts.reports.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+        <span class="mx-auto"><i
+          class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
         </div>
       </div>
-        <h3 *ngIf="unresolvedReports.length <= 0">No hay reportes que solucionar.</h3>
-      <div style="overflow-x:auto;">
-        <table class="table table-striped" *ngIf="!alerts.reports.loading && unresolvedReports.length > 0">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Reclamador</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Editar</th>
-          <th scope="col">Eliminar</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr
-          *ngFor="let report of (unresolvedReports | paginate: { itemsPerPage: 10, currentPage: reportsPage, id: 'reports' });  let i=index">
-          <th scope="row">{{report.id}}</th>
-          <td>
-            <a (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))"
-               id="requester-detail">
-              {{getRequesterFromMap(report.userId).name}}
-            </a>
-          </td>
-          <td>{{report.description}}</td>
-          <td>{{report.date.toStringDate()}}</td>
-          <td>
-            <div class="view-button">
-              <button type="button" class="btn btn-light" (click)="openReportModal(newSupplierModal,'REPORT',report)">
-                <i class="fa fa-plus"></i>
-              </button>
-            </div>
-          </td>
-          <td>
-            <div class="remove-button">
-              <button type="submit" class="btn btn-danger"
-                      (click)="openReportModal(deleteReportModal,'ReportDelete', report,i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-        <pagination-controls id="reports"
-                             class="paginator"
-                             (pageChange)="reportsPage = $event"
-                             autoHide="true"
-                             previousLabel="Anterior"
-                             nextLabel="Siguiente">
-        </pagination-controls>
+      <div class="row" *ngIf="!alerts.reports.loading">
+        <div class="col-lg-6 "><h2>Reportes</h2></div>
+        <div class="header-table col-lg-4 col-8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Reporte">
+          </mat-form-field>
+        </div>
+        <div class="container-table col-lg-12">
+
+          <mat-table [dataSource]="report_DataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+            </ng-container>
+
+            <!-- Requester Column -->
+            <ng-container matColumnDef="userId">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Requester</b></mat-header-cell>
+              <mat-cell *matCellDef="let row" (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
+                {{getRequesterFromMap(row.userId).name}}</mat-cell>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Descripción</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Fecha</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.date}}</mat-cell>
+            </ng-container>
+
+
+            <!--Solve Column-->
+            <ng-container matColumnDef="solve">
+              <mat-header-cell *matHeaderCellDef align="center"><span><b>Actualizar</b></span></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="solve-button" align="center">
+                  <button mat-icon-button (click)="openReportModal(newSupplierModal,'REPORT', row.id)">
+                    <mat-icon>
+                      <i class="fa fa-plus"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!--Remove Column-->
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="remove-button" align="center">
+                  <button mat-icon-button (click)="openReportModal(deleteModal,'REPORTDELETE',row.id)">
+                    <mat-icon>
+                      <i class="fa fa-trash"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="report_Columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: report_Columns;">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+      </div>
     </div>
 
     <!--ALERTS REPORTS-->
