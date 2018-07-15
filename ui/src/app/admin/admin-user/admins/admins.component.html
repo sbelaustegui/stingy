@@ -1,59 +1,89 @@
 <div class="admins">
   <div class="row">
     <!--ADMIN TABLE-->
-    <div class="col-12 col-md-8 mx-auto">
+    <div class="col-lg-8 mx-auto">
       <div class="row">
-        <div class="col-8">
-          <h2>Administradores</h2>
+        <div class="col-lg-6 "><h2>Administradores</h2></div>
+        <div class="header-table col-lg-4 col-8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Administrador">
+          </mat-form-field>
         </div>
-        <div class="add-button col-4">
+        <div class="add-button col-lg-2 col-4">
           <button type="button" class="btn btn-light" (click)="openAdminModal(newAdminModal)">
             <i class="fa fa-plus" aria-hidden="true"></i></button>
         </div>
+        <div class="container-table col-lg-12" >
+
+          <mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+            </ng-container>
+
+            <!-- Username Column -->
+            <ng-container matColumnDef="username">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.username}}</mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+            </ng-container>
+
+            <!-- LastName Column -->
+            <ng-container matColumnDef="lastName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Apellido</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.lastName}}</mat-cell>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Email</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.email}}</mat-cell>
+            </ng-container>
+
+            <!--Update Column-->
+            <ng-container matColumnDef="update">
+              <mat-header-cell *matHeaderCellDef align="center"><span><b>Actualizar</b></span></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="upload-button" align="center">
+                  <button mat-icon-button (click)="openAdminModal(newAdminModal, row.id)">
+                    <mat-icon>
+                      <i class="fa fa-pencil"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!--Remove Column-->
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="remove-button" align="center">
+                  <button mat-icon-button  (click)="openAdminDeleteModal(deleteModal,row.id)">
+                    <mat-icon>
+                      <i class="fa fa-trash"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
       </div>
-      <div style="overflow-x:auto;">
-        <table class="table table-striped" *ngIf="!alerts.admins.loading">
-          <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre y Apellido</th>
-            <th scope="col">Email</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let admin of (adminsArray | paginate: { itemsPerPage: 10, currentPage: adminsPage, id: 'admins' }); let i=index">
-            <th scope="row">{{admin.id}}</th>
-            <td>{{admin.name}} {{admin.lastName}}</td>
-            <td>{{admin.email}}</td>
-            <td>{{admin.username}}</td>
-            <td>
-              <div class="upload-button">
-                <button type="button" class="btn btn-light"  (click)="openAdminModal(newAdminModal, admin)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </div>
-            </td>
-            <td>
-              <div class="remove-button">
-                <button type="submit" class="btn btn-danger" (click)="openAdminDeleteModal(deleteModal, admin, i)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <pagination-controls id="admins"
-                           class="paginator"
-                           (pageChange)="adminsPage = $event"
-                           autoHide="true"
-                           previousLabel="Anterior"
-                           nextLabel="Siguiente">
-      </pagination-controls>
     </div>
 
     <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
@@ -81,7 +111,7 @@
           <span *ngIf="newAdmin.id">Editar administrador {{newAdmin.name}}</span>
         </h4>
         <!--<button type="button" class="close pull-right" aria-label="Close" (click)="resetSupplierModal()">-->
-          <!--<span aria-hidden="true">&times;</span>-->
+        <!--<span aria-hidden="true">&times;</span>-->
         <!--</button>-->
       </div>
       <div class="modal-body">
@@ -139,88 +169,92 @@
               </div>
             </div>
           </fieldset>
-        <!--INPUT EMAIL-->
-        <fieldset>
-          <div class="form-group">
-            <input type="text"
-                   class="form-control"
-                   formControlName="email"
-                   [formGroup]="adminFormGroup"
-                   placeholder="Correo Electrónico"
-                   aria-label="Email"
-                   aria-describedby="basic-addon2"
-                   [(ngModel)]="newAdmin.email"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="adminFormGroup.controls['email'].errors && (adminFormGroup.controls['email'].dirty || adminFormGroup.controls['email'].touched)">
-              <p class="error" *ngIf="adminFormGroup.controls['email'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="adminFormGroup.controls['email'].errors.email">Email Inválido</p>
+          <!--INPUT EMAIL-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="email"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Correo Electrónico"
+                     aria-label="Email"
+                     aria-describedby="basic-addon2"
+                     [(ngModel)]="newAdmin.email"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['email'].errors && (adminFormGroup.controls['email'].dirty || adminFormGroup.controls['email'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['email'].errors.required">Es requerido</p>
+                <p class="error" *ngIf="adminFormGroup.controls['email'].errors.email">Email Inválido</p>
+              </div>
             </div>
-          </div>
-        </fieldset>
-        <!--INPUT CONFIRMED EMAIL-->
-        <fieldset>
-          <div class="form-group">
-            <input type="text"
-                   class="form-control"
-                   formControlName="confirmEmail"
-                   [formGroup]="adminFormGroup"
-                   placeholder="Confirmar Correo Electrónico"
-                   aria-label="Confirmed Email"
-                   aria-describedby="basic-addon3"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="adminFormGroup.controls['confirmEmail'].errors && (adminFormGroup.controls['confirmEmail'].dirty || adminFormGroup.controls['confirmEmail'].touched)">
-              <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no
-                coinciden.</p>
+          </fieldset>
+          <!--INPUT CONFIRMED EMAIL-->
+          <fieldset>
+            <div class="form-group">
+              <input type="text"
+                     class="form-control"
+                     formControlName="confirmEmail"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Confirmar Correo Electrónico"
+                     aria-label="Confirmed Email"
+                     aria-describedby="basic-addon3"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['confirmEmail'].errors && (adminFormGroup.controls['confirmEmail'].dirty || adminFormGroup.controls['confirmEmail'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors.required">Es requerido</p>
+                <p class="error" *ngIf="adminFormGroup.controls['confirmEmail'].errors?.MatchEmail">Los emails no
+                  coinciden.</p>
+              </div>
             </div>
-          </div>
-        </fieldset>
-        <!--INPUT PASSWORD-->
-        <fieldset>
-          <div class="form-group">
-            <input type="password"
-                   class="form-control"
-                   formControlName="password"
-                   [formGroup]="adminFormGroup"
-                   placeholder="Contraseña"
-                   aria-label="Password"
-                   aria-describedby="basic-addon4"
-                   [(ngModel)]="newAdmin.password"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="adminFormGroup.controls['password'].errors && (adminFormGroup.controls['password'].dirty || adminFormGroup.controls['password'].touched)">
-              <p class="error" *ngIf="adminFormGroup.controls['password'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="adminFormGroup.controls['password'].errors.minlength">Minimo de 8 caracteres</p>
+          </fieldset>
+          <!--INPUT PASSWORD-->
+          <fieldset>
+            <div class="form-group">
+              <input type="password"
+                     class="form-control"
+                     formControlName="password"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Contraseña"
+                     aria-label="Password"
+                     aria-describedby="basic-addon4"
+                     [(ngModel)]="newAdmin.password"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['password'].errors && (adminFormGroup.controls['password'].dirty || adminFormGroup.controls['password'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['password'].errors.required">Es requerido</p>
+                <p class="error" *ngIf="adminFormGroup.controls['password'].errors.minlength">Minimo de 8 caracteres</p>
+              </div>
             </div>
-          </div>
-        </fieldset>
-        <!--INPUT CONFIRMED PASSWORD-->
-        <fieldset>
-          <div class="form-group">
-            <input type="password"
-                   class="form-control"
-                   formControlName="confirmPassword"
-                   [formGroup]="adminFormGroup"
-                   placeholder="Confirmar Contraseña"
-                   aria-label="Confirmed Password"
-                   aria-describedby="basic-addon5"
-                   required>
-            <div class="form-control-feedback"
-                 *ngIf="adminFormGroup.controls['confirmPassword'].errors && (adminFormGroup.controls['confirmPassword'].dirty || adminFormGroup.controls['confirmPassword'].touched)">
-              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.required">Es requerido</p>
-              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8 caracteres</p>
-              <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors?.MatchPassword">Las contraseñas no
-                coinciden.</p>
+          </fieldset>
+          <!--INPUT CONFIRMED PASSWORD-->
+          <fieldset>
+            <div class="form-group">
+              <input type="password"
+                     class="form-control"
+                     formControlName="confirmPassword"
+                     [formGroup]="adminFormGroup"
+                     placeholder="Confirmar Contraseña"
+                     aria-label="Confirmed Password"
+                     aria-describedby="basic-addon5"
+                     required>
+              <div class="form-control-feedback"
+                   *ngIf="adminFormGroup.controls['confirmPassword'].errors && (adminFormGroup.controls['confirmPassword'].dirty || adminFormGroup.controls['confirmPassword'].touched)">
+                <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.required">Es requerido</p>
+                <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors.minlength">Mínimo de 8
+                  caracteres</p>
+                <p class="error" *ngIf="adminFormGroup.controls['confirmPassword'].errors?.MatchPassword">Las
+                  contraseñas no
+                  coinciden.</p>
+              </div>
             </div>
-          </div>
-        </fieldset>
+          </fieldset>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-secondary" (click)="resetModal()">Guardar</button>
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': adminFormGroup.invalid}" (click)="uploadAdmin()">Guardar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': adminFormGroup.invalid}"
+                (click)="uploadAdmin()">Guardar
+        </button>
       </div>
       <div class="alert alert-danger text-center" *ngIf="alerts.admins.error">
         <div class="card-block">
@@ -235,7 +269,7 @@
     <ng-template #deleteModal>
       <div class="modal-header" (keyup.esc)="resetDeleteModal()">
         <h4 class="modal-title pull-left">Eliminar
-          <span>Administrador {{adminToDelete.name}}</span>
+          <span>Administrador "{{adminToDelete.name}}"</span>
         </h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
           <span aria-hidden="true">&times;</span>

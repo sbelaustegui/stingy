@@ -13,7 +13,6 @@ import {AdminService} from "../../../shared/services/admin.service";
   selector: 'app-admin-profile',
   templateUrl: './admin-profile.component.html',
   styleUrls: ['./admin-profile.component.scss'],
-  providers: [AdminService]
 })
 export class AdminProfileComponent implements OnInit {
 

@@ -31,7 +31,20 @@ import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.compone
 import { CollapseModule } from 'ngx-bootstrap';
 import { HistoryComponent } from './user/cart/history/history.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {SupplierService} from "./shared/services/supplier.service";
+import {ReportService} from "./shared/services/report.service";
+import {UserService} from "./shared/services/user.service";
+import {ProductService} from "./shared/services/product.service";
+import {SubcategoryService} from "./shared/services/subcategory.service";
+import {CategoryService} from "./shared/services/category.service";
+import {AdminService} from "./shared/services/admin.service";
+import {MatInputModule} from '@angular/material/input';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatPaginatorIntlSpanish} from "./shared/directives/MatPaginatorIntlSpanish";
+import {MatButtonModule, MatIconModule, MatPaginatorIntl} from '@angular/material';
+
 
 @NgModule({
   declarations: [
@@ -69,14 +82,27 @@ import {MatButtonModule, MatCheckboxModule} from '@angular/material';
       apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'
     }),
     BrowserAnimationsModule,
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatButtonModule,
-    MatCheckboxModule,
+    MatIconModule
 ],
   providers : [
     CookieService,
     HttpService,
     UserAuthService,
     AdminAuthService,
+    SupplierService,
+    ReportService,
+    UserService,
+    ProductService,
+    SubcategoryService,
+    CategoryService,
+    AdminService,
+    {provide: MatPaginatorIntl, useClass: MatPaginatorIntlSpanish},
+
   ],
   bootstrap: [AppComponent]
 })

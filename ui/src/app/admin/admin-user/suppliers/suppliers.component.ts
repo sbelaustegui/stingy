@@ -285,42 +285,6 @@ export class SuppliersComponent implements OnInit {
     })
   }
 
-  // openModal(template: TemplateRef<any>, modalReference: string,
-  //           report?: Report, supplier?: Supplier, requester?: User, index ?: number) {
-  //
-  //   if (report || supplier || requester) {
-  //     switch (modalReference.toUpperCase()) {
-  //       case "SUPPLIER":
-  //         this.newSupplier = supplier;
-  //         break;
-  //
-  //       case "SUPPLIERDELETE":
-  //         this.supplierToDelete = supplier;
-  //         this.supplierIndexToDelete = index;
-  //         break;
-  //
-  //       case "REQUESTER":
-  //         this.newSupplier = Supplier.empty();
-  //         break;
-  //
-  //       case "REPORT":
-  //         this.report = report;
-  //         break;
-  //       case "REPORTDELETE":
-  //         this.reportToDelete = report;
-  //         this.reportIndexToDelete = index;
-  //         break;
-  //     }
-  //   }
-  //   // if (supplier) this.newSupplier = Object.assign({}, supplier);
-  //   // else if (report) this.report = Object.assign({}, this.report);
-  //   // else if (requester) this.requester = Object.assign({}, requester);
-  //   // else this.newSupplier = Object.assign({}, Supplier.empty());
-  //
-  //   this.modalRef = this.modalService.show(template);
-  // }
-
-
   openReportModal(template: TemplateRef<any>, modalReference: string,
                   report: Report, index?: number) {
 

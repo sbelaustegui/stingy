@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {AdminService} from "../../../shared/services/admin.service";
 import {BsModalService} from "ngx-bootstrap/modal";
@@ -8,22 +8,26 @@ import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {User} from "../../../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../../../shared/validators/equal-validator.directive";
 import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
+import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
 
 @Component({
   selector: 'app-admins',
   templateUrl: './admins.component.html',
   styleUrls: ['./admins.component.scss'],
-  providers: [AdminService]
 })
 export class AdminsComponent implements OnInit {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  displayedColumns = ['id', 'username', 'name', 'lastName', 'email', 'update', 'remove'];
+  dataSource: MatTableDataSource<User>;
 
   public adminFormGroup: FormGroup;
   public newAdmin: User;
   public loggedAdmin: User;
   public adminToDelete: User;
-  public adminIndexToDelete: number;
-  public adminsArray: User[];
-  public adminsPage: number = 1;
+  public adminsMap: Map<number, User>;
   public alerts: {
     admins: {
       error: boolean,
@@ -44,8 +48,9 @@ export class AdminsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('ABM Categorias | Stingy');
+    this.titleService.setTitle('ABM Administradores | Stingy');
     this.newAdmin = User.empty();
+    this.adminsMap = new Map<number, User>();
     this.authService.loggedUser.then(user => {
       this.loggedAdmin = user;
     }).catch(err => {
@@ -70,8 +75,12 @@ export class AdminsComponent implements OnInit {
   }
 
   getAdmins() {
+    this.alerts.admins.loading = true;
     this.adminService.users.then(res => {
-      this.adminsArray = res;
+      res.forEach(admin => {
+        this.adminsMap.set(admin.id, admin);
+      });
+      this.setData();
       this.alerts.admins.error = false;
       this.alerts.admins.loading = false;
     }).catch(err => {
@@ -82,11 +91,11 @@ export class AdminsComponent implements OnInit {
   }
 
   uploadAdmin() {
-    if(this.newAdmin.id){
+    if (this.newAdmin.id) {
       this.alerts.addAdmin.loading = true;
       this.adminService.updateUser(this.newAdmin).then(res => {
-        this.adminsArray.splice(this.adminsArray.findIndex(a => a.id === res.id),1);
-        this.adminsArray.push(res);
+        this.adminsMap.set(res.id, res);
+        this.refreshTable();
         this.alerts.addAdmin.loading = false;
         this.alerts.addAdmin.error = false;
         this.newAdmin = User.empty();
@@ -107,7 +116,9 @@ export class AdminsComponent implements OnInit {
     } else {
       this.alerts.addAdmin.loading = true;
       this.adminService.addUser(this.newAdmin).then(res => {
-        this.adminsArray.push(res);
+        // this.adminsArray.push(res);
+        this.adminsMap.set(res.id, res);
+        this.refreshTable();
         this.alerts.addAdmin.loading = false;
         this.alerts.addAdmin.error = false;
         this.newAdmin = User.empty();
@@ -129,7 +140,7 @@ export class AdminsComponent implements OnInit {
   }
 
   deleteAdmin() {
-    if(this.adminToDelete.id === this.loggedAdmin.id){
+    if (this.adminToDelete.id === this.loggedAdmin.id) {
       this.alerts.admins.deletingErrorLogged = true;
       setTimeout(() => this.alerts.admins.deletingErrorLogged = false, 3000);
       return;
@@ -137,18 +148,22 @@ export class AdminsComponent implements OnInit {
     this.alerts.admins.deletingErrorLogged = false;
     this.alerts.admins.deleting = true;
     this.adminService.deleteUser(this.adminToDelete.id).then(res => {
-      this.adminsArray.splice(this.adminIndexToDelete,1);
-      // this.deleteSubAdmins();
-      //TODO mostrar mensajes de error/success/ y loader
+      // this.adminsArray.splice(this.adminIndexToDelete,1);
+      this.adminsMap.delete(this.adminToDelete.id);
+      this.refreshTable();
       this.alerts.admins.deleting = false;
       this.alerts.admins.deletingError = false;
       this.modalRef.hide();
       this.alerts.success = true;
-      setTimeout(() => {this.alerts.success = false;},2500);
+      setTimeout(() => {
+        this.alerts.success = false;
+      }, 2500);
     }).catch(() => {
       this.alerts.admins.deleting = false;
       this.alerts.admins.deletingError = true;
-      setTimeout(() => {this.alerts.admins.deletingError = false;},5000);
+      setTimeout(() => {
+        this.alerts.admins.deletingError = false;
+      }, 5000);
     })
   }
 
@@ -166,26 +181,41 @@ export class AdminsComponent implements OnInit {
     })
   }
 
-  openAdminModal(template: TemplateRef<any>, admin?) {
-    if(admin) this.newAdmin = Object.assign({}, admin);
+  openAdminModal(template: TemplateRef<any>, id?) {
+    if (id) this.newAdmin = Object.assign({}, this.adminsMap.get(id));
     this.adminFormGroup.controls['confirmPassword'].setValue(this.newAdmin.password);
     this.modalRef = this.modalService.show(template);
   }
 
-  openAdminDeleteModal(template: TemplateRef<any>, admin, i) {
-    this.adminToDelete = admin;
-    this.adminIndexToDelete = i;
+  openAdminDeleteModal(template: TemplateRef<any>, id: number) {
+    this.adminToDelete = this.adminsMap.get(id);
     this.modalRef = this.modalService.show(template);
   }
 
-  resetDeleteModal(){
-    this.adminToDelete = undefined;
-    this.adminIndexToDelete = -1;
+  resetDeleteModal() {
+    this.adminToDelete = User.empty();
   }
 
-  resetModal(){
+  resetModal() {
     this.newAdmin = User.empty();
     this.adminFormGroup.reset();
     this.modalRef.hide();
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  private setData() {
+    this.dataSource = new MatTableDataSource(Array.from(this.adminsMap.values()));
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  private refreshTable() {
+    // this.dataSource = new MatTableDataSource(this.adminsArray);
+    this.dataSource.data = Array.from(this.adminsMap.values());
   }
 }

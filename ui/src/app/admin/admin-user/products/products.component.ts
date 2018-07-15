@@ -10,7 +10,6 @@ import {Title} from "@angular/platform-browser";
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
-  providers: [ProductService]
 })
 export class ProductsComponent implements OnInit {
 

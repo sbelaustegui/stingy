@@ -16,60 +16,67 @@
       color: white;
       font-family: Open-Sans, "Lilita One", sans-serif;
     }
-    table {
-      text-align: center;
-      background-color: white;
-      tr{
-        th{
-          vertical-align: middle;
-        }
-        td{
-          vertical-align: middle;
-          .upload-button, .remove-button{
-            button {
-              font-size: 26px;
-              background-color: transparent;
-              color: black;
-              border: none;
-            }
-          }
-          .upload-button{
-            i{
-              color: #cc6600;
-            }
-          }
-        }
+
+    .upload-button {
+      button {
+        font-size: 26px;
+        background-color: transparent;
+        color: black;
+        border: none;
       }
-    }
-    .paginator /deep/ .ngx-pagination {
-      text-align: center;
-      li{
-        color: white;
-        &.current{
-          background-color: white;
-          color: black;
-        }
-        & :hover(:not(.disabled)){
-          background-color: white;
-          color: black;
-        }
-        &.disabled{
-          cursor: not-allowed;
-        }
-        a{
-          color: white;
-          & :hover{
-            background-color: white;
-            color: black;
-          }
-        }
+      i {
+        color: #cc6600;
       }
     }
 
-    .remove-button{
-      i{
+    .remove-button {
+      button {
+        font-size: 26px;
+        background-color: transparent;
+        color: black;
+        border: none;
+      }
+      i {
         color: red;
       }
+    }
+
+    .container-table {
+      display: flex;
+      flex-direction: column;
+      min-width: 300px;
+      .mat-header-cell {
+        font-weight: bold;
+        font-color: black;
+      }
+    }
+
+    .header-table {
+      min-height: 64px;
+      //padding: 8px 24px 0;
+      .mat-form-field {
+        font-size: 14px;
+        width: 100%;
+        color: white;
+        font-weight: bold;
+      }
+      .mat-input-subscript-wrapper {
+        color: white;
+      }
+    }
+    //}--><div class="mat-input-hint-spacer mat-form-field-hint-spacer"></div></div></div>
+    //
+    //}
+
+    .mat-table {
+      overflow: auto;
+      max-height: 500px;
+      font-size: 16px;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .mat-paginator {
+      border-radius: 0 0 20px 20px;
     }
   }
 }
