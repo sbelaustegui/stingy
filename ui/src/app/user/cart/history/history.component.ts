@@ -6,6 +6,7 @@ import {Cart} from "../../../shared/models/cart.model";
 import {CartProductService} from "../../../shared/services/cartProduct.service";
 import {SupplierProductService} from "../../../shared/services/supplierProduct.service";
 import {SupplierProductCart} from "../../../shared/models/supplier-product-cart.model";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-history',
@@ -18,36 +19,30 @@ export class HistoryComponent implements OnInit {
   public userId: number;
   public alerts: {
     carts: {
-      error: boolean,
       loading: boolean,
     },
     supplierProducts:{
-      error: boolean,
       loading: boolean,
     },
     user: {
-      error: boolean;
       loading: boolean;
     },
   };
   public carts: Cart[];
   public supplierProducts: Map<number, SupplierProductCart[]>;
 
-  constructor(public cartService: CartService, public supplierProductService: SupplierProductService, public cartProductService: CartProductService, public authService: UserAuthService, private titleService: Title) {}
+  constructor(public cartService: CartService, public supplierProductService: SupplierProductService, public cartProductService: CartProductService, public authService: UserAuthService, private titleService: Title, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.titleService.setTitle('Historial Carritos | Stingy');
     this.alerts = {
       carts: {
-        error: false,
         loading: true,
       },
       supplierProducts:{
-        error: false,
         loading: true,
       },
       user: {
-        error: false,
         loading: true
       },
     };
@@ -61,9 +56,11 @@ export class HistoryComponent implements OnInit {
       this.userId = res.id;
       this.getCarts();
       this.alerts.user.loading = false;
-      this.alerts.user.error = false;
     }).catch(() => {
-      this.alerts.user.error = true;
+      this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.user.loading = false;
     })
   }
@@ -77,11 +74,13 @@ export class HistoryComponent implements OnInit {
           }
         });
         this.alerts.carts.loading = false;
-        this.alerts.carts.error = false;
         this.getSupplierProducts();
       })
       .catch(() => {
-        this.alerts.carts.error = true;
+        this.snackBar.open('Hubo un error al obtener los carritos, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.alerts.carts.loading = false;
       })
   }
@@ -92,12 +91,14 @@ export class HistoryComponent implements OnInit {
         .then(res => {
           this.supplierProducts.set(cart.id, res);
           if(index == this.carts.length-1){
-            this.alerts.supplierProducts.error = false;
             this.alerts.supplierProducts.loading = false;
           }
         })
         .catch(() => {
-          this.alerts.supplierProducts.error = true;
+          this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
           this.alerts.supplierProducts.loading = false;
           return;
         })

@@ -57,23 +57,6 @@
       </pagination-controls>
     </div>
 
-    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-      <div class="alert alert-danger text-center" *ngIf="alerts.addProduct.error || alerts.products.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.success ">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>¡Operación realizada con éxito!</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-
     <!--validate Product Modal-->
     <ng-template #validateProduct>
       <div class="modal-header">
@@ -89,13 +72,6 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" (click)="validateProductA()">Confirmar</button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.products.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al validar el producto.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 
@@ -115,13 +91,6 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.products.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar al eliminar el producto.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 

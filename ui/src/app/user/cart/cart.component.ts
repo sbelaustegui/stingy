@@ -14,6 +14,7 @@ import {CartBag} from "../../shared/models/cart-bag.model";
 import {CartBagProduct} from "../../shared/models/cart-bag-product";
 import {Supplier} from "../../shared/models/supplier.model";
 import {CartProduct} from "../../shared/models/cartProduct.model";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-cart',
@@ -36,25 +37,18 @@ export class CartComponent implements OnInit {
   public alerts: {
     details: {
       loading: boolean,
-      error: boolean,
     },
     cartBags: {
-      error: boolean,
       loading: boolean,
-      deletingError: boolean,
       deletingProducts: boolean,
     },
     cart: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     user: {
-      error: boolean;
       loading: boolean;
     },
-    success: boolean
   };
   private _CB_Index: number;
   private _CBP_Index: number;
@@ -65,7 +59,7 @@ export class CartComponent implements OnInit {
   constructor(public cartService: CartService, public cartProductService: CartProductService, public authService: UserAuthService,
               public productService: ProductService, public supplierService: SupplierService,
               public supplierProductService: SupplierProductService,
-              public router: Router, private titleService: Title, private modalService: BsModalService) {
+              public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -73,25 +67,18 @@ export class CartComponent implements OnInit {
     this.alerts = {
       details: {
         loading: false,
-        error: false,
       },
       cartBags: {
-        error: false,
         loading: false,
-        deletingError: false,
         deletingProducts: false,
       },
       cart: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       user: {
-        error: false,
         loading: true
       },
-      success: false
     };
 
     this._CB_Index = -1;
@@ -110,11 +97,12 @@ export class CartComponent implements OnInit {
       this.userId = res.id;
       this.getCurrentCart(res.id);
       this.alerts.user.loading = false;
-      this.alerts.user.error = false;
     }).catch(() => {
-      this.alerts.user.error = true;
       this.alerts.user.loading = false;
-      setTimeout(() => this.alerts.user.error = false, 5000)
+      this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -124,13 +112,13 @@ export class CartComponent implements OnInit {
         this.alerts.cart.loading = true;
         this.currentCart = res;
         this.alerts.cart.loading = false;
-        this.alerts.cart.error = false;
         this.getCurrentCartBags();
       })
-      .catch(err => {
-        console.log(err);
-        this.alerts.cart.error = true;
-        this.alerts.cart.loading = false;
+      .catch(() => {
+        this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });        this.alerts.cart.loading = false;
       })
   }
 
@@ -143,10 +131,11 @@ export class CartComponent implements OnInit {
         this.cartBags = this.sortCartBagByTotalPrice();
         this.alerts.cartBags.loading = false;
       })
-      .catch(error => {
-        setTimeout(() => {
-          this.alerts.cartBags.error = false;
-        }, 2500);
+      .catch(() => {
+        this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
   }
 
@@ -193,7 +182,11 @@ export class CartComponent implements OnInit {
         .then(res => {
           this.suppliers.set(res.id, res);
         })
-        .catch(error => {
+        .catch(() => {
+          this.snackBar.open('Hubo un error al obtener el proveedor, por favor inténtelo nuevamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
           //todo supplier
         })
     });

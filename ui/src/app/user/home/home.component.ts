@@ -19,6 +19,7 @@ import {User} from "../../shared/models/user.model";
 import {Location} from "../../shared/models/location.model";
 import {LocationService} from "../../shared/services/location.service";
 import {CartService} from "../../shared/services/cart.service";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-home',
@@ -44,35 +45,27 @@ export class HomeComponent implements OnInit {
   public currentCartId: number;  //TODO REVIEW HOW TO MANAGE MULTIPLE CARTS.
 
   public alerts: {
-    success: boolean;
     user: {
       loaded: boolean,
-      error: boolean,
     },
     subcategories: {
       loading: boolean,
-      error: boolean,
     },
     categories: {
       loading: boolean,
-      error: boolean,
     },
     search: {
       loading: boolean,
-      error: boolean,
     },
     location: {
       loading: boolean,
-      error: boolean,
     },
     price: {
       loading: boolean,
-      error: boolean,
     },
     supplierProducts: {
       empty: boolean,
       loading: boolean,
-      error: boolean,
     }
   };
 
@@ -88,41 +81,33 @@ export class HomeComponent implements OnInit {
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
               public productService: ProductService, public supplierService: SupplierService,
               public supplierProductService: SupplierProductService, public locationService: LocationService,
-              public modalService: BsModalService, public cartService: CartService, private titleService: Title) {
+              public modalService: BsModalService, public cartService: CartService, private titleService: Title, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.titleService.setTitle('Búsqueda de Producto | Stingy');
     this.alerts = {
-      success :false,
       user: {
         loaded: false,
-        error: false,
       },
       subcategories: {
         loading: false,
-        error: false,
       },
       categories: {
         loading: true,
-        error: false,
       },
       search: {
         loading: false,
-        error: false,
       },
       location: {
         loading: false,
-        error: false,
       },
       price: {
         loading: false,
-        error: false,
       },
       supplierProducts: {
         empty: true,
         loading: false,
-        error: false,
       },
     };
     this.location = Location.empty();
@@ -151,7 +136,10 @@ export class HomeComponent implements OnInit {
       this.getCurrentCart();
       this.findCurrentGeoLocation();
     }).catch(() => {
-      this.alerts.user.error;
+      this.snackBar.open('Hubo un error al obtener la información del usuario loggeado, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -165,11 +153,12 @@ export class HomeComponent implements OnInit {
   getSubcategories() {
     this.subcategoryService.getSubcategoryByCategoryId(this.selectedCategoryId).then(res => {
       this.subcategories = res;
-      this.alerts.subcategories.error = false;
       this.alerts.subcategories.loading = false;
     }).catch(err => {
-      console.log(err);
-      this.alerts.subcategories.error = true;
+      this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.subcategories.loading = false;
     })
   }
@@ -177,11 +166,12 @@ export class HomeComponent implements OnInit {
   getCategories() {
     this.categoryService.categories.then(res => {
       this.categories = res;
-      this.alerts.categories.error = false;
       this.alerts.categories.loading = false;
     }).catch(err => {
-      console.log(err);
-      this.alerts.categories.error = true;
+      this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.categories.loading = false;
     })
   }
@@ -216,20 +206,33 @@ export class HomeComponent implements OnInit {
               this.suppliers.set(s.id, s);
             });
           }); //Add Suppliers. to map.
-          this.alerts.location.error = false;
         }
       )
       .catch(error => {
         switch (error.message) {
           case "No product for that id":
+            this.snackBar.open('Hubo un error al obtener los productos. No se encontraron productos para ese id.', '', {
+              duration: 5000,
+              verticalPosition: 'top'
+            });
             break;
           case "No location for that user":
-            this.alerts.location.error = true;
+            this.snackBar.open('Hubo un error al obtener los productos. El usuario no posee una ubicación seteada previamente.', '', {
+              duration: 5000,
+              verticalPosition: 'top'
+            });
             break;
           case "No user for that id":
-            this.alerts.user.error = true;
+            this.snackBar.open('Hubo un error al obtener los productos. No se encontró usuario para ese id.', '', {
+              duration: 5000,
+              verticalPosition: 'top'
+            });
             break;
           case "Invalid Data":
+            this.snackBar.open('Hubo un error al obtener los productos. Por favor inténtelo nuevamente mas tarde.', '', {
+              duration: 5000,
+              verticalPosition: 'top'
+            });
             break;
         }
       })
@@ -252,17 +255,19 @@ export class HomeComponent implements OnInit {
         this.searchedProducts.forEach(p => {
           this.getSupplierProducts(p.id, this.user.id);
         });
-        //TODO agregar loader y mensaje de error
-        this.alerts.search.error = false;
+        //TODO agregar loader
         this.alerts.search.loading = false;
         setTimeout(() =>  this.el.nativeElement.scrollIntoView(), 1000);
       }).catch(err => {
-        console.log(err);
-        this.alerts.search.error = true;
+        this.snackBar.open('Hubo un error al obtener los resultados, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.alerts.search.loading = false;
       })
     }else {
       if(!this.location.id){
+        // TODO ???
       }
     }
   }
@@ -271,10 +276,10 @@ export class HomeComponent implements OnInit {
     if (this.supplierProducts.has(productId)) {
       this.supplierProducts.get(productId).forEach(sp => {
         this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id));
-        this.alerts.success = true;
-        setTimeout( t => {
-          this.alerts.success = false;
-        }, 2500);
+        this.snackBar.open('El producto se agregó con éxito.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
     }
   }
@@ -285,14 +290,19 @@ export class HomeComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
-        //TODO mostrar un toast o snackbar que se actualizo la location
+        this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.locationService.updateLocation(this.location).then(this.modalRef ? this.modalRef.hide : undefined);
       });
       this.alerts.location.loading = false;
-      this.alerts.location.error = false;
     }
     catch (e) {
-      this.alerts.location.error = true;
+      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }
   }
 
@@ -311,15 +321,19 @@ export class HomeComponent implements OnInit {
         .then(res => {
           this.supplierProducts.get(res.productId)[this.selectedSupplierProductIndex] = res;
           this.alerts.price.loading = false;
-          this.alerts.price.error = false;
           this.resetModal();
         }).catch(() => {
         this.alerts.price.loading = false;
-        this.alerts.price.error = true;
+        this.snackBar.open('Hubo un error al actualizar el precio, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       });
     } else {
-      this.alerts.price.error = true;
-    }
+      this.snackBar.open('Hubo un error al actualizar el precio, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });    }
   }
 
   resetModal() {

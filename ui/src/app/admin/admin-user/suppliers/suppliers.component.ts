@@ -1,22 +1,17 @@
-import {Component, NgZone, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {SupplierService} from "../../../shared/services/supplier.service";
 import {BsModalService} from "ngx-bootstrap/modal";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {Supplier} from "../../../shared/models/supplier.model";
-import {MapsAPILoader} from "@agm/core";
-import {google} from "@agm/core/services/google-maps-types";
 import {ReportService} from "../../../shared/services/report.service";
 import {Report} from "../../../shared/models/report.model";
 import {User} from "../../../shared/models/user.model";
 import {UserService} from "../../../shared/services/user.service";
 import {Location} from "../../../shared/models/location.model";
-import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
-import {identifierModuleUrl} from "@angular/compiler";
-import {DateModel} from "../../../shared/models/date-model";
-
+import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
@@ -41,46 +36,34 @@ export class SuppliersComponent implements OnInit {
   public newSupplier: Supplier;
   public supplierToDelete: Supplier;
   public supplierIndexToDelete: number;
-  public suppliersArray: Supplier[];
-  public suppliersPage: number = 1;
   public report: Report;
   public reportToDelete: Report;
   public reportIndexToDelete: number;
   public unresolvedReports: Report[];
-  public reportsPage: number = 1;
   public requester: User;
   public requesters: Map<number, User>;
   public alerts: {
     reports: {
-      success: boolean;
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     requester: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     suppliers: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     addSupplier: {
-      error: boolean,
       loading: boolean,
     },
-    success: boolean
   };
   modalRef: BsModalRef;
   public location: Location;
 
-  constructor(public fb: FormBuilder, public router: Router, private titleService: Title, private modalService: BsModalService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone,
-              public supplierService: SupplierService, public reportService: ReportService, public userService: UserService
+  constructor(public fb: FormBuilder, public router: Router, private titleService: Title, private modalService: BsModalService,
+              public supplierService: SupplierService, public reportService: ReportService, public userService: UserService, public snackBar: MatSnackBar
   ) {
   }
 
@@ -97,29 +80,20 @@ export class SuppliersComponent implements OnInit {
     this.requesters = new Map<number, User>();
     this.alerts = {
       reports: {
-        success: false,
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       requester: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       suppliers: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       addSupplier: {
-        error: false,
         loading: false,
       },
-      success: false
     };
     this.createFormControls();
     this.getSuppliers();
@@ -135,11 +109,12 @@ export class SuppliersComponent implements OnInit {
       });
       this.setSuppliersData();
 
-      this.alerts.suppliers.error = false;
       this.alerts.suppliers.loading = false;
     }).catch(err => {
-      this.alerts.suppliers.error = true;
-      this.alerts.suppliers.loading = false;
+      this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });      this.alerts.suppliers.loading = false;
     })
   }
 
@@ -149,17 +124,17 @@ export class SuppliersComponent implements OnInit {
         this.alerts.reports.loading = true;
         res.forEach(r => {
           // this.unresolvedReports.push(Report.from(r));
-          this.reportsMap.set(r.id,r);
+          this.reportsMap.set(r.id,Report.from(r));
           this.getRequester(r.userId);
         });
         this.setReportsData();
-        this.alerts.reports.error;
         this.alerts.reports.loading = false;
       })
       .catch(error => {
-        console.log(error.message,);
-        this.alerts.reports.error = true;
-        this.alerts.reports.loading = false;
+        this.snackBar.open('Hubo un error al obtener los reportes, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });        this.alerts.reports.loading = false;
       })
 
   }
@@ -191,23 +166,21 @@ export class SuppliersComponent implements OnInit {
           this.suppliersMap.set(res.id,res);
           this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
-          this.alerts.addSupplier.error = false;
           this.newSupplier = Supplier.empty();
           this.supplierFormGroup.reset();
           this.modalRef.hide();
-          this.alerts.success = true;
-          setTimeout(() => {
-            this.alerts.success = false;
-          }, 2500);
+          this.snackBar.open('El proveedor se actualizó correctamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
           return true;
         })
         .catch(() => {
-          //TODO mostrar en el front mensaje de error
           this.alerts.addSupplier.loading = false;
-          this.alerts.addSupplier.error = true;
-          setTimeout(() => {
-            this.alerts.addSupplier.error = false;
-          }, 2500);
+          this.snackBar.open('Hubo un error al actualizar el proveedor, por favor inténtelo nuevamente. Revise que el nombre sea válido y no se encuentre repetido.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
         })
     }
     else {
@@ -218,23 +191,21 @@ export class SuppliersComponent implements OnInit {
           this.suppliersMap.set(res.id,res);
           this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
-          this.alerts.addSupplier.error = false;
           this.newSupplier = Supplier.empty();
           this.supplierFormGroup.reset();
           this.modalRef.hide();
-          this.alerts.success = true;
-          setTimeout(() => {
-            this.alerts.success = false;
-          }, 2500);
+          this.snackBar.open('El proveedor se agregó correctamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
           return true;
         })
         .catch(() => {
-          //TODO mostrar en el front mensaje de error
           this.alerts.addSupplier.loading = false;
-          this.alerts.addSupplier.error = true;
-          setTimeout(() => {
-            this.alerts.addSupplier.error = false;
-          }, 2500);
+          this.snackBar.open('Hubo un error al agregar el proveedor, por favor inténtelo nuevamente. Revise que el nombre sea válido y no se encuentre repetido.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
         })
     }
     return false;
@@ -247,18 +218,17 @@ export class SuppliersComponent implements OnInit {
       this.suppliersMap.delete(this.supplierToDelete.id);
       this.refreshSupplierTable();
       this.alerts.suppliers.deleting = false;
-      this.alerts.suppliers.deletingError = false;
       this.modalRef.hide();
-      this.alerts.success = true;
-      setTimeout(() => {
-        this.alerts.success = false;
-      }, 2500);
+      this.snackBar.open('El proveedor se eliminó correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.suppliers.deleting = false;
-      this.alerts.suppliers.deletingError = true;
-      setTimeout(() => {
-        this.alerts.suppliers.deletingError = false;
-      }, 5000);
+      this.snackBar.open('Hubo un error al eliminar el proveedor, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -271,11 +241,10 @@ export class SuppliersComponent implements OnInit {
         this.uploadSupplier();
       })
       .catch(error => {
-        console.log(error.message);
-        this.alerts.reports.error = true;
-        setTimeout(() => {
-          this.alerts.reports.error = false;
-        }, 5000);
+        this.snackBar.open('Hubo un error al marcar como resuelto un reporte, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
   }
 
@@ -287,18 +256,17 @@ export class SuppliersComponent implements OnInit {
       this.reportsMap.delete(this.reportToDelete.id);
       this.refreshReportsTable();
       this.alerts.reports.deleting = false;
-      this.alerts.reports.deletingError = false;
       this.modalRef.hide();
-      this.alerts.reports.success = true;
-      setTimeout(() => {
-        this.alerts.reports.success = false;
-      }, 2500);
+      this.snackBar.open('El reporte se eliminó correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.reports.deleting = false;
-      this.alerts.reports.deletingError = true;
-      setTimeout(() => {
-        this.alerts.reports.deletingError = false;
-      }, 5000);
+      this.snackBar.open('Hubo un error al eliminar el reporte, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -390,11 +358,16 @@ export class SuppliersComponent implements OnInit {
     return Supplier.empty();
   }
 
+  applyReportsFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.report_DataSource.filter = filterValue;
+  }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.supplier_DataSource.filter = filterValue;
-    this.report_DataSource.filter = filterValue;
   }
 
   private setSuppliersData() {

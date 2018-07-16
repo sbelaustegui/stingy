@@ -8,6 +8,7 @@ import {Title} from "@angular/platform-browser";
 import {UserAuthService} from "../../shared/auth/user/user-auth.service";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-profile',
@@ -22,24 +23,18 @@ export class ProfileComponent implements OnInit {
   public alerts: {
     updating: {
       loading: boolean,
-      error: boolean,
-      success: boolean,
     },
     getting: {
       loading: boolean,
-      error: boolean,
     }
     delete:{
       loading: boolean;
-      error: boolean;
-      success: boolean;
-
     }
   };
   modalRef: BsModalRef;
 
 
-  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService, private modalService: BsModalService) {}
+  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService, private modalService: BsModalService, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');
@@ -47,18 +42,12 @@ export class ProfileComponent implements OnInit {
     this.alerts = {
       updating: {
         loading: false,
-          error: false,
-          success: false,
       },
       getting: {
         loading: true,
-          error: false,
       },
       delete:{
         loading: false,
-        error: false,
-        success: false,
-
       }
     };
     this.createFormControls();
@@ -71,12 +60,13 @@ export class ProfileComponent implements OnInit {
         this.user = user;
         this.user.password = '';
         this.alerts.getting.loading = false;
-        this.alerts.getting.error = false;
       });
     }).catch(() => {
-      this.alerts.getting.error = true;
       this.alerts.getting.loading = false;
-      setTimeout(() => this.alerts.getting.error = false , 5000)
+      this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -84,14 +74,16 @@ export class ProfileComponent implements OnInit {
     this.alerts.updating.loading = true;
     this.userService.updateUser(this.user).then( () => {
       this.alerts.updating.loading = false;
-      this.alerts.updating.error = false;
-      this.alerts.updating.success = true;
-      setTimeout(() => this.alerts.updating.success = false , 5000)
+      this.snackBar.open('El usuario se actualizó correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.updating.loading = false;
-      this.alerts.updating.error = true;
-      this.alerts.updating.success = false;
-      setTimeout(() => this.alerts.updating.error = false , 5000)
+      this.snackBar.open('Hubo un error al actualizar el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -110,16 +102,18 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteUser(){
-    this.alerts.delete.success = true;
-    this.userService.deleteUser(this.user.id)
-    if(this.authService.isLoggedIn && this.alerts.delete.success) {
-      this.alerts.delete.success= false;
-      this.alerts.delete.loading = false;
-      this.authService.logout().then(() => {
-        this.router.navigate(['login']);
-      })
-    }
-
+    this.userService.deleteUser(this.user.id).then(res => {
+      this.snackBar.open('El usuario se eliminó correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
+      this.router.navigate(['login']);
+    }).catch(err => {
+      this.snackBar.open('Hubo un error al eliminar el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
+    });
   }
 
   openDeleteModal(template: TemplateRef<any>) {
@@ -128,7 +122,6 @@ export class ProfileComponent implements OnInit {
   }
 
   resetDeleteModal(){
-    this.alerts.delete.success = false;
     this.alerts.delete.loading = false;
   }
 

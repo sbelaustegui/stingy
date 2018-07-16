@@ -114,32 +114,6 @@
         </fieldset>
       </div>
 
-      <!--ALERT MESSAGE-->
-      <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-        <div class="alert alert-danger text-center" *ngIf="uploadProductError">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>Hubo un error al cargar su PRODUCTO. Revise los datos e inténtelo nuevamente.</p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="alert alert-danger text-center" *ngIf="alerts.file.error || uploadProductImageError">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>Hubo un error al cargar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e
-                inténtelo nuevamente.</p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="alert alert-success text-center" *ngIf="alerts.success">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>¡Operación realizada con éxito!</p>
-            </blockquote>
-          </div>
-        </div>
-      </div>
-
       <!--BUTTONS-->
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <div class="row">
@@ -200,13 +174,6 @@
       <button type="button" class="btn btn-primary" [ngClass]="{'disabled': reportFormGroup.invalid}"
               (click)="sendReport()">Enviar Reporte
       </button>
-    </div>
-    <div class="alert alert-danger text-center" *ngIf="alerts.adding.reportError">
-      <div class="card-block">
-        <blockquote class="card-blockquote">
-          <p>Hubo un error al enviar tu Reporte.</p>
-        </blockquote>
-      </div>
     </div>
   </ng-template>
 </div>

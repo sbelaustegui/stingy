@@ -8,6 +8,7 @@ import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
 import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {AdminService} from "../../../shared/services/admin.service";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-admin-profile',
@@ -21,24 +22,18 @@ export class AdminProfileComponent implements OnInit {
   public alerts: {
     updating: {
       loading: boolean,
-      error: boolean,
-      success: boolean,
     },
     getting: {
       loading: boolean,
-      error: boolean,
     }
     delete:{
       loading: boolean;
-      error: boolean;
-      success: boolean;
-
     }
   };
   modalRef: BsModalRef;
 
 
-  constructor(public fb: FormBuilder, public userService: AdminService, public router: Router, private titleService: Title, public authService: AdminAuthService, private modalService: BsModalService) {}
+  constructor(public fb: FormBuilder, public userService: AdminService, public router: Router, private titleService: Title, public authService: AdminAuthService, private modalService: BsModalService, public snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');
@@ -46,18 +41,12 @@ export class AdminProfileComponent implements OnInit {
     this.alerts = {
       updating: {
         loading: false,
-        error: false,
-        success: false,
       },
       getting: {
         loading: true,
-        error: false,
       },
       delete:{
         loading: false,
-        error: false,
-        success: false,
-
       }
     };
     this.createFormControls();
@@ -70,27 +59,29 @@ export class AdminProfileComponent implements OnInit {
         this.user = user;
         this.user.password = '';
         this.alerts.getting.loading = false;
-        this.alerts.getting.error = false;
       });
     }).catch(() => {
-      this.alerts.getting.error = true;
       this.alerts.getting.loading = false;
-      setTimeout(() => this.alerts.getting.error = false , 5000)
-    })
+      this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });    })
   }
 
   updateUser() {
     this.alerts.updating.loading = true;
     this.userService.updateUser(this.user).then( () => {
       this.alerts.updating.loading = false;
-      this.alerts.updating.error = false;
-      this.alerts.updating.success = true;
-      setTimeout(() => this.alerts.updating.success = false , 5000)
+      this.snackBar.open('El usuario fué actualizado correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.updating.loading = false;
-      this.alerts.updating.error = true;
-      this.alerts.updating.success = false;
-      setTimeout(() => this.alerts.updating.error = false , 5000)
+      this.snackBar.open('Hubo un error al actualizar el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -109,15 +100,20 @@ export class AdminProfileComponent implements OnInit {
   }
 
   deleteUser(){
-    this.alerts.delete.success = true;
-    this.userService.deleteUser(this.user.id).then(res => {
-      this.alerts.delete.success= true;
+    this.userService.deleteUser(this.user.id).then(() => {
+      this.snackBar.open('El usuario fué eliminado correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.delete.loading = false;
       this.authService.logout().then(() => {
         this.router.navigate(['admin', 'login']);
       })
     }).catch(() => {
-      this.alerts.delete.error = true;
+      this.snackBar.open('Hubo un error al eliminar el usuario, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.delete.loading = true;
     })
   }
@@ -128,7 +124,6 @@ export class AdminProfileComponent implements OnInit {
   }
 
   resetDeleteModal(){
-    this.alerts.delete.success = false;
     this.alerts.delete.loading = false;
   }
 

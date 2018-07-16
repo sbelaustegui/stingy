@@ -12,7 +12,7 @@ create table abstract_user (
   username                      varchar(255) not null,
   password                      varchar(255) not null,
   location_id                   bigint,
-  rate                          double not null,
+  rate                          double,
   constraint uq_abstract_user_email unique (email),
   constraint uq_abstract_user_username unique (username),
   constraint uq_abstract_user_location_id unique (location_id),

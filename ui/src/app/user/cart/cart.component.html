@@ -89,13 +89,6 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-secondary" (click)="resetModal('PRODUCT')">Volver</button>
       </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.details.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al cargar los datos del Proovedor.</p>
-          </blockquote>
-        </div>
-      </div>
     </ng-template>
 
     <!--Delete confirmation modal-->
@@ -114,13 +107,6 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETEPRODUCT'); modalRef.hide();">Cancelar</button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.cartBags.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar al eliminar el producto.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 

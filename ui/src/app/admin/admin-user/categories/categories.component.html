@@ -7,8 +7,9 @@
           <h2>Categorias</h2>
         </div>
         <div class="add-button col-4">
-          <button type="button" class="btn btn-light" (click)="openCategoryModal(newCategoryModal)">
-            <i class="fa fa-plus" aria-hidden="true"></i></button>
+          <button mat-mini-fab style="background-color: white" (click)="openCategoryModal(newCategoryModal)">
+            <mat-icon style="color: black">add</mat-icon>
+          </button>
         </div>
       </div>
       <div style="overflow-x:auto;">
@@ -58,8 +59,9 @@
           <h2>SubCategorias</h2>
         </div>
         <div class="add-button col-4">
-          <button type="button" class="btn btn-light" (click)="openSubcategoryModal(newSubcategoryModal, -1)">
-            <i class="fa fa-plus" aria-hidden="true"></i></button>
+          <button mat-mini-fab style="background-color: white" (click)="openSubcategoryModal(newSubcategoryModal, -1)">
+            <mat-icon style="color: black">add</mat-icon>
+          </button>
         </div>
       </div>
       <div style="overflow-x:auto;">
@@ -105,23 +107,6 @@
       </pagination-controls>
     </div>
 
-    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-      <div class="alert alert-danger text-center" *ngIf="alerts.addCategory.error ">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.addCategory.success || alerts.deleteSuccess">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>¡Operación realizada con éxito!</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
-
     <!--New category Modal-->
     <ng-template #newCategoryModal>
       <div class="modal-header">
@@ -156,13 +141,6 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}" (click)="uploadCategory()">Guardar</button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.categories.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar una Categorias. Revise que el nombre sea valido y no se encuentre repetido.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 
@@ -237,13 +215,6 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.categories.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar al Eliminar Categoria.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 

@@ -16,6 +16,7 @@ import {SupplierProductService} from "../../shared/services/supplierProduct.serv
 import {BsModalService} from "ngx-bootstrap";
 import {Report} from "../../shared/models/report.model";
 import {ReportService} from "../../shared/services/report.service";
+import {MatSnackBar} from "@angular/material";
 
 
 @Component({
@@ -34,8 +35,6 @@ export class UploadProductComponent implements OnInit {
   public userId: number;
   public newProduct: Product;
   public newSupplierProduct: SupplierProduct;
-  public uploadProductError: boolean;
-  public uploadProductImageError: boolean;
   public selectedCategoryId: number;
   public categories: Category[];
   public subcategories: Subcategory[];
@@ -44,30 +43,18 @@ export class UploadProductComponent implements OnInit {
   public alerts: {
     subcategories: {
       loading: boolean,
-      error: boolean,
     },
     categories: {
       loading: boolean,
-      error: boolean,
     },
     suppliers: {
       loading: boolean,
-      error: boolean,
     },
     adding: {
       product: boolean,
-      productError: boolean,
       supplierProduct: boolean,
-      supplierProductError: boolean,
       report: boolean,
-      reportError: boolean,
     },
-    file: {
-      error: boolean,
-      sizeExceeded: boolean,
-      textSizeExceeded: boolean,
-    },
-    success: boolean,
   };
 
   public newReportSupplier: Report;
@@ -79,14 +66,13 @@ export class UploadProductComponent implements OnInit {
               private reportService: ReportService,
               private productService: ProductService, private  supplierProductService: SupplierProductService,
               private subcategoryService: SubcategoryService, private categoryService: CategoryService,
-              private supplierService: SupplierService, private userAuthService: UserAuthService
+              private supplierService: SupplierService, private userAuthService: UserAuthService, public snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
     this.titleService.setTitle('Carga de Producto | Stingy');
     this.initializeEmptyObjects();
-    this.uploadProductError = false;
     this.userAuthService.loggedUser.then(res => this.userId = res.id);
     this.createFormControls();
     this.subcategories = [];
@@ -95,31 +81,18 @@ export class UploadProductComponent implements OnInit {
     this.alerts = {
       subcategories: {
         loading: false,
-        error: false,
       },
       categories: {
         loading: true,
-        error: false,
       },
       suppliers: {
         loading: false,
-        error: false,
       },
       adding: {
         product: false,
-        productError: false,
         supplierProduct: false,
-        supplierProductError: false,
         report: false,
-        reportError: false,
       },
-      file: {
-        error: false,
-        sizeExceeded: false,
-        textSizeExceeded: false,
-
-      },
-      success: false,
     };
 
     this.modalRef = this.modalService;
@@ -129,10 +102,12 @@ export class UploadProductComponent implements OnInit {
   getSubcategories() {
     this.subcategoryService.getSubcategoryByCategoryId(this.selectedCategoryId).then(res => {
       this.subcategories = res;
-      this.alerts.subcategories.error = false;
       this.alerts.subcategories.loading = false;
-    }).catch(err => {
-      this.alerts.subcategories.error = true;
+    }).catch(() => {
+      this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.subcategories.loading = false;
     })
   }
@@ -140,10 +115,12 @@ export class UploadProductComponent implements OnInit {
   getCategories() {
     this.categoryService.categories.then(res => {
       this.categories = res;
-      this.alerts.categories.error = false;
       this.alerts.categories.loading = false;
-    }).catch(err => {
-      this.alerts.categories.error = true;
+    }).catch(() => {
+      this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.categories.loading = false;
     })
   }
@@ -151,21 +128,28 @@ export class UploadProductComponent implements OnInit {
   getSuppliers() {
     this.supplierService.suppliers.then(res => {
       this.suppliers = res;
-      this.alerts.suppliers.error = false;
       this.alerts.suppliers.loading = false;
-    }).catch(err => {
-      console.log(err);
-      this.alerts.suppliers.error = true;
+    }).catch(() => {
+      this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.suppliers.loading = false;
     })
   }
 
   uploadProduct() {
     if (!this.file || this.file.size > 2000000) {
-      this.alerts.file.error = true;
+      this.snackBar.open('Hubo un error al cargar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       return;
     } else {
-      this.alerts.file.error = false;
+      this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.adding.product = true;
       this.newProduct.isValidated = false;
       this.newProduct.userId = this.userId;
@@ -175,47 +159,44 @@ export class UploadProductComponent implements OnInit {
           this.productService.addProductImage(res.id, this.file)
             .then(() => {
               this.alerts.adding.product = false;
-              this.uploadProductError = false;
               this.saveImage(res.id);
               this.uploadSupplierProduct();
             })
             .catch(() => {
-              this.uploadProductImageError = true;
-              setTimeout(() => {
-                this.uploadProductImageError = false;
-              }, 5000);
+              this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
+                duration: 5000,
+                verticalPosition: 'top'
+              });
               this.alerts.adding.product = false;
             });
         })
-        .catch(error => {
-          this.alerts.adding.productError = true;
-          setTimeout(() => {
-            this.uploadProductError = false;
-          }, 5000);
-          this.alerts.adding.productError = false;
+        .catch(() => {
+          this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
         });
     }
   }
 
   private uploadSupplierProduct() {
-    this.alerts.file.error = false;
     this.alerts.adding.product = true;
     this.newSupplierProduct.supplierId = parseInt(String(this.newSupplierProduct.supplierId));
     this.supplierProductService.addSupplierProduct(this.newSupplierProduct)
       .then(res => {
         this.alerts.adding.supplierProduct = false;
-        this.alerts.success = true;
-        setTimeout(() => {
-          this.alerts.success = false;
-        }, 2500);
+        this.snackBar.open('El producto fue agregado correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.resetUploadProduct();
 
       })
       .catch(error => {
-        this.uploadProductError = true;
-        setTimeout(() => {
-          this.uploadProductError = false;
-        }, 5000);
+        this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.alerts.adding.supplierProduct = false;
       });
   }
@@ -246,17 +227,14 @@ export class UploadProductComponent implements OnInit {
 
   saveImage(productId: number) {
     if (this.formGroup.valid && this.file) {
-      this.alerts.file.sizeExceeded = false;
       this.productService.addProductImage(productId, this.file)
-        .then((product: Product) => {
-          this.alerts.file.error = false;
+        .then(() => {
         })
-        .catch(err => {
-          //TODO alerts
-          this.uploadProductImageError = true;
-          setTimeout(() => {
-            this.uploadProductImageError = false;
-          }, 5000);
+        .catch(() => {
+          this.snackBar.open('Hubo un error al guardar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top'
+          });
         });
     }
   }
@@ -285,16 +263,16 @@ export class UploadProductComponent implements OnInit {
       .then(res => {
         this.alerts.adding.report = false;
         this.modalRef.hide();
-        this.alerts.success = true;
-        setTimeout(() => {
-          this.alerts.success = false;
-        }, 2500);
+        this.snackBar.open('El reporte fué generado con éxito.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
-      .catch(error => {
-        this.alerts.adding.reportError = true;
-        setTimeout(() => {
-          this.alerts.adding.reportError = false;
-        }, 5000);
+      .catch(() => {
+        this.snackBar.open('Hubo un error al generar el reporte.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       });
 
     this.alerts.adding.report = false;

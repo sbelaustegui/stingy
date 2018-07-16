@@ -1,13 +1,6 @@
 <div class="profile">
   <div class="row">
     <span *ngIf="alerts.getting.loading" class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
-    <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.getting.error">
-      <div class="card-block">
-        <blockquote class="card-blockquote">
-          <p>Hubo un error al obtener los datos del usuario.</p>
-        </blockquote>
-      </div>
-    </div>
   </div>
   <form [formGroup]="formGroup" (ngSubmit)="updateUser()" *ngIf="!alerts.getting.loading && !alerts.getting.error">
     <div class="row">
@@ -148,20 +141,6 @@
         </fieldset>
       </div>
       <div class="col-12">
-        <div class="alert alert-danger text-center mx-auto" style="max-width: 500px;" *ngIf="alerts.updating.error">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>Hubo un error al actualizar el usuario. Revise los datos e inténtelo nuevamente.</p>
-            </blockquote>
-          </div>
-        </div>
-        <div class="alert alert-success text-center mx-auto" style="max-width: 500px;" *ngIf="alerts.updating.success">
-          <div class="card-block">
-            <blockquote class="card-blockquote">
-              <p>El usuario se actualizo correctamente.</p>
-            </blockquote>
-          </div>
-        </div>
       </div>
       <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
         <div class="row">
@@ -202,13 +181,6 @@
         <button type="submit" class="btn btn-secondary" id="cancel-button" (click)="resetDeleteModal(); modalRef.hide();">
           Cancelar
         </button>
-      </div>
-    </div>
-    <div class="alert alert-danger text-center" *ngIf="alerts.delete.error">
-      <div class="card-block">
-        <blockquote class="card-blockquote">
-          <p>Hubo un error al agregar al Eliminar Administrador.</p>
-        </blockquote>
       </div>
     </div>
   </ng-template>

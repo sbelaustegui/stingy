@@ -7,8 +7,9 @@
       <div class="loading" *ngIf="alerts.suppliers.loading">
         <div class="col-lg-6 "><h2>Proovedores</h2></div>
         <div class="col-md-4 offset-md-4 col-2 offset-5">
-        <span class="mx-auto"><i
-          class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+        <span class="mx-auto">
+          <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
+        </span>
         </div>
       </div>
       <div class="row" *ngIf="!alerts.suppliers.loading">
@@ -19,8 +20,9 @@
           </mat-form-field>
         </div>
         <div class="add-button col-lg-2 col-4">
-          <button type="button" class="btn btn-light" (click)="openSupplierModal(newSupplierModal,'NEWSUPPLIER')">
-            <i class="fa fa-plus" aria-hidden="true"></i></button>
+          <button mat-mini-fab style="background-color: white" (click)="openSupplierModal(newSupplierModal,'NEWSUPPLIER')">
+            <mat-icon style="color: black">add</mat-icon>
+          </button>
         </div>
         <div class="container-table col-lg-12">
 
@@ -34,7 +36,7 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
@@ -81,31 +83,6 @@
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
-      </div>
-    </div>
-
-    <!--ALERTS SUPPLIERS-->
-    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-      <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.suppliers.loading && alerts.suppliers.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al obtener los datos.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.success ">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>¡Operación realizada con éxito!</p>
-          </blockquote>
-        </div>
       </div>
     </div>
 
@@ -188,7 +165,7 @@
         <div class="col-lg-6 "><h2>Reportes</h2></div>
         <div class="header-table col-lg-4 col-8">
           <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Reporte">
+            <input matInput (keyup)="applyReportsFilter($event.target.value)" placeholder="Buscar Reporte">
           </mat-form-field>
         </div>
         <div class="container-table col-lg-12">
@@ -203,7 +180,7 @@
 
             <!-- Requester Column -->
             <ng-container matColumnDef="userId">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Requester</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
               <mat-cell *matCellDef="let row" (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
                 {{getRequesterFromMap(row.userId).name}}</mat-cell>
             </ng-container>
@@ -217,7 +194,7 @@
             <!-- Date Column -->
             <ng-container matColumnDef="date">
               <mat-header-cell *matHeaderCellDef mat-sort-header><b>Fecha</b></mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.date}}</mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.date.toStringDate()}}</mat-cell>
             </ng-container>
 
 
@@ -257,31 +234,6 @@
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
-      </div>
-    </div>
-
-    <!--ALERTS REPORTS-->
-    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-      <div class="alert alert-danger text-center" *ngIf="alerts.addSupplier.error || alerts.suppliers.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.reports.loading && alerts.reports.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al obtener los datos.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.reports.success ">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>¡Operación realizada con éxito!</p>
-          </blockquote>
-        </div>
       </div>
     </div>
 
@@ -355,13 +307,6 @@
                 (click)="uploadSupplierBySolvingReport()" *ngIf="report.id">Guardar Y Realizar
         </button>
       </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar el proveedor. Revise que el nombre sea valido y no se encuentre repetido.</p>
-          </blockquote>
-        </div>
-      </div>
     </ng-template>
 
     <!--DELETE SUPPLIER CONFIRMATION MODAL-->
@@ -382,13 +327,6 @@
         <button type="submit" class="btn btn-danger" (click)="this.deleteSupplier()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetModal('Supplier'); modalRef.hide();">Cancelar
         </button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.suppliers.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al agregar al eliminar el proveedor.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 
@@ -420,13 +358,6 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-secondary" (click)="resetModal('Requester')">Volver</button>
       </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.requester.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al cargar los datos del Proovedor.</p>
-          </blockquote>
-        </div>
-      </div>
     </ng-template>
 
     <!--DELETE REPORT CONFIRMATION MODALDelete-->
@@ -447,13 +378,6 @@
         <button type="submit" class="btn btn-danger" (click)="this.deleteReport()">Eliminar</button>
         <button type="submit" class="btn btn-secondary" (click)="resetModal('Report'); modalRef.hide();">Cancelar
         </button>
-      </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.reports.deletingError">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al eliminar el proveedor.</p>
-          </blockquote>
-        </div>
       </div>
     </ng-template>
 

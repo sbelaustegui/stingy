@@ -7,14 +7,7 @@
           <h2>Historial de Carritos</h2>
         </div>
       </div>
-      <div class="alert alert-danger text-center" *ngIf="alerts.supplierProducts.error || alerts.carts.error || alerts.user.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al cargar los carritos.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="row" *ngIf="alerts.supplierProducts.loading && !(alerts.supplierProducts.error || alerts.carts.error || alerts.user.error)">
+      <div class="row" *ngIf="alerts.supplierProducts.loading">
         <div class="col-12" style="text-align: center;">
           <span class="mx-auto">
             <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
@@ -22,7 +15,7 @@
         </div>
       </div>
       <div *ngIf="!alerts.supplierProducts.loading">
-        <h3 *ngIf="carts.length <= 0">No posee carritos anteriores al catual.</h3>
+        <h3 *ngIf="carts.length <= 0">No posee carritos anteriores al actual.</h3>
         <div *ngFor="let cartId of cartsIds()">
           <h3>Carrito del {{getCartById(cartId).date.toStringDate()}}</h3>
           <table class="table table-striped">

@@ -8,7 +8,7 @@ import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
 import {User} from "../../../shared/models/user.model";
 import {EmailValidation, PasswordValidation} from "../../../shared/validators/equal-validator.directive";
 import {AdminAuthService} from "../../../shared/auth/admin/admin-auth.service";
-import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
+import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
 
 @Component({
   selector: 'app-admins',
@@ -30,21 +30,17 @@ export class AdminsComponent implements OnInit {
   public adminsMap: Map<number, User>;
   public alerts: {
     admins: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
       deletingErrorLogged: boolean,
     },
     addAdmin: {
-      error: boolean,
       loading: boolean,
     },
-    success: boolean
   };
   modalRef: BsModalRef;
 
-  constructor(public fb: FormBuilder, public adminService: AdminService, public router: Router, private titleService: Title, private modalService: BsModalService, public authService: AdminAuthService) {
+  constructor(public fb: FormBuilder, public adminService: AdminService, public router: Router, private titleService: Title, private modalService: BsModalService, public authService: AdminAuthService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -54,21 +50,20 @@ export class AdminsComponent implements OnInit {
     this.authService.loggedUser.then(user => {
       this.loggedAdmin = user;
     }).catch(err => {
-      this.alerts.admins.error = true;
+      this.snackBar.open('Hubo un error al obtener el usuario loggeado, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     });
     this.alerts = {
       admins: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
         deletingErrorLogged: false,
       },
       addAdmin: {
-        error: false,
         loading: false,
       },
-      success: false
     };
     this.createFormControls();
     this.getAdmins();
@@ -81,11 +76,12 @@ export class AdminsComponent implements OnInit {
         this.adminsMap.set(admin.id, admin);
       });
       this.setData();
-      this.alerts.admins.error = false;
       this.alerts.admins.loading = false;
     }).catch(err => {
-      //TODO mostrar en el front mensaje de error
-      this.alerts.admins.error = true;
+      this.snackBar.open('Hubo un error al obtener los administradores, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.admins.loading = false;
     })
   }
@@ -97,21 +93,19 @@ export class AdminsComponent implements OnInit {
         this.adminsMap.set(res.id, res);
         this.refreshTable();
         this.alerts.addAdmin.loading = false;
-        this.alerts.addAdmin.error = false;
         this.newAdmin = User.empty();
         this.adminFormGroup.reset();
         this.modalRef.hide();
-        this.alerts.success = true;
-        setTimeout(() => {
-          this.alerts.success = false;
-        }, 2500);
+        this.snackBar.open('El administrador se actualizó correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
-        //TODO mostrar en el front mensaje de error
+        this.snackBar.open('Hubo un error al actualizar el administrador, por favor inténtelo nuevamente. Revise que el usuario sea válido y no se encuentre repetido', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.alerts.addAdmin.loading = false;
-        this.alerts.addAdmin.error = true;
-        setTimeout(() => {
-          this.alerts.addAdmin.error = false;
-        }, 2500);
       })
     } else {
       this.alerts.addAdmin.loading = true;
@@ -120,21 +114,19 @@ export class AdminsComponent implements OnInit {
         this.adminsMap.set(res.id, res);
         this.refreshTable();
         this.alerts.addAdmin.loading = false;
-        this.alerts.addAdmin.error = false;
         this.newAdmin = User.empty();
         this.adminFormGroup.reset();
         this.modalRef.hide();
-        this.alerts.success = true;
-        setTimeout(() => {
-          this.alerts.success = false;
-        }, 2500);
+        this.snackBar.open('El administrador se agregó correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
-        //TODO mostrar en el front mensaje de error
+        this.snackBar.open('Hubo un error al agregar el administrador, por favor inténtelo nuevamente. Revise que el usuario sea válido y no se encuentre repetido', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
         this.alerts.addAdmin.loading = false;
-        this.alerts.addAdmin.error = true;
-        setTimeout(() => {
-          this.alerts.addAdmin.error = false;
-        }, 2500);
       })
     }
   }
@@ -152,18 +144,17 @@ export class AdminsComponent implements OnInit {
       this.adminsMap.delete(this.adminToDelete.id);
       this.refreshTable();
       this.alerts.admins.deleting = false;
-      this.alerts.admins.deletingError = false;
       this.modalRef.hide();
-      this.alerts.success = true;
-      setTimeout(() => {
-        this.alerts.success = false;
-      }, 2500);
+      this.snackBar.open('El administrador se eliminó correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.admins.deleting = false;
-      this.alerts.admins.deletingError = true;
-      setTimeout(() => {
-        this.alerts.admins.deletingError = false;
-      }, 5000);
+      this.snackBar.open('Hubo un error al eliminar el administrador, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 

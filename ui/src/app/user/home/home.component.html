@@ -76,33 +76,6 @@
       </div>
     </div>
     <h3 class="col-12 no-results" *ngIf="searched && searchedProducts.length <= 0">Su búsqueda no obtuvo resultados</h3>
-    <h3 class="col-12 no-results" *ngIf="searched && alerts.search.error">Hubo un error al realizar su búsqueda.</h3>
-    <h3 class="col-12 no-results" *ngIf="searched && alerts.location.error">Hubo un error al obtener su ubicación.</h3>
-
-    <!--ALERTS-->
-    <div class="col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-      <div class="alert alert-danger text-center" *ngIf="alerts.user.error || alerts.search.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error en la carga. Revise los datos e inténtelo nuevamente.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-danger text-center mx-auto" *ngIf="alerts.location.error">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>Hubo un error al obtener su ubicacion.</p>
-          </blockquote>
-        </div>
-      </div>
-      <div class="alert alert-success text-center" *ngIf="alerts.success ">
-        <div class="card-block">
-          <blockquote class="card-blockquote">
-            <p>¡Operación realizada con éxito!</p>
-          </blockquote>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -119,13 +92,6 @@
     <agm-map [latitude]="location.latitude" [longitude]="location.longitude" *ngIf="!alerts.location.error && !alerts.location.loading">
       <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
     </agm-map>
-    <div class="alert alert-danger text-center" *ngIf="alerts.location.error">
-      <div class="card-block">
-        <blockquote class="card-blockquote">
-          <p>¡Es necesario habilitar su ubicación!</p>
-        </blockquote>
-      </div>
-    </div>
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicionarme</button>
@@ -148,13 +114,6 @@
       </div>
       <!--<label for="input">Nuevo Precio: </label>-->
       <input id="input" type="number" [min]="0" class="form-control" placeholder="Ingrese nuevo precio" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
-    </div>
-    <div class="alert alert-danger text-center" *ngIf="alerts.price.error">
-      <div class="card-block">
-        <blockquote class="card-blockquote">
-          <p>Hubo un error al actualizar el precio del proveedor</p>
-        </blockquote>
-      </div>
     </div>
   </div>
   <div class="modal-footer">

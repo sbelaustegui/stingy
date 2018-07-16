@@ -8,6 +8,7 @@ import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-categories',
@@ -33,28 +34,21 @@ export class CategoriesComponent implements OnInit {
   public subcategoriesPage: number = 1;
   public alerts: {
     categories: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     addCategory: {
-      success: boolean;
-      error: boolean,
       loading: boolean,
     },
     subcategories: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
-    deleteSuccess: boolean,
   };
   public newSubcategory: Subcategory;
   modalRef: BsModalRef;
 
-  constructor(public fb: FormBuilder, public categoryService: CategoryService, public subcategoryService: SubcategoryService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  constructor(public fb: FormBuilder, public categoryService: CategoryService, public subcategoryService: SubcategoryService, public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -63,23 +57,16 @@ export class CategoriesComponent implements OnInit {
     this.newSubcategory = Subcategory.empty();
     this.alerts = {
       categories: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       addCategory: {
-        error: false,
         loading: false,
-        success: false
       },
       subcategories: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false
       },
-      deleteSuccess: false,
     };
     this.categories = new Map<number, Category>();
     this.createCategoryFormControls();
@@ -91,10 +78,12 @@ export class CategoriesComponent implements OnInit {
   getSubcategories() {
     this.subcategoryService.subcategories.then(res => {
       this.subcategories = res;
-      this.alerts.subcategories.error = false;
       this.alerts.subcategories.loading = false;
-    }).catch(err => {
-      this.alerts.subcategories.error = true;
+    }).catch(() => {
+      this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.subcategories.loading = false;
     })
   }
@@ -105,10 +94,12 @@ export class CategoriesComponent implements OnInit {
       this.categoriesArray.forEach(c => {
         this.categories.set(c.id, c);
       });
-      this.alerts.categories.error = false;
       this.alerts.categories.loading = false;
     }).catch(err => {
-      this.alerts.categories.error = true;
+      this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.categories.loading = false;
     })
   }
@@ -120,42 +111,38 @@ export class CategoriesComponent implements OnInit {
         this.categories.set(res.id, res);
         this.categoriesArray[this.categoryIndexUpdate] = res;
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
-        this.alerts.addCategory.success = true;
-        setTimeout(() => {
-          this.alerts.addCategory.success = false;
-        }, 2500);
+        this.snackBar.open('La categoria fue actualizada correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = true;
-        setTimeout(() => {
-          this.alerts.addCategory.error = false;
-        }, 5000);
-
+        this.snackBar.open('Hubo un error al actualizar la categoria, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
     } else {
       this.categoryService.addCategory(this.newCategory).then(res => {
         this.categoriesArray.push(res);
         this.categories.set(res.id, res);
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = false;
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
-        this.alerts.addCategory.success = true;
-        setTimeout(() => {
-          this.alerts.addCategory.success = false;
-        }, 2500);
-        // this.router.navigate(['categories']);
+        this.snackBar.open('La categoria fue agregada correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = true;
-        setTimeout(() => {
-          this.alerts.addCategory.error = false;
-        }, 5000);
+        this.snackBar.open('Hubo un error al agregar la categoria, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
     }
   }
@@ -167,37 +154,38 @@ export class CategoriesComponent implements OnInit {
       this.subcategoryService.updateSubcategory(this.newSubcategory).then(res => {
         this.subcategories[this.subcategoryIndexUpdate] = res;
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = false;
         this.newSubcategory = Subcategory.empty();
         this.subcategoryFormGroup.reset();
         this.modalRef.hide();
-        this.alerts.addCategory.success = true;
-        setTimeout(() => {
-          this.alerts.addCategory.success = false;
-        }, 2500);
+        this.snackBar.open('La subcategoria fue actualizada correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = true;
-        setTimeout(() => {
-          this.alerts.addCategory.error = false;
-        }, 5000);
-
+        this.snackBar.open('Hubo un error al agregar la subcategoria, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
     } else {
       this.newSubcategory.categoryId = parseInt(String(this.newSubcategory.categoryId));
       this.subcategoryService.addSubcategory(this.newSubcategory).then(res => {
         this.subcategories.push(res);
         this.alerts.addCategory.loading = false;
-        this.alerts.addCategory.error = false;
         this.newSubcategory = Subcategory.empty();
         this.subcategoryFormGroup.reset();
         this.modalRef.hide();
+        this.snackBar.open('La subcategoria fue agregada correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       }).catch(() => {
         this.alerts.addCategory.loading = false;
-        this.alerts.subcategories.error = true;
-        setTimeout(() => {
-          this.alerts.subcategories.error = false;
-        }, 5000);
+        this.snackBar.open('Hubo un error al agregar la subcategoria, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
     }
   }
@@ -209,18 +197,17 @@ export class CategoriesComponent implements OnInit {
       this.categoriesArray.splice(this.categoryIndexToDelete, 1);
       this.categories.delete(this.categoryToDelete.id);
       this.alerts.categories.deleting = false;
-      this.alerts.categories.deletingError = false;
       this.modalRef.hide();
-      this.alerts.deleteSuccess = true;
-      setTimeout(() => {
-        this.alerts.deleteSuccess = false;
-      }, 2500);
+      this.snackBar.open('La categoria fue eliminada correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.categories.deleting = false;
-      this.alerts.categories.error = true;
-      setTimeout(() => {
-        this.alerts.categories.error = false;
-      }, 2500);
+      this.snackBar.open('Hubo un error al eliminar la categoria, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -242,18 +229,17 @@ export class CategoriesComponent implements OnInit {
     this.subcategoryService.deleteSubcategory(this.subcategoryToDelete.id).then(res => {
       this.subcategories.splice(this.subcategoryIndexToDelete, 1);
       this.alerts.subcategories.deleting = false;
-      this.alerts.subcategories.deletingError = false;
       this.modalRef.hide();
-      this.alerts.addCategory.success = true;
-      setTimeout(() => {
-        this.alerts.addCategory.success = false;
-      }, 2500);
+      this.snackBar.open('La subcategoria fue eliminada correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.subcategories.deleting = false;
-      this.alerts.subcategories.deletingError = true;
-      setTimeout(() => {
-        this.alerts.subcategories.deletingError = false;
-      }, 2500);
+      this.snackBar.open('Hubo un error al eliminar la subcategoria, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 

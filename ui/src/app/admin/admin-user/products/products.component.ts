@@ -1,10 +1,10 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {Product} from "../../../shared/models/product.model";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProductService} from "../../../shared/services/product.service";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-products',
@@ -20,20 +20,16 @@ export class ProductsComponent implements OnInit {
   public productsPage: number = 1;
   public alerts: {
     products: {
-      error: boolean,
       loading: boolean,
       deleting: boolean,
-      deletingError: boolean,
     },
     addProduct: {
-      error: boolean,
       loading: boolean,
     },
-    success: boolean
   };
   modalRef: BsModalRef;
 
-  constructor(public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService) {
+  constructor(public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -41,16 +37,12 @@ export class ProductsComponent implements OnInit {
     this.newProduct = Product.empty();
     this.alerts = {
       products: {
-        error: false,
         loading: true,
         deleting: false,
-        deletingError: false,
       },
       addProduct: {
-        error: false,
         loading: false,
       },
-      success:false
     };
     this.getProducts();
   }
@@ -61,12 +53,12 @@ export class ProductsComponent implements OnInit {
       this.productsArray = res.map(p => {
         return Product.from(p)
       });
-      this.alerts.products.error = false;
       this.alerts.products.loading = false;
     }).catch(err => {
-      console.log(err);
-      //TODO mostrar en el front mensaje de error
-      this.alerts.products.error = true;
+      this.snackBar.open('Hubo un error al obtener los productos, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
       this.alerts.products.loading = false;
     })
   }
@@ -76,17 +68,18 @@ export class ProductsComponent implements OnInit {
     this.productService.validateProduct(this.newProduct.id).then(res => {
       this.newProduct.isValidated = true;
       this.alerts.addProduct.loading = false;
-      this.alerts.addProduct.error = false;
       this.newProduct = Product.empty();
       this.modalRef.hide();
-      this.alerts.success = true;
-      setTimeout(() => {this.alerts.success = false;},2500);
+      this.snackBar.open('El producto fue validado correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
-      //TODO mostrar en el front mensaje de error
       this.alerts.addProduct.loading = false;
-      this.alerts.addProduct.error = true;
-      this.alerts.addProduct.error = true;
-      setTimeout(() => {this.alerts.addProduct.error = false;},5000);
+      this.snackBar.open('Hubo un error al validar el producto, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
@@ -96,14 +89,17 @@ export class ProductsComponent implements OnInit {
       this.productsArray.splice(this.productIndexToDelete,1);
       //TODO mostrar mensajes de error/success/ y loader
       this.alerts.products.deleting = false;
-      this.alerts.products.deletingError = false;
       this.modalRef.hide();
-      this.alerts.success = true;
-      setTimeout(() => {this.alerts.success = false;},2500);
+      this.snackBar.open('El producto fue eliminado correctamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     }).catch(() => {
       this.alerts.products.deleting = false;
-      this.alerts.products.deletingError = true;
-      setTimeout(() => {this.alerts.products.deletingError = false;},5000);
+      this.snackBar.open('Hubo un error al eliminar el producto, por favor inténtelo nuevamente.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
     })
   }
 
