@@ -69,12 +69,12 @@ class ReportController @Inject()(cc: ControllerComponents) extends AbstractContr
   }
 
   def getByUserId(id: Long) = Action {
-    Report.getByUserId(id) match {
-      case Some(report) =>
+    User.getById(id) match {
+      case Some(_) =>
         Ok(
           Json.toJson(
             ResponseGenerated(
-              OK, "Report found", Json.toJson(report)
+              OK, "Reports found", Json.toJson(Report.getByUserId(id))
             )
           )
         )
@@ -82,7 +82,28 @@ class ReportController @Inject()(cc: ControllerComponents) extends AbstractContr
         BadRequest(
           Json.toJson(
             ResponseGenerated(
-              BAD_REQUEST, "No report for that user id"
+              BAD_REQUEST, "No user for that id"
+            )
+          )
+        )
+    }
+  }
+
+  def getUserReportStatistics(id: Long) = Action {
+    User.getById(id) match {
+      case Some(_) =>
+        Ok(
+          Json.toJson(
+            ResponseGenerated(
+              OK, "Reports found", Json.toJson(Report.getUserReportStatistics(id))
+            )
+          )
+        )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(
+              BAD_REQUEST, "No user for that id"
             )
           )
         )
@@ -151,24 +172,23 @@ class ReportController @Inject()(cc: ControllerComponents) extends AbstractContr
 
   def delete(id: Long) = Action {
     Report.getById(id) match {
-      case Some(report) =>
-        Report.delete(report) match {
-          case Some(true) =>
-            Ok(
-              Json.toJson(
-                ResponseGenerated(
-                  OK, "Report deleted"
-                )
+      case Some(_) =>
+        if(Report.reject(id)) {
+          Ok(
+            Json.toJson(
+              ResponseGenerated(
+                OK, "Report rejected"
               )
             )
-          case _ =>
-            BadRequest(
-              Json.toJson(
-                ResponseGenerated(
-                  BAD_REQUEST, "Delete error"
-                )
+          )
+        }else{
+          BadRequest(
+            Json.toJson(
+              ResponseGenerated(
+                BAD_REQUEST, "Delete error"
               )
             )
+          )
         }
       case None =>
         BadRequest(

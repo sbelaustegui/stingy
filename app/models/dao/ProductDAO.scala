@@ -80,6 +80,14 @@ object ProductDAO {
     EProduct.getAllProducts.map(Product.apply).toList
   }
 
+  def getTotalProductAmountByUserId(id: Long): Integer = {
+    EProduct.getTotalProductAmountByUserId(id)
+  }
+
+  def getValidatedProductAmountByUserId(id: Long): Integer = {
+    EProduct.getValidatedProductAmountByUserId(id)
+  }
+
   def delete(product: Product): Option[Boolean] = {
     product.id match {
       case Some(_) =>

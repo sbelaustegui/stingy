@@ -5,7 +5,7 @@ import models.domain.util.Date
 import models.ebean.{Report => EReport}
 import play.api.libs.json.{Json, OFormat}
 
-case class Report(id: Option[Long], userId: Long, description: String, date: Date, solved: Boolean) {
+case class Report(id: Option[Long], userId: Long, description: String, date: Date, solved: Boolean, rejected: Boolean) {
   def equals(report: Report): Boolean = {
     if(report.id.isDefined && id.isDefined) id.get.equals(report.id.get)
     else false
@@ -20,7 +20,8 @@ object Report extends ReportJsonFormat {
       report.getUser.getId,
       report.getDescription,
       Date(report.getDate),
-      report.getSolved
+      report.getSolved,
+      report.getRejected
     )
   }
 
@@ -30,6 +31,7 @@ object Report extends ReportJsonFormat {
       reportCreate.userId,
       reportCreate.description,
       Date.now,
+      false,
       false
     )
   }
@@ -42,12 +44,16 @@ object Report extends ReportJsonFormat {
     ReportDAO.getById(id)
   }
 
-  def getByUserId(id : Long) : Option[Report] = {
+  def getByUserId(id : Long) : List[Report] = {
     ReportDAO.getByUserId(id)
   }
 
   def getAll: List[Report] = {
     ReportDAO.getAllReports
+  }
+
+  def reject(id: Long): Boolean = {
+    ReportDAO.reject(id)
   }
 
   def getUnresolved: List[Report] = {
@@ -56,6 +62,10 @@ object Report extends ReportJsonFormat {
 
   def delete(report: Report): Option[Boolean] = {
     ReportDAO.delete(report)
+  }
+
+  def getUserReportStatistics(id: Long): ReportStatistics = {
+    ReportStatistics(ReportDAO.getNumberOfTotalUserReports(id).longValue(), ReportDAO.getNumberOfRejectedUserReports(id).longValue(), ReportDAO.getNumberOfSolvedUserReports(id).longValue())
   }
 
 }

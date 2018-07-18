@@ -42,6 +42,7 @@ DELETE      /api/supplier/:id                                   controllers.Supp
 POST        /api/product                                        controllers.ProductController.register()
 POST        /api/product/search                                 controllers.ProductController.search()
 GET         /api/product/all                                    controllers.ProductController.getAll
+#GET         /api/product/statistics/:id                         controllers.ProductController.getProductStatistics(id: Long)
 GET         /api/product/validate/:id                           controllers.ProductController.validate(id: Long)
 GET         /api/product/id/:id                                 controllers.ProductController.getById(id: Long)
 PUT         /api/product                                        controllers.ProductController.update()
@@ -92,6 +93,7 @@ GET         /api/report/unresolved                              controllers.Repo
 GET         /api/report/id/:id                                  controllers.ReportController.getById(id: Long)
 GET         /api/report/resolve/:id                             controllers.ReportController.resolveReport(id: Long)
 GET         /api/report/user/:id                                controllers.ReportController.getByUserId(id: Long)
+GET         /api/report/statistics/:id                          controllers.ReportController.getUserReportStatistics(id: Long)
 PUT         /api/report                                         controllers.ReportController.update()
 DELETE      /api/report/:id                                     controllers.ReportController.delete(id: Long)
 

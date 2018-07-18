@@ -58,11 +58,15 @@ object Product extends ProductJsonFormat {
   }
 
   def validate(product: Product): Product = {
-      ProductDAO.validate(product)
+    ProductDAO.validate(product)
   }
 
   def delete(product: Product): Option[Boolean] = {
     ProductDAO.delete(product)
+  }
+
+  def getUserProductStatistics(id: Long): ProductStatistics = {
+    ProductStatistics(ProductDAO.getTotalProductAmountByUserId(id).longValue(), ProductDAO.getValidatedProductAmountByUserId(id).longValue())
   }
 
   def addImage(productImage: ProductImage): ProductImage = {

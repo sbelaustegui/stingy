@@ -19,7 +19,8 @@ object ReportDAO {
       User.getById(report.userId).get(),
       report.description,
       report.date.toDateTime,
-      report.solved
+      report.solved,
+      report.rejected
     )
   }
 
@@ -45,13 +46,8 @@ object ReportDAO {
     }
   }
 
-  def getByUserId(id: Long) : Option[Report] = {
-    toScalaOption(EReport.getReportByUserId(id)) match {
-      case Some(report) =>
-        Some(Report(report))
-      case None =>
-        None
-    }
+  def getByUserId(id: Long) : List[Report] = {
+    EReport.getReportByUserId(id).map(Report.apply).toList
   }
 
   def getReportsUnresolved : List[Report] = {
@@ -60,6 +56,28 @@ object ReportDAO {
 
   def getAllReports: List[Report] = {
     EReport.getAllReports.map(Report.apply).toList
+  }
+
+  def reject(id: Long): Boolean = {
+    getById(id) match {
+      case Some(report) =>
+        val rejectedReport = report.copy(rejected = true)
+        saveOrUpdate(rejectedReport).isDefined
+      case None =>
+        false
+    }
+  }
+
+  def getNumberOfRejectedUserReports(id: Long): Integer = {
+    EReport.getNumberOfRejectedUserReports(id)
+  }
+
+  def getNumberOfSolvedUserReports(id: Long): Integer = {
+    EReport.getNumberOfSolvedUserReports(id)
+  }
+
+  def getNumberOfTotalUserReports(id: Long): Integer = {
+    EReport.getNumberOfTotalUserReports(id)
   }
 
   def delete(report: Report): Option[Boolean] = {

@@ -5,6 +5,7 @@ import javax.inject.Inject
 import models.domain.image.Image
 import models.domain.product._
 import models.domain.product.productImage.ProductImageCreate
+import models.domain.report.Report
 import models.domain.user.User
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
@@ -195,6 +196,27 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
         BadRequest(
           Json.toJson(
             ResponseGenerated(BAD_REQUEST, "No product found")
+          )
+        )
+    }
+  }
+
+  def getUserProductStatistics(id: Long) = Action {
+    User.getById(id) match {
+      case Some(_) =>
+        Ok(
+          Json.toJson(
+            ResponseGenerated(
+              OK, "Reports found", Json.toJson(Product.getUserProductStatistics(id))
+            )
+          )
+        )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(
+              BAD_REQUEST, "No user for that id"
+            )
           )
         )
     }

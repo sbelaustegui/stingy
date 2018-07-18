@@ -66,6 +66,14 @@ public class Product extends Model {
         return Optional.of(Ebean.find(Product.class).where().icontains("name", name).eq("subcategory_id", subcategoryId).eq("is_validated", 1).findList());
     }
 
+    public static Integer getTotalProductAmountByUserId(Long id){
+        return Ebean.find(Product.class).where().eq("user_id", id).findCount();
+    }
+
+    public static Integer getValidatedProductAmountByUserId(Long id){
+        return Ebean.find(Product.class).where().eq("user_id", id).eq("is_validated", 1).findCount();
+    }
+
     public static List<Product> getAllProducts() {
         return finder.all();
     }

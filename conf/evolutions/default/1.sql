@@ -78,6 +78,7 @@ create table report (
   description                   varchar(255),
   date                          datetime(6),
   solved                        tinyint(1) default 0,
+  rejected                      tinyint(1) default 0,
   constraint pk_report primary key (id)
 );
 

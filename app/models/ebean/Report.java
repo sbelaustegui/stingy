@@ -24,16 +24,18 @@ public class Report extends Model {
     private String description;
     private DateTime date;
     private Boolean solved;
+    private Boolean rejected;
 
 
     private static Finder<Long, Report> finder = new Finder<>(Report.class);
 
-    public Report(Long id, User user, String description, DateTime date, Boolean solved) {
+    public Report(Long id, User user, String description, DateTime date, Boolean solved, Boolean rejected) {
         this.id = id;
         this.date = date;
         this.description = description;
         this.user = user;
         this.solved = solved;
+        this.rejected = rejected;
     }
 
     @Override
@@ -49,12 +51,24 @@ public class Report extends Model {
         return Optional.empty();
     }
 
-    public static Optional<Report> getReportByUserId(Long id){
-        return Optional.ofNullable(Ebean.find(Report.class).where().eq("user_id", id).findOne());
+    public static List<Report> getReportByUserId(Long id){
+        return Ebean.find(Report.class).where().eq("user_id", id).findList();
     }
 
     public static List<Report> getReportsUnsolved(){
-        return Ebean.find(Report.class).where().eq("solved", 0).findList();
+        return Ebean.find(Report.class).where().eq("solved", 0).eq("rejected", 0).findList();
+    }
+
+    public static Integer getNumberOfRejectedUserReports(Long id){
+        return Ebean.find(Report.class).where().eq("user_id", id).eq("rejected", 1).findCount();
+    }
+
+    public static Integer getNumberOfSolvedUserReports(Long id){
+        return Ebean.find(Report.class).where().eq("user_id", id).eq("solved", 1).findCount();
+    }
+
+    public static Integer getNumberOfTotalUserReports(Long id){
+        return Ebean.find(Report.class).where().eq("user_id", id).findCount();
     }
 
     public static List<Report> getAllReports() {
@@ -79,5 +93,9 @@ public class Report extends Model {
 
     public User getUser() {
         return user;
+    }
+
+    public Boolean getRejected() {
+        return rejected;
     }
 }
