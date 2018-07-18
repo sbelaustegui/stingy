@@ -21,6 +21,12 @@ class SupplierProductController @Inject()(cc: ControllerComponents) extends Abst
         case Some(supplierProductCreate) =>
           SupplierProduct.saveOrUpdate(SupplierProduct(supplierProductCreate)) match {
             case Some(savedSupplierProduct) =>
+              User.getById(savedSupplierProduct.userId) match {
+                case Some(user) =>
+                  val newRate = user.rate + 5.0
+                  User.saveOrUpdate(user.copy(rate = newRate))
+                case None =>
+              }
               Ok(
                 Json.toJson(
                   ResponseGenerated(

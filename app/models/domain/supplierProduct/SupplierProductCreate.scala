@@ -4,7 +4,7 @@ import models.domain.util.Date
 import models.ebean.{SupplierProduct => ESupplierProduct}
 import play.api.libs.json.{Json, OFormat}
 
-case class SupplierProductCreate(supplierId: Long, productId: Long, price: Double)
+case class SupplierProductCreate(supplierId: Long, productId: Long, price: Double, userId: Long)
 
 object SupplierProductCreate extends SupplierProductCreateJsonFormat{
   def apply(supplierProduct: ESupplierProduct): SupplierProduct = {
@@ -13,7 +13,8 @@ object SupplierProductCreate extends SupplierProductCreateJsonFormat{
       supplierProduct.getSupplierId,
       supplierProduct.getProductId,
       supplierProduct.getPrice,
-      Date.now
+      Date.now,
+      supplierProduct.getUserId
     )
   }
 }

@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 import models.domain.report._
+import models.domain.user.User
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -89,15 +90,22 @@ class ReportController @Inject()(cc: ControllerComponents) extends AbstractContr
   }
 
   def resolveReport(id: Long) = Action {
-    Report.getByUserId(id) match {
+    Report.getById(id) match {
       case Some(report) =>
         val resolvedReport = report.copy(solved = true)
         Report.saveOrUpdate(resolvedReport) match {
-          case Some(_) =>
+          case Some(newReport) =>
+            User.getById(newReport.userId) match {
+              case Some(user) =>
+                val newRate = user.rate + 25.0
+                val userUpdate = user.copy(rate = newRate)
+                User.saveOrUpdate(userUpdate)
+              case None =>
+            }
             Ok(
               Json.toJson(
                 ResponseGenerated(
-                  OK, "Report found", Json.toJson(report)
+                  OK, "Report found", Json.toJson(newReport)
                 )
               )
             )

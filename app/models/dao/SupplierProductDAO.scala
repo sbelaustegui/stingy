@@ -20,7 +20,8 @@ object SupplierProductDAO {
       supplierProduct.supplierId,
       supplierProduct.productId,
       supplierProduct.price,
-      supplierProduct.date.toDateTime
+      supplierProduct.date.toDateTime,
+      supplierProduct.userId
     )
   }
 

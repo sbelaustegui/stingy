@@ -24,15 +24,18 @@ public class SupplierProduct extends Model {
     private Long productId;
     private Double price;
     private DateTime date;
+    @NotNull
+    private Long userId;
 
     private static Finder<Long, SupplierProduct> finder = new Finder<>(SupplierProduct.class);
 
-    public SupplierProduct(Long id, Long supplierId, Long productId, Double price, DateTime date) {
+    public SupplierProduct(Long id, Long supplierId, Long productId, Double price, DateTime date, Long userId) {
         this.id = id;
         this.productId = productId;
         this.supplierId = supplierId;
         this.price = price;
         this.date = date;
+        this.userId = userId;
     }
 
     @Override
@@ -123,5 +126,9 @@ public class SupplierProduct extends Model {
 
     public DateTime getDate() {
         return date;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

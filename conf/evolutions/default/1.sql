@@ -104,6 +104,7 @@ create table supplier_product (
   product_id                    bigint not null,
   price                         double,
   date                          datetime(6),
+  user_id                       bigint not null,
   constraint pk_supplier_product primary key (id)
 );
 

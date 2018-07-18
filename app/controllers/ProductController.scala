@@ -5,6 +5,7 @@ import javax.inject.Inject
 import models.domain.image.Image
 import models.domain.product._
 import models.domain.product.productImage.ProductImageCreate
+import models.domain.user.User
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -178,6 +179,13 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
   def validate(id: Long) = Action {
     Product.getById(id) match {
       case Some(product) =>
+        User.getById(product.userId) match {
+          case Some(user) =>
+            val newRate = user.rate + 50.0
+            val userUpdate = user.copy(rate = newRate)
+            User.saveOrUpdate(userUpdate)
+          case None =>
+        }
         Ok(
           Json.toJson(
             ResponseGenerated(OK, "Product update successful", Json.toJson(Product.validate(product)))

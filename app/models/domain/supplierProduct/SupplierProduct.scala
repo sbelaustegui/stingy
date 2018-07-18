@@ -6,7 +6,7 @@ import models.domain.util.Date
 import models.ebean.{SupplierProduct => ESupplierProduct}
 import play.api.libs.json.{Json, OFormat}
 
-case class SupplierProduct(id: Option[Long], supplierId: Long, productId: Long, price: Double, date: Date) {
+case class SupplierProduct(id: Option[Long], supplierId: Long, productId: Long, price: Double, date: Date, userId: Long) {
   def equals(supplierProduct: SupplierProduct): Boolean = {
     if(supplierProduct.id.isDefined && id.isDefined) id.get.equals(supplierProduct.id.get)
     else false
@@ -21,7 +21,8 @@ object SupplierProduct extends SupplierProductJsonFormat {
       supplierProduct.getSupplierId,
       supplierProduct.getProductId,
       supplierProduct.getPrice,
-      Date(supplierProduct.getDate)
+      Date(supplierProduct.getDate),
+      supplierProduct.getUserId
     )
   }
 
@@ -31,7 +32,8 @@ object SupplierProduct extends SupplierProductJsonFormat {
       supplierProductCreate.supplierId,
       supplierProductCreate.productId,
       supplierProductCreate.price,
-      Date.now
+      Date.now,
+      supplierProductCreate.userId
     )
   }
 

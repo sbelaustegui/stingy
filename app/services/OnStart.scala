@@ -89,30 +89,31 @@ class OnStartImpl @Inject() (appLifecycle: ApplicationLifecycle) extends OnStart
 
   def createSuppliersProduct(): List[SupplierProduct] = {
     var supplierProducts: List[SupplierProduct] = List()
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 1, 50))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 1, 55))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 1, 75))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 2, 15))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 2, 20))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 3, 200))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 3, 205))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 4, 5))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 4, 25))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 5, 67))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 5, 70))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 6, 700))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 7, 7500))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 7, 7200))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 8, 15000))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 8, 15500))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 9, 20000))).get :: supplierProducts
-    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 9, 21000))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 1, 50, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 1, 55, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 1, 75, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 2, 15, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 2, 20, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 3, 200, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 3, 205, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 4, 5, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 4, 25, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 5, 67, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 5, 70, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 6, 700, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 7, 7500, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 7, 7200, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(3, 8, 15000, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 8, 15500, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(1, 9, 20000, 1))).get :: supplierProducts
+    supplierProducts = SupplierProduct.saveOrUpdate(SupplierProduct(SupplierProductCreate(2, 9, 21000, 1))).get :: supplierProducts
     supplierProducts
   }
 
   def createCarts(): List[Cart] = {
     var carts: List[Cart] = List()
-    carts = Cart.saveOrUpdate(Cart(CartCreate(1))).get :: carts
+    val secondCart = Cart.saveOrUpdate(Cart(CartCreate(1))).get
+    carts = Cart.saveOrUpdate(secondCart.copy(current = false)).get :: carts
     carts = Cart.saveOrUpdate(Cart(CartCreate(1))).get :: carts
     carts
   }
