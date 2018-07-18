@@ -173,7 +173,10 @@ export class AdminsComponent implements OnInit {
   }
 
   openAdminModal(template: TemplateRef<any>, id?) {
-    if (id) this.newAdmin = Object.assign({}, this.adminsMap.get(id));
+    if (id) {
+      const a = Object.assign({}, this.adminsMap.get(id));
+      this.newAdmin = a;
+    }
     this.adminFormGroup.controls['confirmPassword'].setValue(this.newAdmin.password);
     this.modalRef = this.modalService.show(template);
   }

@@ -1,120 +1,281 @@
 <div class="admin-categories">
   <div class="row">
+
     <!--CATEGORY TABLE-->
-    <div class="col-12 col-md-6">
-      <div class="row">
-        <div class="col-8">
-          <h2>Categorias</h2>
+    <div class="col-lg-6 mx-auto">
+      <!--LOADING ANIMATION-->
+      <div class="loading" *ngIf="alerts.categories.loading">
+        <div class="col-lg-6 "><h2>Proovedores</h2></div>
+        <div class="col-lg-4 offset-lg-4 col-2 offset-5">
+        <span class="mx-auto">
+          <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
+        </span>
         </div>
-        <div class="add-button col-4">
-          <button mat-mini-fab style="background-color: white" (click)="openCategoryModal(newCategoryModal)">
+      </div>
+      <div class="row" *ngIf="!alerts.categories.loading">
+        <div class="col-lg-6 "><h2>Categorias</h2></div>
+        <div class="header-table col-lg-4 col-8">
+          <mat-form-field>
+            <input matInput (keyup)="applyCategoryFilter($event.target.value)" placeholder="Buscar Categoria">
+          </mat-form-field>
+        </div>
+        <div class="add-button col-lg-2 col-4">
+          <button mat-mini-fab style="background-color: white" (click)="openModal(newCategoryModal,'CATEGORY')">
             <mat-icon style="color: black">add</mat-icon>
           </button>
         </div>
-      </div>
-      <div style="overflow-x:auto;">
-        <table class="table table-striped" *ngIf="!alerts.categories.loading">
-          <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">
-            <th scope="row">{{category.id}}</th>
-            <td>{{category.name}}</td>
-            <td>
-              <div class="upload-button">
-                <button type="button" class="btn btn-light"  (click)="openCategoryModal(newCategoryModal, i, category)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </div>
-            </td>
-            <td>
-              <div class="remove-button">
-              <button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <pagination-controls id="categories"
-                           class="paginator"
-                           (pageChange)="categoriesPage = $event"
-                           autoHide="true"
-                           previousLabel="Anterior"
-                           nextLabel="Siguiente">
-      </pagination-controls>
-    </div>
-    <!--SUB-CATEGORY TABLE-->
-    <div class="col-12 col-md-6">
-      <div class="row">
-        <div class="col-8">
-          <h2>SubCategorias</h2>
+        <div class="container-table col-lg-12">
+          <mat-table #suppliersTable [dataSource]="categories_DataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+            </ng-container>
+
+            <!--Update Column-->
+            <ng-container matColumnDef="update">
+              <mat-header-cell *matHeaderCellDef align="center"><span><b>Actualizar</b></span></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="upload-button" align="center">
+                  <button mat-icon-button (click)="openModal(newCategoryModal,'CATEGORY', row.id)">
+                    <mat-icon>
+                      <i class="fa fa-pencil"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!--Remove Column-->
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="remove-button" align="center">
+                  <button mat-icon-button (click)="openModal(deleteModal,'CATEGORYDELETE',row.id)">
+                    <mat-icon>
+                      <i class="fa fa-trash"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="categories_Columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: categories_Columns;">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-        <div class="add-button col-4">
-          <button mat-mini-fab style="background-color: white" (click)="openSubcategoryModal(newSubcategoryModal, -1)">
+
+      </div>
+    </div>
+
+    <!--SUBCATEGORY TABLE-->
+    <div class="col-lg-6 mx-auto">
+      <!--LOADING ANIMATION-->
+      <div class="loading" *ngIf="alerts.subcategories.loading">
+        <div class="col-lg-6 "><h2>Proovedores</h2></div>
+        <div class="col-lg-4 offset-lg-4 col-2 offset-5">
+        <span class="mx-auto">
+          <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
+        </span>
+        </div>
+      </div>
+      <div class="row" *ngIf="!alerts.subcategories.loading">
+        <div class="col-lg-6 "><h2>Sub-Categorias</h2></div>
+        <div class="header-table col-lg-4 col-8">
+          <mat-form-field>
+            <input matInput (keyup)="applySubcategoriesFilter($event.target.value)" placeholder="Buscar Subcategoria">
+          </mat-form-field>
+        </div>
+        <div class="add-button col-lg-2 col-4">
+          <button mat-mini-fab style="background-color: white" (click)="openModal(newCategoryModal,'SUBCATEGORY')">
             <mat-icon style="color: black">add</mat-icon>
           </button>
         </div>
+        <div class="container-table col-lg-12">
+          <mat-table #suppliersTable [dataSource]="subCategories_DataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="categoryId">
+              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Categoria</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{categoriesMap.get(row.categoryId).name}}</mat-cell>
+            </ng-container>
+
+
+            <!--Update Column-->
+            <ng-container matColumnDef="update">
+              <mat-header-cell *matHeaderCellDef align="center"><span><b>Actualizar</b></span></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="upload-button" align="center">
+                  <button mat-icon-button (click)="openModal(newSubcategoryModal,'SUBCATEGORY', row.id)">
+                    <mat-icon>
+                      <i class="fa fa-pencil"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!--Remove Column-->
+            <ng-container matColumnDef="remove">
+              <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <div class="remove-button" align="center">
+                  <button mat-icon-button (click)="openModal(deleteModal,'SUBCATEGORYDELETE',row.id)">
+                    <mat-icon>
+                      <i class="fa fa-trash"></i>
+                    </mat-icon>
+                  </button>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="subCategories_Columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: subCategories_Columns;">
+            </mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
       </div>
-      <div style="overflow-x:auto;">
-        <table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">
-          <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">
-            <th scope="row">{{subcategory.id}}</th>
-            <td>{{subcategory.name}}</td>
-            <td>{{categories.get(subcategory.categoryId).name}}</td>
-            <td>
-              <div class="upload-button">
-                <button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-              </div>
-            </td>
-            <td>
-              <div class="remove-button">
-                <button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <pagination-controls id="subcategories"
-                           class="paginator"
-                           (pageChange)="subcategoriesPage = $event"
-                          autoHide="true"
-                          previousLabel="Anterior"
-                          nextLabel="Siguiente">
-      </pagination-controls>
     </div>
+
+    <!--&lt;!&ndash;CATEGORY TABLE&ndash;&gt;-->
+    <!--<div class="col-12 col-md-6">-->
+      <!--<div class="row">-->
+        <!--<div class="col-8">-->
+          <!--<h2>Categorias</h2>-->
+        <!--</div>-->
+        <!--<div class="add-button col-4">-->
+          <!--<button mat-mini-fab style="background-color: white" (click)="openCategoryModal(newCategoryModal)">-->
+            <!--<mat-icon style="color: black">add</mat-icon>-->
+          <!--</button>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div style="overflow-x:auto;">-->
+        <!--<table class="table table-striped" *ngIf="!alerts.categories.loading">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<th scope="col">Id</th>-->
+            <!--<th scope="col">Nombre</th>-->
+            <!--<th scope="col">Editar</th>-->
+            <!--<th scope="col">Eliminar</th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">-->
+            <!--<th scope="row">{{category.id}}</th>-->
+            <!--<td>{{category.name}}</td>-->
+            <!--<td>-->
+              <!--<div class="upload-button">-->
+                <!--<button type="button" class="btn btn-light"  (click)="openCategoryModal(newCategoryModal, i, category)">-->
+                  <!--<i class="fa fa-pencil"></i>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<div class="remove-button">-->
+              <!--<button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">-->
+                <!--<i class="fa fa-trash"></i>-->
+              <!--</button>-->
+            <!--</div>-->
+            <!--</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+      <!--<pagination-controls id="categories"-->
+                           <!--class="paginator"-->
+                           <!--(pageChange)="categoriesPage = $event"-->
+                           <!--autoHide="true"-->
+                           <!--previousLabel="Anterior"-->
+                           <!--nextLabel="Siguiente">-->
+      <!--</pagination-controls>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;SUB-CATEGORY TABLE&ndash;&gt;-->
+    <!--<div class="col-12 col-md-6">-->
+      <!--<div class="row">-->
+        <!--<div class="col-8">-->
+          <!--<h2>SubCategorias</h2>-->
+        <!--</div>-->
+        <!--<div class="add-button col-4">-->
+          <!--<button mat-mini-fab style="background-color: white" (click)="openSubcategoryModal(newSubcategoryModal, -1)">-->
+            <!--<mat-icon style="color: black">add</mat-icon>-->
+          <!--</button>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div style="overflow-x:auto;">-->
+        <!--<table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">-->
+          <!--<thead>-->
+          <!--<tr>-->
+            <!--<th scope="col">Id</th>-->
+            <!--<th scope="col">Nombre</th>-->
+            <!--<th scope="col">Categoria</th>-->
+            <!--<th scope="col">Editar</th>-->
+            <!--<th scope="col">Eliminar</th>-->
+          <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+          <!--<tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">-->
+            <!--<th scope="row">{{subcategory.id}}</th>-->
+            <!--<td>{{subcategory.name}}</td>-->
+            <!--<td>{{categories.get(subcategory.categoryId).name}}</td>-->
+            <!--<td>-->
+              <!--<div class="upload-button">-->
+                <!--<button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">-->
+                  <!--<i class="fa fa-pencil"></i>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<div class="remove-button">-->
+                <!--<button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">-->
+                  <!--<i class="fa fa-trash"></i>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</td>-->
+          <!--</tr>-->
+          <!--</tbody>-->
+        <!--</table>-->
+      <!--</div>-->
+      <!--<pagination-controls id="subcategories"-->
+                           <!--class="paginator"-->
+                           <!--(pageChange)="subcategoriesPage = $event"-->
+                          <!--autoHide="true"-->
+                          <!--previousLabel="Anterior"-->
+                          <!--nextLabel="Siguiente">-->
+      <!--</pagination-controls>-->
+    <!--</div>-->
 
     <!--New category Modal-->
     <ng-template #newCategoryModal>
       <div class="modal-header">
         <h4 class="modal-title pull-left">
-          <span *ngIf="!newCategory.id">Nueva categoría</span>
-          <span *ngIf="newCategory.id">Editar categoría {{newCategory.name}}</span>
+          <span *ngIf="alerts.add.category">Nueva categoría</span>
+          <span *ngIf="!alerts.add.category">Editar categoría {{newCategory.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('CATEGORY'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -142,16 +303,17 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}" (click)="uploadCategory()">Guardar</button>
       </div>
+      <button type="submit" class="btn btn-secondary" (click)="resetModal('CATEGORY'); modalRef.hide();">Cancelar</button>
     </ng-template>
 
     <!--New subcategory Modal-->
     <ng-template #newSubcategoryModal>
       <div class="modal-header">
         <h4 class="modal-title pull-left">
-          <span *ngIf="!newSubcategory.id">Nueva subcategoría</span>
-          <span *ngIf="newSubcategory.id">Editar subcategoría {{newSubcategory.name}}</span>
+          <span *ngIf="alerts.add.subCategory">Nueva subcategoría</span>
+          <span *ngIf="!alerts.add.subCategory">Editar subcategoría {{newSubcategory.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('SUBCATEGORY');modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -196,16 +358,17 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': subcategoryFormGroup.invalid}" (click)="uploadSubcategory()">Guardar</button>
       </div>
+      <button type="submit" class="btn btn-secondary" (click)="resetModal('SUBCATEGORY'); modalRef.hide();">Cancelar</button>
     </ng-template>
 
     <!--Delete confirmation modal-->
     <ng-template #deleteModal>
-      <div class="modal-header" (keyup.esc)="resetDeleteModal()">
+      <div class="modal-header" (keyup.esc)="resetModal('DELETE')">
         <h4 class="modal-title pull-left">Eliminar
           <span *ngIf="categoryToDelete">Categoria {{categoryToDelete.name}}</span>
           <span *ngIf="subcategoryToDelete">Subcategoria {{subcategoryToDelete.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetDeleteModal(); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('DELETE'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -214,7 +377,7 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger" (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetDeleteModal(); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETE'); modalRef.hide();">Cancelar</button>
       </div>
     </ng-template>
 
