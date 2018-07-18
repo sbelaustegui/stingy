@@ -6,7 +6,7 @@
       <!--LOADING ANIMATION-->
       <div class="loading" *ngIf="alerts.suppliers.loading">
         <div class="col-lg-6 "><h2>Proovedores</h2></div>
-        <div class="col-md-4 offset-md-4 col-2 offset-5">
+        <div class="col-lg-4 offset-lg-4 col-2 offset-5">
         <span class="mx-auto">
           <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
         </span>
@@ -25,8 +25,7 @@
           </button>
         </div>
         <div class="container-table col-lg-12">
-
-          <mat-table [dataSource]="supplier_DataSource" matSort>
+          <mat-table #suppliersTable [dataSource]="supplier_DataSource" matSort>
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -79,7 +78,6 @@
             <mat-row *matRowDef="let row; columns: supplier_Columns;">
             </mat-row>
           </mat-table>
-
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
@@ -170,7 +168,7 @@
         </div>
         <div class="container-table col-lg-12">
 
-          <mat-table [dataSource]="report_DataSource" matSort>
+          <mat-table #reportsTable [dataSource]="report_DataSource" matSort>
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -182,7 +180,8 @@
             <ng-container matColumnDef="userId">
               <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
               <mat-cell *matCellDef="let row" (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
-                {{getRequesterFromMap(row.userId).name}}</mat-cell>
+                <span id="Details">{{getRequesterFromMap(row.userId).username}}</span>
+              </mat-cell>
             </ng-container>
 
             <!-- Description Column -->

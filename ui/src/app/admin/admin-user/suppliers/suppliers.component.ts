@@ -35,10 +35,8 @@ export class SuppliersComponent implements OnInit {
   public supplierFormGroup: FormGroup;
   public newSupplier: Supplier;
   public supplierToDelete: Supplier;
-  public supplierIndexToDelete: number;
   public report: Report;
   public reportToDelete: Report;
-  public reportIndexToDelete: number;
   public unresolvedReports: Report[];
   public requester: User;
   public requesters: Map<number, User>;
@@ -288,7 +286,8 @@ export class SuppliersComponent implements OnInit {
     if (id) {
       switch (modalReference.toUpperCase()) {
         case "REPORT":
-          this.report = this.reportsMap.get(id);
+          const r = Object.assign({},this.reportsMap.get(id));
+          this.report = r;
           break;
         case "REPORTDELETE":
           this.reportToDelete = this.reportsMap.get(id);
@@ -303,7 +302,8 @@ export class SuppliersComponent implements OnInit {
     if (id) {
       switch (modalReference.toUpperCase()) {
         case "SUPPLIER":
-          this.newSupplier = this.suppliersMap.get(id);
+          const s = this.suppliersMap.get(id);
+          this.newSupplier = Object.assign({},s);
           break;
         case "SUPPLIERDELETE":
           this.supplierToDelete = this.suppliersMap.get(id);
@@ -341,7 +341,6 @@ export class SuppliersComponent implements OnInit {
         break;
       case "SUPPLIERDELETE":
         this.supplierToDelete = Supplier.empty();
-        this.supplierIndexToDelete = -1;
         break;
       case "REQUESTER":
         this.requester = User.empty();
@@ -349,7 +348,6 @@ export class SuppliersComponent implements OnInit {
 
       case "REPORTDELETE":
         this.reportToDelete = Report.empty();
-        this.reportIndexToDelete = -1;
         break;
     }
   }

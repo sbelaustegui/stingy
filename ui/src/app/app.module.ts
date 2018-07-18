@@ -43,7 +43,13 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorIntlSpanish} from "./shared/directives/MatPaginatorIntlSpanish";
-import {MatButtonModule, MatIconModule, MatPaginatorIntl, MatSnackBarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatExpansionModule,
+  MatIconModule,
+  MatPaginatorIntl,
+  MatSnackBarModule
+} from '@angular/material';
 
 
 @NgModule({
@@ -88,6 +94,7 @@ import {MatButtonModule, MatIconModule, MatPaginatorIntl, MatSnackBarModule} fro
     MatSortModule,
     MatButtonModule,
     MatIconModule,
+    MatExpansionModule,
     MatSnackBarModule
 ],
   providers : [
