@@ -104,6 +104,10 @@ public class SupplierProduct extends Model {
         return Ebean.find(SupplierProduct.class).where().eq("supplier_id", id).findList();
     }
 
+    public static List<SupplierProduct> getSupplierProductByProductIdFromTo(Long id, DateTime from, DateTime to){
+        return Ebean.find(SupplierProduct.class).where().eq("product_id", id).between("date", from, to).findList();
+    }
+
     public static List<SupplierProduct> getAllSupplierProducts() {
         return finder.all();
     }

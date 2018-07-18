@@ -1,7 +1,8 @@
 package models.domain.supplierProduct
 
-import models.dao.SupplierProductDAO
+import models.dao.{ProductDAO, SupplierProductDAO}
 import models.domain.location.Location
+import models.domain.product.Product
 import models.domain.util.Date
 import models.ebean.{SupplierProduct => ESupplierProduct}
 import play.api.libs.json.{Json, OFormat}
@@ -75,6 +76,10 @@ object SupplierProduct extends SupplierProductJsonFormat {
 
   def delete(supplierProduct: SupplierProduct): Option[Boolean] = {
     SupplierProductDAO.delete(supplierProduct)
+  }
+
+  def getPrices(productId: Long, from: Date, to: Date): List[Double] = {
+    SupplierProductDAO.getPrices(productId, from, to)
   }
 
 }

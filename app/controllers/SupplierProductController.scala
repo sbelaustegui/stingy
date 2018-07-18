@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.Inject
-import models.domain.product.Product
+import models.domain.product.{Product, ProductPrices}
 import models.domain.supplierProduct.{SupplierProductCreate, _}
 import models.domain.user.User
 import play.api.libs.json.Json
@@ -232,6 +232,24 @@ class SupplierProductController @Inject()(cc: ControllerComponents) extends Abst
                 )
               )
           }
+        case None =>
+          BadRequest(
+            Json.toJson(
+              ResponseGenerated(BAD_REQUEST, "Invalid data")
+            )
+          )
+      }
+  }
+
+  def getPrices = Action{
+    request =>
+      request.body.asJson.get.asOpt[ProductPrices] match {
+        case Some(productPrices) =>
+          Ok(
+            Json.toJson(
+              ResponseGenerated(OK, "Update successful", Json.toJson(SupplierProduct.getPrices(productPrices.productId, productPrices.from, productPrices.to)))
+            )
+          )
         case None =>
           BadRequest(
             Json.toJson(

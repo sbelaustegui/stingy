@@ -2,6 +2,7 @@ package models.dao
 
 import models.domain.location.Location
 import models.domain.supplierProduct.SupplierProduct
+import models.domain.util.Date
 import models.ebean.{Location => ELocation, SupplierProduct => ESupplierProduct}
 import utils.ScalaOptional.toScalaOption
 
@@ -69,6 +70,10 @@ object SupplierProductDAO {
 
   def getAllSupplierProducts: List[SupplierProduct] = {
     ESupplierProduct.getAllSupplierProducts.map(SupplierProduct.apply).toList
+  }
+
+  def getPrices(productId: Long, from: Date, to: Date): List[Double] = {
+    ESupplierProduct.getSupplierProductByProductIdFromTo(productId, from.toDateTime, to.toDateTime).map(SupplierProduct.apply).map(sp  => sp.price).toList
   }
 
   def delete(supplierProduct: SupplierProduct): Option[Boolean] = {
