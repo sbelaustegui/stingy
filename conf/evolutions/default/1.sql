@@ -4,7 +4,7 @@
 # --- !Ups
 
 create table abstract_user (
-  dtype                         varchar(10) not null,
+  dtype                         varchar(31) not null,
   id                            bigint auto_increment not null,
   name                          varchar(255) not null,
   last_name                     varchar(255) not null,
@@ -21,16 +21,16 @@ create table abstract_user (
 
 create table cart (
   id                            bigint auto_increment not null,
-  user_id                       bigint,
-  current                       tinyint(1) default 0,
+  user_id                       bigint not null,
+  current                       tinyint(1),
   date                          datetime(6),
   constraint pk_cart primary key (id)
 );
 
 create table cart_product (
   id                            bigint auto_increment not null,
-  cart_id                       bigint,
-  supplier_product_id           bigint,
+  cart_id                       bigint not null,
+  supplier_product_id           bigint not null,
   constraint pk_cart_product primary key (id)
 );
 
@@ -68,17 +68,17 @@ create table product (
 create table product_image (
   id                            bigint auto_increment not null,
   product_id                    bigint,
-  image_id                      bigint,
+  image_id                      bigint not null,
   constraint pk_product_image primary key (id)
 );
 
 create table report (
   id                            bigint auto_increment not null,
-  user_id                       bigint,
+  user_id                       bigint not null,
   description                   varchar(255),
   date                          datetime(6),
-  solved                        tinyint(1) default 0,
-  rejected                      tinyint(1) default 0,
+  solved                        tinyint(1),
+  rejected                      tinyint(1),
   constraint pk_report primary key (id)
 );
 
@@ -111,23 +111,23 @@ create table supplier_product (
 
 alter table abstract_user add constraint fk_abstract_user_location_id foreign key (location_id) references location (id) on delete restrict on update restrict;
 
-alter table cart add constraint fk_cart_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
 create index ix_cart_user_id on cart (user_id);
+alter table cart add constraint fk_cart_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
 
-alter table cart_product add constraint fk_cart_product_cart_id foreign key (cart_id) references cart (id) on delete restrict on update restrict;
 create index ix_cart_product_cart_id on cart_product (cart_id);
+alter table cart_product add constraint fk_cart_product_cart_id foreign key (cart_id) references cart (id) on delete restrict on update restrict;
 
-alter table cart_product add constraint fk_cart_product_supplier_product_id foreign key (supplier_product_id) references supplier_product (id) on delete restrict on update restrict;
 create index ix_cart_product_supplier_product_id on cart_product (supplier_product_id);
+alter table cart_product add constraint fk_cart_product_supplier_product_id foreign key (supplier_product_id) references supplier_product (id) on delete restrict on update restrict;
 
-alter table product_image add constraint fk_product_image_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
 create index ix_product_image_product_id on product_image (product_id);
+alter table product_image add constraint fk_product_image_product_id foreign key (product_id) references product (id) on delete restrict on update restrict;
 
-alter table product_image add constraint fk_product_image_image_id foreign key (image_id) references image (id) on delete restrict on update restrict;
 create index ix_product_image_image_id on product_image (image_id);
+alter table product_image add constraint fk_product_image_image_id foreign key (image_id) references image (id) on delete restrict on update restrict;
 
-alter table report add constraint fk_report_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
 create index ix_report_user_id on report (user_id);
+alter table report add constraint fk_report_user_id foreign key (user_id) references abstract_user (id) on delete restrict on update restrict;
 
 alter table supplier add constraint fk_supplier_location_id foreign key (location_id) references location (id) on delete restrict on update restrict;
 
