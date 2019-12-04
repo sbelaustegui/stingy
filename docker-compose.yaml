@@ -5,8 +5,8 @@ networks:
 
 services:
   database:
-    container_name: comisiones-db
-    image: mysql:8
+    container_name: stingy-db
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
       MYSQL_DATABASE: "stingydb"
