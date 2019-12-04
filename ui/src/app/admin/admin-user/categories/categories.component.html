@@ -81,7 +81,6 @@
     <div class="col-lg-6 mx-auto">
       <!--LOADING ANIMATION-->
       <div class="loading" *ngIf="alerts.subcategories.loading">
-        <div class="col-lg-6 "><h2>Proovedores</h2></div>
         <div class="col-lg-4 offset-lg-4 col-2 offset-5">
         <span class="mx-auto">
           <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
@@ -118,7 +117,7 @@
             <!-- Category Column -->
             <ng-container matColumnDef="categoryId">
               <mat-header-cell *matHeaderCellDef mat-sort-header><b>Categoria</b></mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{categoriesMap.get(row.categoryId).name}}</mat-cell>
+              <mat-cell *matCellDef="let row"> {{findCategory(row).name}}</mat-cell>
             </ng-container>
 
 
