@@ -1,0 +1,69 @@
+
+::ng-deep h2 {
+  font-weight: bold;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/*standard input style*/
+::ng-deep .mat-form-field {
+
+  .mat-input-element,
+  .mat-select-value,
+  .mat-form-field-label,
+  .mat-select-arrow {
+    color: white;
+  }
+
+  .mat-form-field-underline,
+  .mat-form-field-ripple {
+    background-color: white;
+  }
+}
+
+/*focused input style*/
+::ng-deep .mat-focused.mat-form-field {
+
+  .mat-input-element,
+  .mat-select-value,
+  .mat-form-field-label,
+  .mat-select-arrow {
+    color: white;
+  }
+
+  .mat-form-field-underline,
+  .mat-form-field-ripple {
+    background-color: white !important;
+  }
+
+}
+
+/*invalid input style*/
+::ng-deep .mat-form-field-invalid {
+  .mat-input-element,
+  .mat-select-value,
+  .mat-form-field-label,
+  .mat-select-arrow {
+    color: white;
+  }
+
+  .mat-form-field-underline,
+  .mat-form-field-ripple {
+    background-color: white;
+  }
+}
+
+::ng-deep .mat-paginator {
+  border-radius: 0 0 20px 20px;
+}
+
+::ng-deep .mat-table {
+  overflow: auto;
+  font-size: 16px;
+  border-radius: 20px 20px 0 0;
+}
+
+::ng-deep .mat-icon-button {
+  ::ng-deep #mat-mini-fab {
+    color: #58bee0 !important;
+  }
+}

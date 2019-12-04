@@ -96,7 +96,7 @@
           </mat-form-field>
         </div>
         <div class="add-button col-lg-2 col-4">
-          <button mat-mini-fab style="background-color: white" (click)="openModal(newCategoryModal,'SUBCATEGORY')">
+          <button mat-mini-fab style="background-color: white" (click)="openModal(newSubcategoryModal,'SUBCATEGORY')">
             <mat-icon style="color: black">add</mat-icon>
           </button>
         </div>
@@ -160,122 +160,15 @@
       </div>
     </div>
 
-    <!--&lt;!&ndash;CATEGORY TABLE&ndash;&gt;-->
-    <!--<div class="col-12 col-md-6">-->
-      <!--<div class="row">-->
-        <!--<div class="col-8">-->
-          <!--<h2>Categorias</h2>-->
-        <!--</div>-->
-        <!--<div class="add-button col-4">-->
-          <!--<button mat-mini-fab style="background-color: white" (click)="openCategoryModal(newCategoryModal)">-->
-            <!--<mat-icon style="color: black">add</mat-icon>-->
-          <!--</button>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div style="overflow-x:auto;">-->
-        <!--<table class="table table-striped" *ngIf="!alerts.categories.loading">-->
-          <!--<thead>-->
-          <!--<tr>-->
-            <!--<th scope="col">Id</th>-->
-            <!--<th scope="col">Nombre</th>-->
-            <!--<th scope="col">Editar</th>-->
-            <!--<th scope="col">Eliminar</th>-->
-          <!--</tr>-->
-          <!--</thead>-->
-          <!--<tbody>-->
-          <!--<tr *ngFor="let category of (categoriesArray | paginate: { itemsPerPage: 10, currentPage: categoriesPage, id: 'categories' }); let i=index">-->
-            <!--<th scope="row">{{category.id}}</th>-->
-            <!--<td>{{category.name}}</td>-->
-            <!--<td>-->
-              <!--<div class="upload-button">-->
-                <!--<button type="button" class="btn btn-light"  (click)="openCategoryModal(newCategoryModal, i, category)">-->
-                  <!--<i class="fa fa-pencil"></i>-->
-                <!--</button>-->
-              <!--</div>-->
-            <!--</td>-->
-            <!--<td>-->
-              <!--<div class="remove-button">-->
-              <!--<button type="submit" class="btn btn-danger" (click)="openCategoryDeleteModal(deleteModal, category, i)">-->
-                <!--<i class="fa fa-trash"></i>-->
-              <!--</button>-->
-            <!--</div>-->
-            <!--</td>-->
-          <!--</tr>-->
-          <!--</tbody>-->
-        <!--</table>-->
-      <!--</div>-->
-      <!--<pagination-controls id="categories"-->
-                           <!--class="paginator"-->
-                           <!--(pageChange)="categoriesPage = $event"-->
-                           <!--autoHide="true"-->
-                           <!--previousLabel="Anterior"-->
-                           <!--nextLabel="Siguiente">-->
-      <!--</pagination-controls>-->
-    <!--</div>-->
-
-    <!--&lt;!&ndash;SUB-CATEGORY TABLE&ndash;&gt;-->
-    <!--<div class="col-12 col-md-6">-->
-      <!--<div class="row">-->
-        <!--<div class="col-8">-->
-          <!--<h2>SubCategorias</h2>-->
-        <!--</div>-->
-        <!--<div class="add-button col-4">-->
-          <!--<button mat-mini-fab style="background-color: white" (click)="openSubcategoryModal(newSubcategoryModal, -1)">-->
-            <!--<mat-icon style="color: black">add</mat-icon>-->
-          <!--</button>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div style="overflow-x:auto;">-->
-        <!--<table class="table table-striped" *ngIf="!alerts.subcategories.loading && !alerts.categories.loading">-->
-          <!--<thead>-->
-          <!--<tr>-->
-            <!--<th scope="col">Id</th>-->
-            <!--<th scope="col">Nombre</th>-->
-            <!--<th scope="col">Categoria</th>-->
-            <!--<th scope="col">Editar</th>-->
-            <!--<th scope="col">Eliminar</th>-->
-          <!--</tr>-->
-          <!--</thead>-->
-          <!--<tbody>-->
-          <!--<tr *ngFor="let subcategory of (subcategories | paginate: { itemsPerPage: 10, currentPage: subcategoriesPage, id: 'products' }); let i=index">-->
-            <!--<th scope="row">{{subcategory.id}}</th>-->
-            <!--<td>{{subcategory.name}}</td>-->
-            <!--<td>{{categories.get(subcategory.categoryId).name}}</td>-->
-            <!--<td>-->
-              <!--<div class="upload-button">-->
-                <!--<button type="button" class="btn btn-light"  (click)="openSubcategoryModal(newSubcategoryModal, i, subcategory)">-->
-                  <!--<i class="fa fa-pencil"></i>-->
-                <!--</button>-->
-              <!--</div>-->
-            <!--</td>-->
-            <!--<td>-->
-              <!--<div class="remove-button">-->
-                <!--<button  type="submit" class="btn btn-danger" (click)="openSubcategoryDeleteModal(deleteModal, subcategory, i)">-->
-                  <!--<i class="fa fa-trash"></i>-->
-                <!--</button>-->
-              <!--</div>-->
-            <!--</td>-->
-          <!--</tr>-->
-          <!--</tbody>-->
-        <!--</table>-->
-      <!--</div>-->
-      <!--<pagination-controls id="subcategories"-->
-                           <!--class="paginator"-->
-                           <!--(pageChange)="subcategoriesPage = $event"-->
-                          <!--autoHide="true"-->
-                          <!--previousLabel="Anterior"-->
-                          <!--nextLabel="Siguiente">-->
-      <!--</pagination-controls>-->
-    <!--</div>-->
-
-    <!--New category Modal-->
+    <!--New Category Modal-->
     <ng-template #newCategoryModal>
       <div class="modal-header">
         <h4 class="modal-title pull-left">
           <span *ngIf="alerts.add.category">Nueva categoría</span>
           <span *ngIf="!alerts.add.category">Editar categoría {{newCategory.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('CATEGORY'); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close"
+                (click)="resetModal('CATEGORY'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -301,9 +194,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}" (click)="uploadCategory()">Guardar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('CATEGORY'); modalRef.hide();">Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': categoryFormGroup.invalid}"
+                (click)="uploadCategory()">Guardar
+        </button>
       </div>
-      <button type="submit" class="btn btn-secondary" (click)="resetModal('CATEGORY'); modalRef.hide();">Cancelar</button>
     </ng-template>
 
     <!--New subcategory Modal-->
@@ -313,7 +209,8 @@
           <span *ngIf="alerts.add.subCategory">Nueva subcategoría</span>
           <span *ngIf="!alerts.add.subCategory">Editar subcategoría {{newSubcategory.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('SUBCATEGORY');modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close"
+                (click)="resetModal('SUBCATEGORY');modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -345,7 +242,8 @@
                 [formGroup]="subcategoryFormGroup"
                 required>
                 <option [value]="undefined" selected>Seleccione una opción</option>
-                <option *ngFor="let category of categoriesArray" [value]="category.id">{{category.name}}</option>
+                <option *ngFor="let category of categories"
+                        [value]="category.id">{{category.name}}</option>
               </select>
               <div class="form-control-feedback"
                    *ngIf="subcategoryFormGroup.controls['categoryId'].errors && (subcategoryFormGroup.controls['categoryId'].dirty || subcategoryFormGroup.controls['categoryId'].touched)">
@@ -356,9 +254,12 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': subcategoryFormGroup.invalid}" (click)="uploadSubcategory()">Guardar</button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('SUBCATEGORY'); modalRef.hide();">Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [ngClass]="{'disabled': subcategoryFormGroup.invalid}"
+                (click)="uploadSubcategory()">Guardar
+        </button>
       </div>
-      <button type="submit" class="btn btn-secondary" (click)="resetModal('SUBCATEGORY'); modalRef.hide();">Cancelar</button>
     </ng-template>
 
     <!--Delete confirmation modal-->
@@ -368,16 +269,21 @@
           <span *ngIf="categoryToDelete">Categoria {{categoryToDelete.name}}</span>
           <span *ngIf="subcategoryToDelete">Subcategoria {{subcategoryToDelete.name}}</span>
         </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('DELETE'); modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close"
+                (click)="resetModal('DELETE'); modalRef.hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ¿Está seguro que desea eliminar la <span *ngIf="categoryToDelete">categoría</span><span *ngIf="subcategoryToDelete">subcategoría</span>?
+        ¿Está seguro que desea eliminar la <span *ngIf="categoryToDelete">categoría</span><span
+        *ngIf="subcategoryToDelete">subcategoría</span>?
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-danger" (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETE'); modalRef.hide();">Cancelar</button>
+        <button type="submit" class="btn btn-danger"
+                (click)="categoryToDelete? this.deleteCategory() : this.deleteSubCategory()">Eliminar
+        </button>
+        <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETE'); modalRef.hide();">Cancelar
+        </button>
       </div>
     </ng-template>
 

@@ -35,16 +35,11 @@ export class CategoriesComponent implements OnInit {
   public subcategoryFormGroup: FormGroup;
   public newCategory: Category;
   public categoryToDelete: Category;
-  public categoryIndexToDelete: number;
-  public categoryIndexUpdate: number;
   public subcategoryToDelete: Subcategory;
-  public subcategoryIndexToDelete: number;
   public subcategoryIndexUpdate: number;
-  public categories: Map<number, Category>;
-  public categoriesArray: Category[];
-  public subcategories: Subcategory[];
-  public categoriesPage: number = 1;
-  public subcategoriesPage: number = 1;
+  public categories: Category[] = [];
+  public subcategories: Subcategory[] = [];
+
   public alerts: {
     categories: {
       loading: boolean,
@@ -85,7 +80,6 @@ export class CategoriesComponent implements OnInit {
         deleting: false,
       },
     };
-    this.categories = new Map<number, Category>();
     this.categoriesMap = new Map<number, Category>();
     this.subCategoriesMap = new Map<number, Subcategory>();
     this.createCategoryFormControls();
@@ -123,6 +117,7 @@ export class CategoriesComponent implements OnInit {
         this.categoriesMap.set(c.id, c);
       });
       this.setCategoriesData();
+      this.categories = Array.from(this.categoriesMap.values());
       this.alerts.categories.loading = false;
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
@@ -139,12 +134,11 @@ export class CategoriesComponent implements OnInit {
       this.categoryService.updateCategory(this.newCategory).then(res => {
         this.categoriesMap.set(res.id, res);
         this.refreshCategoriesTable();
-        // this.categories.set(res.id, res);
-        // this.categoriesArray[this.categoryIndexUpdate] = res;
         this.alerts.add.loading = false;
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
+        this.categories = Array.from(this.categoriesMap.values());
         this.snackBar.open('La categoria fue actualizada correctamente.', '', {
           duration: 5000,
           verticalPosition: 'top'
@@ -166,6 +160,7 @@ export class CategoriesComponent implements OnInit {
         this.newCategory = Category.empty();
         this.categoryFormGroup.reset();
         this.modalRef.hide();
+        this.categories = Array.from(this.categoriesMap.values());
         this.snackBar.open('La categoria fue agregada correctamente.', '', {
           duration: 5000,
           verticalPosition: 'top'
@@ -231,12 +226,12 @@ export class CategoriesComponent implements OnInit {
     this.alerts.categories.deleting = true;
     this.categoryService.deleteCategory(this.categoryToDelete.id).then(res => {
       this.deleteSubCategoriesByCatID(this.categoryToDelete.id);
-      // this.categoriesArray.splice(this.categoryIndexToDelete, 1);
-      // this.categories.delete(this.categoryToDelete.id);
       this.categoriesMap.delete(res.id);
-      this.refreshCategoriesTable();
+      this.categories = Array.from(this.categoriesMap.values());
+      this.categories_DataSource.data = this.categories;
       this.alerts.categories.deleting = false;
       this.modalRef.hide();
+
       this.snackBar.open('La categoria fue eliminada correctamente.', '', {
         duration: 5000,
         verticalPosition: 'top'
@@ -254,14 +249,7 @@ export class CategoriesComponent implements OnInit {
    * Private method to delete all products that match with the category deleted.
    */
   private deleteSubCategoriesByCatID(categoryId: number) {
-    // TODO review with subcategoriesMap
-    let i = 0;
-    while (i < this.subcategories.length) {
-      if (this.subcategories[i].categoryId == categoryId)
-        this.subcategories.splice(i, 1);
-      else
-        i++;
-    }
+    this.subcategories = this.subcategories.filter(f => f.categoryId !== categoryId);
   }
 
   deleteSubCategory() {
@@ -306,12 +294,12 @@ export class CategoriesComponent implements OnInit {
         case "CATEGORY":
           this.alerts.add.category = false;
           const c = this.categoriesMap.get(id);
-          this.newCategory = Object.assign({},c);
+          this.newCategory = Object.assign({}, c);
           break;
         case "SUBCATEGORY":
           this.alerts.add.subCategory = false;
           const s = this.subCategoriesMap.get(id)
-          this.newSubcategory = Object.assign({},s);
+          this.newSubcategory = Object.assign({}, s);
           break;
         case "CATEGORYDELETE":
           this.categoryToDelete = this.categoriesMap.get(id);
