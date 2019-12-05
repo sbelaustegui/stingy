@@ -2,6 +2,7 @@ import {HttpService} from "./http.service";
 import {Injectable} from '@angular/core';
 import {Product} from "../models/product.model";
 import {ProductSearch} from "../models/product-search.model";
+import {DateModel} from "../models/date-model";
 
 /*
 # Product
@@ -82,6 +83,13 @@ export class ProductService {
 
   public searchProduct(product :ProductSearch): Promise<Product[]> {
     return this.http.post('/api/product/search', product)
+      .then(res => {
+        return res.data;
+      });
+  }
+
+  public getProductStatistics(productId: number, from: DateModel, to: DateModel): Promise<any[]> {
+    return this.http.post('/api/supplier/product/prices', {productId, from, to })
       .then(res => {
         return res.data;
       });

@@ -1,0 +1,18 @@
+.statistics {
+  padding-right: 50px;
+  padding-left: 50px;
+  .row {
+    padding-top: 2%;
+    background-color: #8BC4FF;
+
+    h2 {
+      color: white;
+      font-family: Open-Sans, "Lilita One", sans-serif;
+    }
+
+  }
+  .chart-container{
+    display: block;
+    background-color: white;
+  }
+}

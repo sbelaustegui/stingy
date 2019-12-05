@@ -21,6 +21,7 @@ import {AdminProfileComponent} from "./admin/admin-user/admin-profile/admin-prof
 import {ProductsComponent} from "./admin/admin-user/products/products.component";
 import {SuppliersComponent} from "./admin/admin-user/suppliers/suppliers.component";
 import {HistoryComponent} from "./user/cart/history/history.component";
+import {StatisticsComponent} from "./admin/admin-user/statistics/statistics.component";
 
 const routes: Routes =[
   {
@@ -53,6 +54,7 @@ const routes: Routes =[
               {path: 'admin-profile',                                 component: AdminProfileComponent},
               {path: 'products',                                      component: ProductsComponent},
               {path: 'suppliers',                                     component: SuppliersComponent},
+              {path: 'statistics',                                    component: StatisticsComponent},
             ]
           }
         ]

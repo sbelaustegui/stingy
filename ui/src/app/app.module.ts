@@ -50,6 +50,8 @@ import {
   MatPaginatorIntl,
   MatSnackBarModule
 } from '@angular/material';
+import {StatisticsComponent} from "./admin/admin-user/statistics/statistics.component";
+import {ChartsModule} from "ng2-charts";
 
 
 @NgModule({
@@ -71,7 +73,7 @@ import {
     ProductsComponent,
     SuppliersComponent,
     HistoryComponent,
-
+    StatisticsComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,7 +98,8 @@ import {
     MatButtonModule,
     MatIconModule,
     MatExpansionModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ChartsModule
 ],
   providers : [
     CookieService,
