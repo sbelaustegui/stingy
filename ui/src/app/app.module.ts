@@ -85,7 +85,8 @@ import {
     CollapseModule.forRoot(),
     TruncateModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho'
+      apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho',
+      libraries: ['places']
     }),
     BrowserAnimationsModule,
     MatInputModule,

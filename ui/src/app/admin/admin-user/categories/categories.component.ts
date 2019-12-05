@@ -23,9 +23,9 @@ export class CategoriesComponent implements OnInit {
   subCategories_Columns = ['id', 'name', 'categoryId', 'update', 'remove'];
   subCategories_DataSource: MatTableDataSource<Subcategory>;
 
-  @ViewChild(MatPaginator, {static: true}) categoryPaginator: MatPaginator;
+  @ViewChild(MatPaginator) categoryPaginator: MatPaginator;
   @ViewChild(MatSort) categorySort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) subcategoryPaginator: MatPaginator;
+  @ViewChild(MatPaginator) subcategoryPaginator: MatPaginator;
   @ViewChild(MatSort) subcategorySort: MatSort;
 
 
