@@ -53,6 +53,13 @@ export class UserService {
     }
   }
 
+  public getUserReportStatistics(userId: number){
+      return this.http
+        .get('/api/report/statistics/'+userId).then( res => {
+          return res.data;
+        })
+  }
+
   public updateUser(user: User): Promise<User> {
     if(this._usersById.get(user.id)) {
       return this.http

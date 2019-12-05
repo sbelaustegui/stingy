@@ -12,6 +12,7 @@ import {User} from "../../../shared/models/user.model";
 import {UserService} from "../../../shared/services/user.service";
 import {Location} from "../../../shared/models/location.model";
 import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
+import {ReportStatisticsModel} from "../../../shared/models/report-statistics.model";
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
@@ -132,16 +133,28 @@ export class SuppliersComponent implements OnInit {
         this.snackBar.open('Hubo un error al obtener los reportes, por favor inténtelo nuevamente.', '', {
           duration: 5000,
           verticalPosition: 'top'
-        });        this.alerts.reports.loading = false;
+        });
+        this.alerts.reports.loading = false;
       })
 
   }
 
   private getRequester(userId: number) {
-    this.userService.getUserById(userId)
-      .then(res => {
-        this.requesters.set(res.id, res);
+    if(!this.requesters.has(userId)) {
+      this.userService.getUserById(userId)
+        .then(user => {
+          this.userService.getUserReportStatistics(user.id)
+            .then((statistic: ReportStatisticsModel) => {
+              user.acceptedReportsPercentage = Math.floor((statistic.solved / statistic.total) * 100);
+              this.requesters.set(user.id, user);
+            })
+        }).catch(err => {
+        this.snackBar.open('Hubo un error al obtener los datos, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
       })
+    }
   };
 
   getRequesterFromMap(userId: number): User {
