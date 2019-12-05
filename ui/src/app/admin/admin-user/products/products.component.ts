@@ -5,6 +5,12 @@ import {ProductService} from "../../../shared/services/product.service";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {MatSnackBar} from "@angular/material";
+import {User} from "../../../shared/models/user.model";
+import {ReportService} from "../../../shared/services/report.service";
+import {UserService} from "../../../shared/services/user.service";
+import {Report} from "../../../shared/models/report.model";
+import {ReportStatisticsModel} from "../../../shared/models/report-statistics.model";
+import {Supplier} from "../../../shared/models/supplier.model";
 
 @Component({
   selector: 'app-products',
@@ -25,16 +31,20 @@ export class ProductsComponent implements OnInit {
     },
     addProduct: {
       loading: boolean,
-    },
+    }
   };
+  public users: Map<number, User>;
+  public selectedUser: User;
+
   modalRef: BsModalRef;
 
-  constructor(public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
+  constructor(public productService: ProductService, public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar, public userService: UserService) {
   }
 
   ngOnInit() {
     this.titleService.setTitle('ABM Categorias | Stingy');
     this.newProduct = Product.empty();
+    this.users = new Map<number, User>();
     this.alerts = {
       products: {
         loading: true,
@@ -51,6 +61,7 @@ export class ProductsComponent implements OnInit {
   getProducts() {
     this.productService.products.then(res => {
       this.productsArray = res.map(p => {
+        this.getUser(p.userId);
         return Product.from(p)
       });
       this.alerts.products.loading = false;
@@ -62,6 +73,24 @@ export class ProductsComponent implements OnInit {
       this.alerts.products.loading = false;
     })
   }
+
+  private getUser(userId: number) {
+    if(!this.users.has(userId)) {
+      this.userService.getUserById(userId)
+        .then(user => {
+          this.userService.getUserReportStatistics(user.id)
+            .then((statistic: ReportStatisticsModel) => {
+              user.acceptedReportsPercentage = Math.floor((statistic.solved / statistic.total) * 100);
+              this.users.set(user.id, user);
+            })
+        }).catch(err => {
+        this.snackBar.open('Hubo un error al obtener los datos, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
+      })
+    }
+  };
 
   validateProductA() {
     this.alerts.addProduct.loading = true;
@@ -119,6 +148,20 @@ export class ProductsComponent implements OnInit {
   resetDeleteModal(){
     this.productToDelete = undefined;
     this.productIndexToDelete = -1;
+  }
+
+  resetUserModal(){
+    this.modalRef.hide();
+    this.selectedUser = undefined;
+  }
+
+  openRequesterModal(template: TemplateRef<any>, modalReference: string,
+                     requester: User, index?: number) {
+
+    if (requester) {
+          this.selectedUser = requester;
+    }
+    this.modalRef = this.modalService.show(template);
   }
 
 }
