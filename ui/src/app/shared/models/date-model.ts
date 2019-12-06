@@ -15,6 +15,10 @@ export class DateModel{
     return new DateModel(date.getFullYear(), date.getMonth()+1, date.getDate());
   }
 
+  static dateModelFromDateWithTime(date: Date): DateModel{
+    return new DateModel(date.getFullYear(), date.getMonth()+1, date.getDate(), 0, 0, 0);
+  }
+
   toStringDate(): string{
     return this.day.toString()+'/'+this.month.toString()+'/'+this.year.toString();
   }
@@ -51,5 +55,5 @@ export class DateModel{
     return this.year.toString();
   }
 
-  constructor(public year: number, public month: number, public day: number){}
+  constructor(public year: number, public month: number, public day: number, public minute?: number, public hour?: number, public second?: number){}
 }

@@ -1,0 +1,43 @@
+<div class="statistics">
+  <div class="row">
+    <!--ADMIN TABLE-->
+    <div class="col-lg-8 mx-auto">
+      <div class="loading" *ngIf="alerts.products.loading">
+        <div class="col-lg-6 ">
+          <h2>Estadísticas</h2>
+        </div>
+        <div class="col-lg-4 offset-lg-4 col-2 offset-5">
+          <span class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6 ">
+          <h2>Estadísticas</h2>
+        </div>
+        <div class="col-lg-12" *ngIf="!alerts.products.loading">
+            <select
+              class="form-control"
+              [(ngModel)]="selectedProduct"
+              (change)="getStatistics()"
+            >
+              <option [value]="undefined" selected>Seleccione una producto</option>
+              <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
+            </select>
+          <div class="col-lg-4 offset-lg-4 col-2 offset-5" *ngIf="alerts.statistics.loading">
+            <span class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+          </div>
+          <div class="chart-container" *ngIf="!alerts.statistics.loading">
+            <canvas baseChart
+                    [datasets]="barChartData"
+                    [labels]="barChartLabels"
+                    [options]="barChartOptions"
+                    [legend]="barChartLegend"
+                    [chartType]="barChartType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
