@@ -25,23 +25,23 @@
           </button>
         </div>
         <div class="container-table col-lg-12">
-          <mat-table #suppliersTable [dataSource]="supplier_DataSource" matSort>
+          <mat-table #suppliersTable [dataSource]="supplier_DataSource" >
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="description">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
             </ng-container>
 
@@ -78,7 +78,6 @@
             <mat-row *matRowDef="let row; columns: supplier_Columns;">
             </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
       </div>
@@ -103,17 +102,17 @@
         </div>
         <div class="container-table col-lg-12">
 
-          <mat-table #reportsTable [dataSource]="report_DataSource" matSort>
+          <mat-table #reportsTable [dataSource]="report_DataSource" >
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Requester Column -->
             <ng-container matColumnDef="userId">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Usuario</b></mat-header-cell>
               <mat-cell *matCellDef="let row" (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
                 <span id="Details">{{getRequesterFromMap(row.userId).username}}</span>
               </mat-cell>
@@ -121,13 +120,13 @@
 
             <!-- Description Column -->
             <ng-container matColumnDef="description">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Descripción</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Descripción</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
             </ng-container>
 
             <!-- Date Column -->
             <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Fecha</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Fecha</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.date.toStringDate()}}</mat-cell>
             </ng-container>
 
@@ -165,7 +164,6 @@
             </mat-row>
           </mat-table>
 
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
       </div>

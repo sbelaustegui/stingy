@@ -22,8 +22,6 @@ import {ReportStatisticsModel} from "../../../shared/models/report-statistics.mo
 
 export class SuppliersComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator:  MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   supplier_Columns = ['id', 'name', 'description', 'update', 'remove'];
   supplier_DataSource: MatTableDataSource<Supplier>;
 
@@ -383,8 +381,6 @@ export class SuppliersComponent implements OnInit {
 
   private setSuppliersData() {
     this.supplier_DataSource = new MatTableDataSource(Array.from(this.suppliersMap.values()));
-    this.supplier_DataSource.paginator = this.paginator;
-    this.supplier_DataSource.sort = this.sort;
   }
 
   private refreshSupplierTable() {
@@ -393,8 +389,6 @@ export class SuppliersComponent implements OnInit {
 
   private setReportsData() {
     this.report_DataSource = new MatTableDataSource(Array.from(this.reportsMap.values()));
-    this.report_DataSource.paginator = this.paginator;
-    this.report_DataSource.sort = this.sort;
   }
 
   private refreshReportsTable() {

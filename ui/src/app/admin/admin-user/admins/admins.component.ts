@@ -16,10 +16,6 @@ import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/m
   styleUrls: ['./admins.component.scss'],
 })
 export class AdminsComponent implements OnInit {
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
   displayedColumns = ['id', 'username', 'name', 'lastName', 'email', 'update', 'remove'];
   dataSource: MatTableDataSource<User>;
 
@@ -204,8 +200,6 @@ export class AdminsComponent implements OnInit {
 
   private setData() {
     this.dataSource = new MatTableDataSource(Array.from(this.adminsMap.values()));
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   private refreshTable() {

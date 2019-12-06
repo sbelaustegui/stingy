@@ -23,12 +23,6 @@ export class CategoriesComponent implements OnInit {
   subCategories_Columns = ['id', 'name', 'categoryId', 'update', 'remove'];
   subCategories_DataSource: MatTableDataSource<Subcategory>;
 
-  @ViewChild(MatPaginator) categoryPaginator: MatPaginator;
-  @ViewChild(MatSort) categorySort: MatSort;
-  @ViewChild(MatPaginator) subcategoryPaginator: MatPaginator;
-  @ViewChild(MatSort) subcategorySort: MatSort;
-
-
   public categoryFormGroup: FormGroup;
   public subcategoryFormGroup: FormGroup;
   public newCategory: Category;
@@ -60,8 +54,6 @@ export class CategoriesComponent implements OnInit {
               public router: Router, private titleService: Title,
               private modalService: BsModalService, public snackBar: MatSnackBar) {
     this.titleService.setTitle('ABM Categorias | Stingy');
-    this.setCategoriesData();
-    this.setSubCategoriesData();
     this.newCategory = Category.empty();
     this.newSubcategory = Subcategory.empty();
     this.alerts = {
@@ -83,13 +75,12 @@ export class CategoriesComponent implements OnInit {
     this.createSubcategoryFormControls();
     this.getCategories();
     this.getSubcategories();
+    this.subCategories_DataSource = new MatTableDataSource(this.subcategories);
+    this.categories_DataSource = new MatTableDataSource(this.categories);
+
   }
 
   ngOnInit() {
-    this.categories_DataSource.sort = this.categorySort;
-    this.subCategories_DataSource.sort = this.subcategorySort;
-    this.subCategories_DataSource.paginator = this.subcategoryPaginator;
-    this.categories_DataSource.paginator = this.categoryPaginator;
   }
 
   getSubcategories() {
@@ -342,17 +333,6 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  private setCategoriesData() {
-    this.categories_DataSource = new MatTableDataSource(this.categories);
-    this.categories_DataSource.paginator = this.categoryPaginator;
-    this.categories_DataSource.sort = this.categorySort;
-  }
-
-  private setSubCategoriesData() {
-    this.subCategories_DataSource = new MatTableDataSource(this.subcategories);
-    this.subCategories_DataSource.paginator = this.subcategoryPaginator;
-    this.subCategories_DataSource.sort = this.subcategorySort;
-  }
 
   applyCategoryFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

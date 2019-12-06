@@ -23,35 +23,35 @@
         </div>
         <div class="container-table col-lg-12" >
 
-          <mat-table [dataSource]="dataSource" matSort>
+          <mat-table [dataSource]="dataSource" >
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Username Column -->
             <ng-container matColumnDef="username">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Usuario</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Usuario</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.username}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
             <!-- LastName Column -->
             <ng-container matColumnDef="lastName">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Apellido</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Apellido</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.lastName}}</mat-cell>
             </ng-container>
 
             <!-- Email Column -->
             <ng-container matColumnDef="email">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Email</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Email</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.email}}</mat-cell>
             </ng-container>
 
@@ -87,10 +87,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;">
             </mat-row>
           </mat-table>
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-
       </div>
     </div>
 

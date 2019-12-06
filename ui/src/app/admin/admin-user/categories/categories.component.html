@@ -25,17 +25,17 @@
           </button>
         </div>
         <div class="container-table col-lg-12">
-          <mat-table #suppliersTable [dataSource]="categories_DataSource" matSort>
+          <mat-table #suppliersTable [dataSource]="categories_DataSource">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
@@ -71,7 +71,6 @@
             <mat-row *matRowDef="let row; columns: categories_Columns;">
             </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
       </div>
@@ -100,23 +99,23 @@
           </button>
         </div>
         <div class="container-table col-lg-12">
-          <mat-table #suppliersTable [dataSource]="subCategories_DataSource" matSort>
+          <mat-table #suppliersTable [dataSource]="subCategories_DataSource">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
             <!-- Category Column -->
             <ng-container matColumnDef="categoryId">
-              <mat-header-cell *matHeaderCellDef mat-sort-header><b>Categoria</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef ><b>Categoria</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{findCategory(row).name}}</mat-cell>
             </ng-container>
 
@@ -153,7 +152,6 @@
             <mat-row *matRowDef="let row; columns: subCategories_Columns;">
             </mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
 
       </div>
