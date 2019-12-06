@@ -223,4 +223,3 @@ drop table if exists sub_category;
 drop table if exists supplier;
 
 drop table if exists supplier_product;
-

@@ -20,6 +20,8 @@ libraryDependencies += "io.ebean" % "ebean" % "11.32.1"
 libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.15"
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"
 libraryDependencies += "com.amazonaws" % "aws-java-sdk-s3" % "1.11.234"
+libraryDependencies += "org.glassfish.jaxb" % "jaxb-core" % "2.3.0.1"
+libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime" % "2.3.2"
 
 playEbeanModels in Compile := Seq("models.*")
 playEbeanDebugLevel := 4
