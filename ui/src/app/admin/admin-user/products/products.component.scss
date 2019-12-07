@@ -1,89 +1,45 @@
 .admin-products {
   padding-right: 50px;
   padding-left: 50px;
+
   .row {
     padding-top: 2%;
     background-color: #8BC4FF;
-    .add-button {
-      text-align: right;
-      button {
-        background-color: #58bee0;
-        font-weight: bold;
-        color: white;
-      }
-    }
+
     h2 {
       color: white;
       font-family: Open-Sans, "Lilita One", sans-serif;
     }
-    table {
-      text-align: center;
-      background-color: white;
-      tr{
-        th{
-          vertical-align: middle;
-        }
-        td{
-          vertical-align: middle;
-          .upload-button{
-            button {
-              font-size: 26px;
-              background-color: transparent;
-              color: black;
-              border: none;
-            }
-            i{
-              color: yellowgreen;
-            }
-          }
-          .remove-button{
-            button {
-              font-size: 26px;
-              background-color: transparent;
-              color: black;
-              border: none;
-            }
-            i{
-              color: red;
-            }
-          }
-          &.product-image{
-            .product-img{
-              max-width: 70px;
-              max-height: 50px;
-            }
-          }
-          .user-name{
-            color: #30b1ff;
-            text-decoration: underline;
-            cursor: pointer;
-          }
+
+    mat-table {
+      width: 100%;
+      height: 100%;
+
+      .product-img {
+        max-width: 70px;
+        max-height: 50px;
+      }
+
+      .validate {
+        display: flex;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+
+        i {
+          font-size: 24px;
+          color: limegreen;
         }
       }
-    }
-    .paginator /deep/ .ngx-pagination {
-      text-align: center;
-      li{
-        color: white;
-        &.current{
-          background-color: white;
-          color: black;
-        }
-        & :hover(:not(.disabled)){
-          background-color: white;
-          color: black;
-        }
-        &.disabled{
-          cursor: not-allowed;
-        }
-        a{
-          color: white;
-          & :hover{
-            background-color: white;
-            color: black;
-          }
-        }
+
+      .user-name {
+        text-align: center;
+        color: #58bee0;
+        font-weight: bold;
+        cursor: pointer;
       }
     }
+
   }
 }
+
