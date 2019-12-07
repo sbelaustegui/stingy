@@ -22,6 +22,7 @@ import {ReportStatisticsModel} from "../../../shared/models/report-statistics.mo
 })
 
 export class SuppliersComponent implements OnInit, AfterViewInit {
+  myAnimation:any;
 
   supplier_Columns = ['id', 'name', 'description', 'update', 'remove'];
   supplier_DataSource: MatTableDataSource<Supplier>;
@@ -105,6 +106,11 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void{
     this.findCurrentGeoLocation();
   }
+
+  mapReading(){
+    this.myAnimation = 'BOUNCE';
+  }
+
 
   getSuppliers() {
     this.supplierService.suppliers.then(res => {
@@ -291,6 +297,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   placeMarker($event) {
     this.newSupplier.location.latitude = $event.coords.lat;
     this.newSupplier.location.longitude = $event.coords.lng;
+    this.location.latitude=$event.coords.lat;
+    this.location.longitude = $event.coords.lng;
   }
 
   private createFormControls() {

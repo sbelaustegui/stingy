@@ -20,28 +20,29 @@
           </mat-form-field>
         </div>
         <div class="add-button col-lg-2 col-4">
-          <button mat-mini-fab style="background-color: white" (click)="openSupplierModal(newSupplierModal,'NEWSUPPLIER')">
+          <button mat-mini-fab style="background-color: white"
+                  (click)="openSupplierModal(newSupplierModal,'NEWSUPPLIER')">
             <mat-icon style="color: black">add</mat-icon>
           </button>
         </div>
         <div class="container-table col-lg-12">
-          <mat-table #suppliersTable [dataSource]="supplier_DataSource" >
+          <mat-table #suppliersTable [dataSource]="supplier_DataSource">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="description">
-              <mat-header-cell *matHeaderCellDef ><b>Nombre</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>Nombre</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
             </ng-container>
 
@@ -102,31 +103,32 @@
         </div>
         <div class="container-table col-lg-12">
 
-          <mat-table #reportsTable [dataSource]="report_DataSource" >
+          <mat-table #reportsTable [dataSource]="report_DataSource">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef ><b>ID</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>ID</b></mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
             </ng-container>
 
             <!-- Requester Column -->
             <ng-container matColumnDef="userId">
-              <mat-header-cell *matHeaderCellDef ><b>Usuario</b></mat-header-cell>
-              <mat-cell *matCellDef="let row" (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
+              <mat-header-cell *matHeaderCellDef><b>Usuario</b></mat-header-cell>
+              <mat-cell *matCellDef="let row"
+                        (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
                 <span id="Details">{{getRequesterFromMap(row.userId).username}}</span>
               </mat-cell>
             </ng-container>
 
             <!-- Description Column -->
             <ng-container matColumnDef="description">
-              <mat-header-cell *matHeaderCellDef ><b>Descripción</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>Descripción</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.description}}</mat-cell>
             </ng-container>
 
             <!-- Date Column -->
             <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef ><b>Fecha</b></mat-header-cell>
+              <mat-header-cell *matHeaderCellDef><b>Fecha</b></mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.date.toStringDate()}}</mat-cell>
             </ng-container>
 
@@ -222,10 +224,17 @@
             </div>
           </fieldset>
         </form>
-        <agm-map [latitude]="location.latitude" [longitude]="location.longitude">
-          <!--                   (mapClick)="placeMarker($event)">-->
-          <!--            <agm-marker [latitude]="location.latitude"-->
-          <!--                        [longitude]="location.longitude"></agm-marker>-->
+        <agm-map [latitude]="location.latitude"
+                 [longitude]="location.longitude"
+                 (mapClick)="placeMarker($event)"
+
+                 (mapReady)="mapReading()"
+        >
+          <agm-marker
+            [animation]="myAnimation"
+            [latitude]="location.latitude"
+            [longitude]="location.longitude">
+          </agm-marker>
         </agm-map>
       </div>
       <div class="modal-footer">
@@ -281,7 +290,8 @@
               <li class="list-group-item"><b>Usuario: </b><span>{{requester.username}}</span></li>
               <li class="list-group-item"><b>Email: </b><span>{{requester.email}}</span></li>
               <li class="list-group-item"><b>Rating: </b><span>{{requester.rate}}</span></li>
-              <li class="list-group-item"><b>Porcentaje de reportes aprobados: </b><span>{{requester.acceptedReportsPercentage}}%</span></li>
+              <li class="list-group-item"><b>Porcentaje de reportes
+                aprobados: </b><span>{{requester.acceptedReportsPercentage}}%</span></li>
             </ul>
           </div>
         </div>
