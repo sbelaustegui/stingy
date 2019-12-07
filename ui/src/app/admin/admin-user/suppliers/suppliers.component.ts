@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef} from '@angular/core';
 import {Title} from "@angular/platform-browser";
 import {SupplierService} from "../../../shared/services/supplier.service";
 import {BsModalService} from "ngx-bootstrap/modal";
@@ -11,8 +11,9 @@ import {Report} from "../../../shared/models/report.model";
 import {User} from "../../../shared/models/user.model";
 import {UserService} from "../../../shared/services/user.service";
 import {Location} from "../../../shared/models/location.model";
-import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
+import {MatSnackBar, MatTableDataSource} from "@angular/material";
 import {ReportStatisticsModel} from "../../../shared/models/report-statistics.model";
+
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
@@ -20,19 +21,19 @@ import {ReportStatisticsModel} from "../../../shared/models/report-statistics.mo
   providers: [SupplierService, ReportService, UserService]
 })
 
-export class SuppliersComponent implements OnInit {
+export class SuppliersComponent implements OnInit, AfterViewInit {
 
   supplier_Columns = ['id', 'name', 'description', 'update', 'remove'];
   supplier_DataSource: MatTableDataSource<Supplier>;
 
-  report_Columns = ['id', 'userId', 'description','date', 'solve', 'remove'];
+  report_Columns = ['id', 'userId', 'description', 'date', 'solve', 'remove'];
   report_DataSource: MatTableDataSource<Report>;
 
-  public suppliersMap: Map<number,Supplier>;
-  public reportsMap: Map<number,Report>;
+  public suppliersMap: Map<number, Supplier>;
+  public reportsMap: Map<number, Report>;
 
   public supplierFormGroup: FormGroup;
-  public newSupplier: Supplier;
+  public newSupplier: Supplier = Supplier.empty();
   public supplierToDelete: Supplier;
   public report: Report;
   public reportToDelete: Report;
@@ -40,6 +41,9 @@ export class SuppliersComponent implements OnInit {
   public requester: User;
   public requesters: Map<number, User>;
   public alerts: {
+    location: {
+      loading: boolean;
+    }
     reports: {
       loading: boolean,
       deleting: boolean,
@@ -62,13 +66,12 @@ export class SuppliersComponent implements OnInit {
   constructor(public fb: FormBuilder, public router: Router, private titleService: Title, private modalService: BsModalService,
               public supplierService: SupplierService, public reportService: ReportService, public userService: UserService, public snackBar: MatSnackBar
   ) {
+    this.location = Location.empty();
   }
 
   ngOnInit() {
     this.suppliersMap = new Map<number, Supplier>();
     this.reportsMap = new Map<number, Report>();
-
-    this.location = Location.empty();
     this.unresolvedReports = [];
     this.titleService.setTitle('Provedores | Stingy');
     this.newSupplier = Supplier.empty();
@@ -76,6 +79,9 @@ export class SuppliersComponent implements OnInit {
     this.requester = User.empty();
     this.requesters = new Map<number, User>();
     this.alerts = {
+      location: {
+        loading: false,
+      },
       reports: {
         loading: true,
         deleting: false,
@@ -96,13 +102,16 @@ export class SuppliersComponent implements OnInit {
     this.getSuppliers();
     this.getUnresolveReports();
   }
+  ngAfterViewInit(): void{
+    this.findCurrentGeoLocation();
+  }
 
   getSuppliers() {
     this.supplierService.suppliers.then(res => {
       this.alerts.suppliers.loading = true;
 
-      res.forEach( s => {
-        this.suppliersMap.set(s.id,s);
+      res.forEach(s => {
+        this.suppliersMap.set(s.id, s);
       });
       this.setSuppliersData();
 
@@ -111,7 +120,8 @@ export class SuppliersComponent implements OnInit {
       this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
         duration: 5000,
         verticalPosition: 'top'
-      });      this.alerts.suppliers.loading = false;
+      });
+      this.alerts.suppliers.loading = false;
     })
   }
 
@@ -121,7 +131,7 @@ export class SuppliersComponent implements OnInit {
         this.alerts.reports.loading = true;
         res.forEach(r => {
           // this.unresolvedReports.push(Report.from(r));
-          this.reportsMap.set(r.id,Report.from(r));
+          this.reportsMap.set(r.id, Report.from(r));
           this.getRequester(r.userId);
         });
         this.setReportsData();
@@ -138,7 +148,7 @@ export class SuppliersComponent implements OnInit {
   }
 
   private getRequester(userId: number) {
-    if(!this.requesters.has(userId)) {
+    if (!this.requesters.has(userId)) {
       this.userService.getUserById(userId)
         .then(user => {
           this.userService.getUserReportStatistics(user.id)
@@ -172,7 +182,7 @@ export class SuppliersComponent implements OnInit {
         .then(res => {
           // this.suppliersArray.splice(this.suppliersArray.findIndex(a => a.id === res.id), 1);
           // this.suppliersArray.push(res);
-          this.suppliersMap.set(res.id,res);
+          this.suppliersMap.set(res.id, res);
           this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
           this.newSupplier = Supplier.empty();
@@ -191,13 +201,12 @@ export class SuppliersComponent implements OnInit {
             verticalPosition: 'top'
           });
         })
-    }
-    else {
+    } else {
       this.alerts.addSupplier.loading = true;
       this.supplierService.addSupplier(this.newSupplier)
         .then(res => {
           // this.suppliersArray.push(res);
-          this.suppliersMap.set(res.id,res);
+          this.suppliersMap.set(res.id, res);
           this.refreshSupplierTable();
           this.alerts.addSupplier.loading = false;
           this.newSupplier = Supplier.empty();
@@ -244,7 +253,7 @@ export class SuppliersComponent implements OnInit {
   uploadSupplierBySolvingReport() {
     this.report.solved = true;
     this.reportService.resolveReport(this.report.id)
-      .then( () => {
+      .then(() => {
         this.unresolvedReports.splice(this.unresolvedReports.findIndex(r => r.id == this.report.id), 1);
         this.getUnresolveReports();
         this.uploadSupplier();
@@ -297,7 +306,7 @@ export class SuppliersComponent implements OnInit {
     if (id) {
       switch (modalReference.toUpperCase()) {
         case "REPORT":
-          const r = Object.assign({},this.reportsMap.get(id));
+          const r = Object.assign({}, this.reportsMap.get(id));
           this.report = r;
           break;
         case "REPORTDELETE":
@@ -314,16 +323,15 @@ export class SuppliersComponent implements OnInit {
       switch (modalReference.toUpperCase()) {
         case "SUPPLIER":
           const s = this.suppliersMap.get(id);
-          this.newSupplier = Object.assign({},s);
+          this.newSupplier = Object.assign({}, s);
           break;
         case "SUPPLIERDELETE":
           this.supplierToDelete = this.suppliersMap.get(id);
           break;
       }
-    }
-    else {
+    } else {
       if (modalReference.toUpperCase() == "NEWSUPPLIER") {
-        this.newSupplier = this.emptySupplier();
+        this.newSupplier = Supplier.empty();
       }
     }
     this.modalRef = this.modalService.show(template);
@@ -363,9 +371,6 @@ export class SuppliersComponent implements OnInit {
     }
   }
 
-  emptySupplier(): Supplier {
-    return Supplier.empty();
-  }
 
   applyReportsFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -393,5 +398,26 @@ export class SuppliersComponent implements OnInit {
 
   private refreshReportsTable() {
     this.report_DataSource.data = Array.from(this.reportsMap.values());
+  }
+
+  private findCurrentGeoLocation() {
+    try {
+      this.alerts.location.loading = true;
+      navigator.geolocation.getCurrentPosition(position => {
+        this.location.latitude = position.coords.latitude;
+        this.location.longitude = position.coords.longitude;
+        this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top'
+        });
+      });
+      this.alerts.location.loading = false;
+    } catch (e) {
+      this.location = Location.empty();
+      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
+    }
   }
 }

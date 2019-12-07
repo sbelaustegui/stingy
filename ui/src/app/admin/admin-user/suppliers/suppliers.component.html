@@ -221,14 +221,12 @@
               </div>
             </div>
           </fieldset>
-          <label for="map">Ubicación</label>
-          <agm-map id="map" [latitude]="newSupplier.location.latitude" [longitude]="newSupplier.location.longitude"
-                   (mapClick)="placeMarker($event)">
-            <agm-marker [latitude]="newSupplier.location.latitude"
-                        [longitude]="newSupplier.location.longitude"></agm-marker>
-          </agm-map>
-
         </form>
+        <agm-map [latitude]="location.latitude" [longitude]="location.longitude">
+          <!--                   (mapClick)="placeMarker($event)">-->
+          <!--            <agm-marker [latitude]="location.latitude"-->
+          <!--                        [longitude]="location.longitude"></agm-marker>-->
+        </agm-map>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-secondary" (click)="resetModal('Supplier')">Cancelar</button>
