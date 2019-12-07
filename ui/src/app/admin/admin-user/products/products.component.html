@@ -40,7 +40,7 @@
           <span
             class="user-name"
             (click)="openRequesterModal(userDetailModal,'User', users.get(row.userId))">
-            {{users.get(row.userId).name}}
+            {{getUserName(row.userId)}}
           </span>
         </mat-cell>
       </ng-container>

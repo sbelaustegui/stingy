@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef} from '@angular/core';
 import {Product} from "../../../shared/models/product.model";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {ProductService} from "../../../shared/services/product.service";
@@ -15,7 +15,7 @@ import {MatTableDataSource} from "@angular/material/table";
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'name', 'image', 'description', 'lastUpdate', 'reporter', 'creationDate', 'update', 'remove'];
   dataSource: MatTableDataSource<Product>;
 
@@ -54,14 +54,16 @@ export class ProductsComponent implements OnInit {
         loading: false,
       },
     };
-    this.getProducts();
   }
 
+  ngAfterViewInit(): void {
+    this.requestProducts();
+  }
 
-  getProducts() {
+  requestProducts() {
     this.productService.products.then(res => {
       this.productsArray = res.map(p => {
-        this.getUser(p.userId);
+        this.requestUser(p.userId);
         return Product.from(p)
       });
       this.dataSource.data = this.productsArray;
@@ -76,7 +78,11 @@ export class ProductsComponent implements OnInit {
       })
   }
 
-  private getUser(userId: number) {
+  getUserName(id: number): string {
+    return this.users.has(id) ? this.users.get(id).name : 'None';
+  }
+
+  private requestUser(userId: number) {
     if (!this.users.has(userId)) {
       this.userService.getUserById(userId)
         .then(user => {
