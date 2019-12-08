@@ -125,7 +125,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
       this.alerts.suppliers.loading = false;
     })
@@ -146,7 +147,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
       .catch(error => {
         this.snackBar.open('Hubo un error al obtener los reportes, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.reports.loading = false;
       })
@@ -165,7 +167,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
         }).catch(err => {
         this.snackBar.open('Hubo un error al obtener los datos, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
     }
@@ -196,7 +199,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
           this.modalRef.hide();
           this.snackBar.open('El proveedor se actualizó correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
           });
           return true;
         })
@@ -204,7 +208,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
           this.alerts.addSupplier.loading = false;
           this.snackBar.open('Hubo un error al actualizar el proveedor, por favor inténtelo nuevamente. Revise que el nombre sea válido y no se encuentre repetido.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     } else {
@@ -220,7 +225,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
           this.modalRef.hide();
           this.snackBar.open('El proveedor se agregó correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
           });
           return true;
         })
@@ -228,7 +234,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
           this.alerts.addSupplier.loading = false;
           this.snackBar.open('Hubo un error al agregar el proveedor, por favor inténtelo nuevamente. Revise que el nombre sea válido y no se encuentre repetido.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     }
@@ -245,13 +252,16 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
       this.modalRef.hide();
       this.snackBar.open('El proveedor se eliminó correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
+
       });
     }).catch(() => {
       this.alerts.suppliers.deleting = false;
       this.snackBar.open('Hubo un error al eliminar el proveedor, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }
@@ -267,7 +277,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
       .catch(error => {
         this.snackBar.open('Hubo un error al marcar como resuelto un reporte, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
   }
@@ -283,13 +294,15 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
       this.modalRef.hide();
       this.snackBar.open('El reporte se eliminó correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
       });
     }).catch(() => {
       this.alerts.reports.deleting = false;
       this.snackBar.open('Hubo un error al eliminar el reporte, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }

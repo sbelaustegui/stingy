@@ -48,7 +48,8 @@ export class AdminsComponent implements OnInit {
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener el usuario loggeado, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     });
     this.alerts = {
@@ -76,7 +77,8 @@ export class AdminsComponent implements OnInit {
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener los administradores, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
       this.alerts.admins.loading = false;
     })
@@ -94,12 +96,14 @@ export class AdminsComponent implements OnInit {
         this.modalRef.hide();
         this.snackBar.open('El administrador se actualizó correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
         });
       }).catch(() => {
         this.snackBar.open('Hubo un error al actualizar el administrador, por favor inténtelo nuevamente. Revise que el usuario sea válido y no se encuentre repetido', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.addAdmin.loading = false;
       })
@@ -115,12 +119,14 @@ export class AdminsComponent implements OnInit {
         this.modalRef.hide();
         this.snackBar.open('El administrador se agregó correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
         });
       }).catch(() => {
         this.snackBar.open('Hubo un error al agregar el administrador, por favor inténtelo nuevamente. Revise que el usuario sea válido y no se encuentre repetido', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.addAdmin.loading = false;
       })
@@ -143,13 +149,15 @@ export class AdminsComponent implements OnInit {
       this.modalRef.hide();
       this.snackBar.open('El administrador se eliminó correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
       });
     }).catch(() => {
       this.alerts.admins.deleting = false;
       this.snackBar.open('Hubo un error al eliminar el administrador, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }

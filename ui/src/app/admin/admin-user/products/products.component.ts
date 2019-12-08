@@ -72,7 +72,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       .catch(err => {
         this.snackBar.open('Hubo un error al obtener los productos, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.products.loading = false;
       })
@@ -94,7 +95,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         }).catch(err => {
         this.snackBar.open('Hubo un error al obtener los datos, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
     }
@@ -109,13 +111,15 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.modalRef.hide();
       this.snackBar.open('El producto fue validado correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
       });
     }).catch(() => {
       this.alerts.addProduct.loading = false;
       this.snackBar.open('Hubo un error al validar el producto, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }
@@ -131,14 +135,16 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         this.modalRef.hide();
         this.snackBar.open('El producto fue eliminado correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
         });
       })
       .catch(() => {
         this.alerts.products.deleting = false;
         this.snackBar.open('Hubo un error al eliminar el producto, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
   }
