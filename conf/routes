@@ -65,7 +65,7 @@ GET         /api/cart/product/all                               controllers.Cart
 GET         /api/cart/product/id/:id                            controllers.CartProductController.getById(id: Long)
 GET         /api/cart/product/cart/:id                          controllers.CartProductController.getByCartId(id: Long)
 PUT         /api/cart/product                                   controllers.CartProductController.update()
-DELETE      /api/cart/product/:id                               controllers.CartProductController.delete(id: Long)
+DELETE      /api/cart/product/:cartId/:supplierProductId        controllers.CartProductController.delete(cartId: Long, supplierProductId: Long)
 
 # Supplier Product
 POST        /api/supplier/product                               controllers.SupplierProductController.register()

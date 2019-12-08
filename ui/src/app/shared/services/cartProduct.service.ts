@@ -61,10 +61,10 @@ export class CartProductService {
     }
   }
 
-  public deleteCartProduct(id: number): Promise<any> {
-    return this.http.delete('/api/cart/product/' + id)
+  public deleteCartProduct(cartId: number, supplierProductId: number): Promise<any> {
+    return this.http.delete('/api/cart/product/' + cartId + '/' + supplierProductId)
       .then(res => {
-        this._cartProductsById.delete(id);
+        this._cartProductsById.delete(res.data.id);
         return res;
       });
   }

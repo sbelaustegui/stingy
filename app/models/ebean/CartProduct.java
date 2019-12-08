@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Entity
@@ -47,6 +48,10 @@ public class CartProduct extends Model {
 
     public static List<CartProduct> getCartProductsByCartId(Long id){
         return Ebean.find(CartProduct.class).where().eq("cart_id", id).findList();
+    }
+
+    public static Long getCartProductIdByCartIdAndSupplierProductId(Long cartId, Long supplierProductId){
+        return Objects.requireNonNull(Ebean.find(CartProduct.class).where().eq("cart_id", cartId).where().eq("supplier_product_id", supplierProductId).findOne()).id;
     }
 
     public static List<CartProduct> getAllCartProducts() {

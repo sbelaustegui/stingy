@@ -19,7 +19,8 @@ export class CartProductTableComponent implements OnInit {
 
   @Input()
   cartBagProducts: CartBagProduct[] = [];
-
+  @Input()
+  cartId: number;
 
   cartBagProductDetail: CartBagProduct = CartBagProduct.empty();
   cartBagProductToDelete: CartBagProduct = CartBagProduct.empty();
@@ -38,7 +39,7 @@ export class CartProductTableComponent implements OnInit {
 
   deleteProduct() {
     console.log('PRODUCT TO DELETE', this.cartBagProductToDelete.id);
-    this.cartProductService.deleteCartProduct(this.cartBagProductToDelete.id)
+    this.cartProductService.deleteCartProduct(this.cartId, this.cartBagProductToDelete.supplierProductId)
       .then(res => {
 
         this.cartBagProducts = this.cartBagProducts.filter(p => p.id !== this.cartBagProductToDelete.id);

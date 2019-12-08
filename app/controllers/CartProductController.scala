@@ -88,8 +88,8 @@ class CartProductController @Inject()(cc: ControllerComponents) extends Abstract
     )
   }
 
-  def delete(id: Long) = Action {
-    CartProduct.getById(id) match {
+  def delete(cartId: Long, supplierProductId: Long) = Action {
+    CartProduct.getById(CartProduct.getCartProductIdByCartIdAndSupplierProductId(cartId, supplierProductId)) match {
       case Some(cartProduct) =>
         CartProduct.delete(cartProduct) match {
           case Some(true) =>

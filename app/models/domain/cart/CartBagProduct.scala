@@ -7,11 +7,15 @@ import models.domain.user.User
 import models.domain.util.Date
 import play.api.libs.json.{Json, OFormat}
 
-case class CartBagProduct(supplierProductDate: Date, supplierProductPrice: Double, productDate: Date, productName: String, productDescription: String, userName: String)
+case class CartBagProduct(supplierProductId: Long, supplierProductDate: Date, supplierProductPrice: Double, productDate: Date, productName: String, productDescription: String, userName: String)
 
 object CartBagProduct extends CartBagProductJsonFormat {
   def apply(supplierProduct: SupplierProduct): CartBagProduct = {
     new CartBagProduct(
+      supplierProduct.id match {
+        case Some(id) =>
+          id
+      },
       supplierProduct.date,
       supplierProduct.price,
       Product.getById(supplierProduct.productId) match {
