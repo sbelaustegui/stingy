@@ -116,7 +116,7 @@
               <mat-header-cell *matHeaderCellDef><b>Usuario</b></mat-header-cell>
               <mat-cell *matCellDef="let row"
                         (click)="openRequesterModal(userDetailModal,'Requester', getRequesterFromMap(report.userId))">
-                <span id="Details">{{getRequesterFromMap(row.userId).username}}</span>
+                <span class="user-name">{{getRequesterFromMap(row.userId).username}}</span>
               </mat-cell>
             </ng-container>
 
