@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartService} from "../../../shared/services/cart.service";
 import {UserAuthService} from "../../../shared/auth/user/user-auth.service";
 import {Title} from "@angular/platform-browser";
@@ -21,7 +21,7 @@ export class HistoryComponent implements OnInit {
     carts: {
       loading: boolean,
     },
-    supplierProducts:{
+    supplierProducts: {
       loading: boolean,
     },
     user: {
@@ -31,7 +31,8 @@ export class HistoryComponent implements OnInit {
   public carts: Cart[];
   public supplierProducts: Map<number, SupplierProductCart[]>;
 
-  constructor(public cartService: CartService, public supplierProductService: SupplierProductService, public cartProductService: CartProductService, public authService: UserAuthService, private titleService: Title, public snackBar: MatSnackBar) {}
+  constructor(public cartService: CartService, public supplierProductService: SupplierProductService, public cartProductService: CartProductService, public authService: UserAuthService, private titleService: Title, public snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
     this.titleService.setTitle('Historial Carritos | Stingy');
@@ -39,7 +40,7 @@ export class HistoryComponent implements OnInit {
       carts: {
         loading: true,
       },
-      supplierProducts:{
+      supplierProducts: {
         loading: true,
       },
       user: {
@@ -59,17 +60,18 @@ export class HistoryComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       this.alerts.user.loading = false;
     })
   }
 
-  getCarts(){
+  getCarts() {
     this.cartService.getCartsByUserId(this.userId)
       .then(res => {
         res.forEach(cart => {
-          if(!cart.current) {
+          if (!cart.current) {
             this.carts.push(Cart.from(cart));
           }
         });
@@ -79,7 +81,8 @@ export class HistoryComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener los carritos, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top', panelClass: ['snack-bar-error']
+
         });
         this.alerts.carts.loading = false;
       })
@@ -90,14 +93,15 @@ export class HistoryComponent implements OnInit {
       this.supplierProductService.getSupplierProductsByCartId(cart.id)
         .then(res => {
           this.supplierProducts.set(cart.id, res);
-          if(index == this.carts.length-1){
+          if (index == this.carts.length - 1) {
             this.alerts.supplierProducts.loading = false;
           }
         })
         .catch(() => {
           this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top', panelClass: ['snack-bar-error']
+
           });
           this.alerts.supplierProducts.loading = false;
           return;
@@ -105,7 +109,7 @@ export class HistoryComponent implements OnInit {
     });
   }
 
-  cartsIds(): Array<number>{
+  cartsIds(): Array<number> {
     return Array.from(this.supplierProducts.keys());
   }
 

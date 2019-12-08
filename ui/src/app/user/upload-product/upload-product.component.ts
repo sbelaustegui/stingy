@@ -106,7 +106,8 @@ export class UploadProductComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       this.alerts.subcategories.loading = false;
     })
@@ -119,7 +120,8 @@ export class UploadProductComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       this.alerts.categories.loading = false;
     })
@@ -132,7 +134,8 @@ export class UploadProductComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener los proveedores, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       this.alerts.suppliers.loading = false;
     })
@@ -142,13 +145,15 @@ export class UploadProductComponent implements OnInit {
     if (!this.file || this.file.size > 2000000) {
       this.snackBar.open('Hubo un error al cargar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       return;
     } else {
       this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
       this.alerts.adding.product = true;
       this.newProduct.isValidated = false;
@@ -165,7 +170,8 @@ export class UploadProductComponent implements OnInit {
             .catch(() => {
               this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
                 duration: 5000,
-                verticalPosition: 'top'
+                verticalPosition: 'top', panelClass: ['snack-bar-error']
+
               });
               this.alerts.adding.product = false;
             });
@@ -173,7 +179,8 @@ export class UploadProductComponent implements OnInit {
         .catch(() => {
           this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top', panelClass: ['snack-bar-error']
+
           });
         });
     }
@@ -187,7 +194,8 @@ export class UploadProductComponent implements OnInit {
         this.alerts.adding.supplierProduct = false;
         this.snackBar.open('El producto fue agregado correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top', panelClass: ['snack-bar-success']
+
         });
         this.resetUploadProduct();
 
@@ -195,7 +203,8 @@ export class UploadProductComponent implements OnInit {
       .catch(error => {
         this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top', panelClass: ['snack-bar-error']
+
         });
         this.alerts.adding.supplierProduct = false;
       });
@@ -233,7 +242,8 @@ export class UploadProductComponent implements OnInit {
         .catch(() => {
           this.snackBar.open('Hubo un error al guardar la imagen del producto. La imagen no debe exceder los 2MB. Revise los datos e inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top', panelClass: ['snack-bar-error']
+
           });
         });
     }
@@ -265,13 +275,15 @@ export class UploadProductComponent implements OnInit {
         this.modalRef.hide();
         this.snackBar.open('El reporte fué generado con éxito.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top', panelClass: ['snack-bar-success']
+
         });
       })
       .catch(() => {
         this.snackBar.open('Hubo un error al generar el reporte.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top', panelClass: ['snack-bar-error']
+
         });
       });
 

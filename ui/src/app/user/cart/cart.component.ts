@@ -101,7 +101,8 @@ export class CartComponent implements OnInit {
       this.alerts.user.loading = false;
       this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+
       });
     })
   }
@@ -117,7 +118,8 @@ export class CartComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+
         });        this.alerts.cart.loading = false;
       })
   }
@@ -134,7 +136,8 @@ export class CartComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+
         });
       })
   }
@@ -185,7 +188,8 @@ export class CartComponent implements OnInit {
         .catch(() => {
           this.snackBar.open('Hubo un error al obtener el proveedor, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+
           });
           //todo supplier
         })

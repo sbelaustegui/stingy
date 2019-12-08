@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
   selectedSupplierProduct: SupplierProduct;
   selectedSupplierProductIndex: number;
 
-  @ViewChild('results') el:ElementRef;
+  @ViewChild('results') el: ElementRef;
 
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
@@ -138,7 +138,8 @@ export class HomeComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener la información del usuario loggeado, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }
@@ -157,7 +158,8 @@ export class HomeComponent implements OnInit {
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
       this.alerts.subcategories.loading = false;
     })
@@ -170,7 +172,8 @@ export class HomeComponent implements OnInit {
     }).catch(err => {
       this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
       this.alerts.categories.loading = false;
     })
@@ -214,24 +217,31 @@ export class HomeComponent implements OnInit {
             this.snackBar.open('Hubo un error al obtener los productos. No se encontraron productos para ese id.', '', {
               duration: 5000,
               verticalPosition: 'top'
+              , panelClass: ['snack-bar-error']
             });
             break;
           case "No location for that user":
             this.snackBar.open('Hubo un error al obtener los productos. El usuario no posee una ubicación seteada previamente.', '', {
               duration: 5000,
-              verticalPosition: 'top'
+              verticalPosition: 'top',
+              panelClass: ['snack-bar-error']
+
             });
             break;
           case "No user for that id":
             this.snackBar.open('Hubo un error al obtener los productos. No se encontró usuario para ese id.', '', {
               duration: 5000,
-              verticalPosition: 'top'
+              verticalPosition: 'top',
+              panelClass: ['snack-bar-error']
+
             });
             break;
           case "Invalid Data":
             this.snackBar.open('Hubo un error al obtener los productos. Por favor inténtelo nuevamente mas tarde.', '', {
               duration: 5000,
-              verticalPosition: 'top'
+              verticalPosition: 'top',
+              panelClass: ['snack-bar-error']
+
             });
             break;
         }
@@ -257,16 +267,17 @@ export class HomeComponent implements OnInit {
         });
         //TODO agregar loader
         this.alerts.search.loading = false;
-        setTimeout(() =>  this.el.nativeElement.scrollIntoView(), 1000);
+        setTimeout(() => this.el.nativeElement.scrollIntoView(), 1000);
       }).catch(err => {
         this.snackBar.open('Hubo un error al obtener los resultados, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.search.loading = false;
       })
-    }else {
-      if(!this.location.id){
+    } else {
+      if (!this.location.id) {
         // TODO ???
       }
     }
@@ -278,8 +289,9 @@ export class HomeComponent implements OnInit {
         this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id));
         this.snackBar.open('El producto se agregó con éxito.', '', {
           duration: 5000,
-          verticalPosition: 'top'
-        });
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
+      });
       })
     }
   }
@@ -293,29 +305,32 @@ export class HomeComponent implements OnInit {
         this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
           duration: 5000,
           verticalPosition: 'top'
-        });
+          ,panelClass: ['snack-bar-success']
+      });
         this.locationService.updateLocation(this.location).then(this.modalRef ? this.modalRef.hide : undefined);
       });
       this.alerts.location.loading = false;
-    }
-    catch (e) {
-      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '', {
-        duration: 5000,
-        verticalPosition: 'top'
-      });
+    } catch (e) {
+      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '',
+        {
+          duration: 5000,
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
+
+        });
     }
   }
 
   public openModal(template: TemplateRef<any>, supplierProduct?, supplierProductIndex?) {
-    if(supplierProduct){
+    if (supplierProduct) {
       this.selectedSupplierProduct = supplierProduct;
       this.selectedSupplierProductIndex = supplierProductIndex;
     }
     this.modalRef = this.modalService.show(template);
   }
 
-  priceUpdate(){
-    if(this.selectedSupplierProduct.price <= 0) {
+  priceUpdate() {
+    if (this.selectedSupplierProduct.price <= 0) {
       this.alerts.price.loading = true;
       this.supplierProductService.addSupplierProduct(new SupplierProduct(this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
         .then(res => {
@@ -326,14 +341,18 @@ export class HomeComponent implements OnInit {
         this.alerts.price.loading = false;
         this.snackBar.open('Hubo un error al actualizar el precio, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
+
         });
       });
     } else {
       this.snackBar.open('Hubo un error al actualizar el precio, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
-      });    }
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
+      });
+    }
   }
 
   resetModal() {

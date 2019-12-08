@@ -27,14 +27,15 @@ export class ProfileComponent implements OnInit {
     getting: {
       loading: boolean,
     }
-    delete:{
+    delete: {
       loading: boolean;
     }
   };
   modalRef: BsModalRef;
 
 
-  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService, private modalService: BsModalService, public snackBar: MatSnackBar) {}
+  constructor(public fb: FormBuilder, public userService: UserService, public router: Router, private titleService: Title, public authService: UserAuthService, private modalService: BsModalService, public snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
     this.titleService.setTitle('Perfil Usuario | Stingy');
@@ -46,7 +47,7 @@ export class ProfileComponent implements OnInit {
       getting: {
         loading: true,
       },
-      delete:{
+      delete: {
         loading: false,
       }
     };
@@ -54,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.getUser();
   }
 
-  getUser(){
+  getUser() {
     this.authService.loggedUser.then(res => {
       this.userService.getUserById(res.id).then(user => {
         this.user = user;
@@ -65,24 +66,27 @@ export class ProfileComponent implements OnInit {
       this.alerts.getting.loading = false;
       this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
     })
   }
 
   updateUser() {
     this.alerts.updating.loading = true;
-    this.userService.updateUser(this.user).then( () => {
+    this.userService.updateUser(this.user).then(() => {
       this.alerts.updating.loading = false;
       this.snackBar.open('El usuario se actualizó correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-success']
+
       });
     }).catch(() => {
       this.alerts.updating.loading = false;
       this.snackBar.open('Hubo un error al actualizar el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
     })
   }
@@ -101,17 +105,19 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  deleteUser(){
+  deleteUser() {
     this.userService.deleteUser(this.user.id).then(res => {
       this.snackBar.open('El usuario se eliminó correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-success']
+
       });
       this.router.navigate(['login']);
     }).catch(err => {
       this.snackBar.open('Hubo un error al eliminar el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
+
       });
     });
   }
@@ -121,10 +127,9 @@ export class ProfileComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  resetDeleteModal(){
+  resetDeleteModal() {
     this.alerts.delete.loading = false;
   }
-
 
 
 }
