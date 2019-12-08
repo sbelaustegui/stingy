@@ -15,29 +15,25 @@
           <h2>Estadísticas</h2>
         </div>
         <div class="col-lg-12" *ngIf="!alerts.products.loading">
-            <select
-              class="form-control"
-              [(ngModel)]="selectedProduct"
-              (change)="getStatistics()"
-            >
-              <option [value]="undefined" selected>Seleccione una producto</option>
-              <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
-            </select>
+          <select
+            class="form-control"
+            [(ngModel)]="selectedProduct"
+            (change)="getStatistics()"
+          >
+            <option [value]="undefined" selected>Seleccione una producto</option>
+            <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
+          </select>
           <div class="col-lg-4 offset-lg-4 col-2 offset-5" *ngIf="alerts.statistics.loading">
             <span class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
           </div>
-          <div class="chart-container" *ngIf="!alerts.statistics.loading">
-            <canvas baseChart
-                    [datasets]="barChartData"
-                    [labels]="barChartLabels"
-                    [options]="barChartOptions"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType">
-            </canvas>
+        </div>
+        <div class="blank-separator"></div>
+        <div class="col-lg-12">
+          <div class="chart-container">
+            <canvas #canvas></canvas>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

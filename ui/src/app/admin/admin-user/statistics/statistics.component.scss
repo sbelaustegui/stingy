@@ -1,18 +1,27 @@
 .statistics {
   padding-right: 50px;
   padding-left: 50px;
+
   .row {
     padding-top: 2%;
     background-color: #8BC4FF;
+    display: flex;
+    flex-direction: row;
 
     h2 {
       color: white;
       font-family: Open-Sans, "Lilita One", sans-serif;
+      padding-bottom: 20px ;
+
     }
 
+  }
+  .blank-separator{
+    padding: 40px 0;
   }
   .chart-container{
     display: block;
     background-color: white;
+    border-radius: 10px;
   }
 }
