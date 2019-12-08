@@ -90,6 +90,7 @@ export class StatisticsComponent implements OnInit {
           {
             data: [],
             label: this.label,
+            fill:false,
             backgroundColor:
               'rgb(88,190,224)',
             borderColor:
