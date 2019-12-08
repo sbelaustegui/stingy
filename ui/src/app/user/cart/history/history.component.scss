@@ -1,33 +1,14 @@
 .history {
   padding-right: 50px;
   padding-left: 50px;
-  .row {
-    .fa-spinner{
-      color: white;
-      text-align: center;
-    }
-    padding-top: 2%;
-    background-color: #8BC4FF;
-    .add-button {
-      text-align: right;
-      button {
-        background-color: #58bee0;
-        font-weight: bold;
-        color: white;
-      }
-    }
-    h2 {
-      color: white;
-      font-family: Open-Sans, "Lilita One", sans-serif;
-    }
-    h3 {
-      margin-bottom: 30px;
-      margin-top: 30px;
-      color: white;
-      font-family: Open-Sans, "Lilita One", sans-serif;
-    }
-    table {
-      background-color: white;
-    }
+  padding-top: 2%;
+
+  .row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 40px;
+    margin: 0;
   }
 }

@@ -51,10 +51,11 @@ export class CartComponent implements OnInit {
   private _CBP_Index: number;
 
 
-  constructor(public cartService: CartService,
-              public authService: UserAuthService,
-              public supplierService: SupplierService,
-              public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
+  constructor(private cartService: CartService,
+              private authService: UserAuthService,
+              private supplierService: SupplierService,
+              private router: Router,
+              private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

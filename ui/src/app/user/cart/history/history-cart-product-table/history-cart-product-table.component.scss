@@ -1,0 +1,10 @@
+@import "../../../../../styles";
+
+::ng-deep mat-expansion-panel {
+  mat-expansion-panel-header {
+    mat-panel-title {
+      color: $primary-color !important;
+      font-weight: bold;
+    }
+  }
+}

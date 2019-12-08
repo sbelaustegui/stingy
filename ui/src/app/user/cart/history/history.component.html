@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-10 offset-1">
       <div class="row">
-        <div class="col-12">
-          <h2>Historial de Carritos</h2>
-        </div>
+        <h2>Carrito Actual</h2>
+        <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="goToCurrentCart()">Volver</button>
       </div>
+
       <div class="row" *ngIf="alerts.supplierProducts.loading">
         <div class="col-12" style="text-align: center;">
           <span class="mx-auto">
@@ -16,24 +16,27 @@
       </div>
       <div *ngIf="!alerts.supplierProducts.loading">
         <h3 *ngIf="carts.length <= 0">No posee carritos anteriores al actual.</h3>
-        <div *ngFor="let cartId of cartsIds()">
-          <h3>Carrito del {{getCartById(cartId).date.toStringDate()}}</h3>
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Producto</th>
-              <th scope="col">Proveedor</th>
-              <th scope="col">Precio</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let supplierProduct of supplierProducts.get(cartId)">
-              <td>{{supplierProduct.product}}</td>
-              <td>{{supplierProduct.supplier}}</td>
-              <td>${{supplierProduct.price}}</td>
-            </tr>
-            </tbody>
-          </table>
+        <div >
+          <mat-accordion>
+            <ng-container
+              class="suppliers"
+              *ngFor="let cartId of cartsIds()"
+            >
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Carrito del {{getCartById(cartId).date.toStringDate()}}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <app-history-cart-product-table
+                  [supplierProducts]="supplierProducts.get(cartId)"
+                >
+                </app-history-cart-product-table>
+              </mat-expansion-panel>
+            </ng-container>
+          </mat-accordion>
         </div>
       </div>
     </div>

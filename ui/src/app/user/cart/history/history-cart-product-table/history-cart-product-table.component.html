@@ -1,0 +1,28 @@
+<div class="history-cart-product-table">
+  <mat-table [dataSource]="dataSource">
+    <!--PRODUCT Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef><b>Producto</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{row.product}}
+      </mat-cell>
+    </ng-container>
+    <!--SUPPLIER Column -->
+    <ng-container matColumnDef="supplier">
+      <mat-header-cell *matHeaderCellDef><b>Proveedor</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{row.supplier}}
+      </mat-cell>
+    </ng-container>
+    <!--PRICE Column -->
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef><b>Precio</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        ${{row.price}}
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+</div>

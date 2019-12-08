@@ -7,6 +7,7 @@ import {CartProductService} from "../../../shared/services/cartProduct.service";
 import {SupplierProductService} from "../../../shared/services/supplierProduct.service";
 import {SupplierProductCart} from "../../../shared/models/supplier-product-cart.model";
 import {MatSnackBar} from "@angular/material";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-history',
@@ -31,7 +32,15 @@ export class HistoryComponent implements OnInit {
   public carts: Cart[];
   public supplierProducts: Map<number, SupplierProductCart[]>;
 
-  constructor(public cartService: CartService, public supplierProductService: SupplierProductService, public cartProductService: CartProductService, public authService: UserAuthService, private titleService: Title, public snackBar: MatSnackBar) {
+  constructor(
+    private titleService: Title,
+    private cartService: CartService,
+    private supplierProductService: SupplierProductService,
+    private cartProductService: CartProductService,
+    private authService: UserAuthService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+  ) {
   }
 
   ngOnInit() {
@@ -116,4 +125,9 @@ export class HistoryComponent implements OnInit {
   getCartById(id): Cart {
     return this.carts.find(cart => cart.id == id);
   }
+
+  goToCurrentCart() {
+    this.router.navigate(['user/cart']);
+  }
+
 }

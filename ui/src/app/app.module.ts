@@ -54,6 +54,7 @@ import {StatisticsComponent} from "./admin/admin-user/statistics/statistics.comp
 import {ChartsModule} from "ng2-charts";
 import { CartProductTableComponent } from './user/cart/cart-product-table/cart-product-table.component';
 import {MatCardModule} from "@angular/material/card";
+import { HistoryCartProductTableComponent } from './user/cart/history/history-cart-product-table/history-cart-product-table.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import {MatCardModule} from "@angular/material/card";
     HistoryComponent,
     StatisticsComponent,
     CartProductTableComponent,
+    HistoryCartProductTableComponent,
   ],
     imports: [
         BrowserModule,
