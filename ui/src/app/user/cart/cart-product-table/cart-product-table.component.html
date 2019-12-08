@@ -1,0 +1,102 @@
+<div class="cart-product-table">
+  <mat-table [dataSource]="dataSource">
+    <!--NAME Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef><b>Nombre</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.productName}}</mat-cell>
+    </ng-container>
+    <!--DETAILS Column -->
+    <ng-container matColumnDef="details">
+      <mat-header-cell *matHeaderCellDef><b>Detalle</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <i class="fa fa-eye" (click)="openProductModal(productDetailModal,row)" id="detail"></i>
+      </mat-cell>
+    </ng-container>
+    <!--LAST UPTDATE Column -->
+    <ng-container matColumnDef="lastUpdate">
+      <mat-header-cell *matHeaderCellDef><b>Última Modificación</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{dateModelToString(row.productDate)}}
+      </mat-cell>
+    </ng-container>
+    <!--PRICE Column -->
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef><b>Precio</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        ${{row.supplierProductPrice}}
+      </mat-cell>
+    </ng-container>
+    <!--Remove Column-->
+    <ng-container matColumnDef="remove">
+      <mat-header-cell *matHeaderCellDef align="center"><b>Remover</b></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div class="remove-button" align="center">
+          <button mat-icon-button (click)="openProductDeleteModal(deleteModal, row)">
+            <mat-icon>
+              <i class="fa fa-trash"></i>
+            </mat-icon>
+          </button>
+        </div>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+  <!--DETAIL CART-BAG-PRODUCT MODAL-->
+  <ng-template #productDetailModal>
+    <div class="modal-header" (keyup.esc)="resetModal('PRODUCT')">
+      <h4 class="modal-title pull-left">
+        <span *ngIf="cartBagProductDetail">Detalles del Producto: {{cartBagProductDetail.productName}}</span>
+      </h4>
+
+      <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('PRODUCT')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="detail-modal" *ngIf="cartBagProductDetail">
+          <!--TODO SEBAS IMAGE FROM PRODUCT-->
+          <!--<td class="cartBagProduct-image"><img class="cartBagProduct-img" [src]="cartBagProduct.imageUrl" alt="Product Image"></td>-->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Nombre: </b><span>{{cartBagProductDetail.productName}}</span></li>
+            <li class="list-group-item"><b>Descripción: </b><span>{{cartBagProductDetail.productDescription}}</span>
+            </li>
+            <li class="list-group-item"><b>Aporte por: </b><span>{{cartBagProductDetail.userName}}</span></li>
+            <li class="list-group-item"><b>Última
+              Modificación: </b><span>{{dateModelToString(cartBagProductDetail.supplierProductDate)}}</span></li>
+            <li class="list-group-item"><b>Fecha de Creación: </b><span>{{dateModelToString(cartBagProductDetail.productDate)}}</span>
+            </li>
+            <li class="list-group-item"><b>Precio: </b><span>${{cartBagProductDetail.supplierProductPrice}}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-secondary" (click)="resetModal('PRODUCT')">Volver</button>
+    </div>
+  </ng-template>
+
+  <!--Delete confirmation modal-->
+  <ng-template #deleteModal>
+    <div class="modal-header" (keyup.esc)="resetModal('PRODUCTDELETE')">
+      <h4 class="modal-title pull-left">Eliminar
+        <span *ngIf="cartBagProductToDelete">Producto {{cartBagProductToDelete.productName}}</span>
+      </h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('PRODUCTDELETE'); modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      ¿Está seguro que desea eliminar el producto del carrito?
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
+      <button type="submit" class="btn btn-secondary" (click)="resetModal('PRODUCTDELETE'); modalRef.hide();">
+        Cancelar
+      </button>
+    </div>
+  </ng-template>
+
+</div>

@@ -6,13 +6,13 @@ export class CartBag {
     if (!jsonObject || !jsonObject.supplierName || !jsonObject.products) {
       throw new Error('Failed to instantiate SupplierProduct from given jsonObject');
     }
-    return new CartBag(jsonObject.supplierName, jsonObject.products);
+    return new CartBag(jsonObject.supplierName, jsonObject.products, jsonObject.id);
   }
 
   static empty(): CartBag {
     return new CartBag(undefined, [])
   }
 
-  constructor(public supplierId: number, public products: CartBagProduct[]) {
+  constructor(public supplierId: number, public products: CartBagProduct[], public id?: number) {
   }
 }

@@ -3,114 +3,36 @@
 
     <!--PRODUCTS TABLE-->
     <div class="col-8 offset-2">
-      <button class="btn btn-light my-2 my-sm-0 history-button" type="button" (click)="goToHistory()">Historial </button>
-
+      <div class="row">
+        <h2>Carritos</h2>
+        <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="goToHistory()">Historial</button>
+      </div>
       <div class="row" *ngIf="alerts.cartBags.loading">
-          <div class="col-12" style="text-align: center;">
+        <div class="col-12" style="text-align: center;">
             <span class="mx-auto">
               <i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i>
             </span>
-          </div>
-      </div>
-      <div class="suppliers" *ngFor="let cartBag of cartBags; let  cartBagIndex = index">
-        <!--TODO supplier name -> think tittle or table with total price and distance -->
-        <h2>
-          {{ getSupplierNameBySupId(cartBag.supplierId)}}    ${{getCartBagTotalPriceBySupId(cartBag.supplierId)}}
-        </h2>
-        <table class="table table-striped" *ngIf="!alerts.cartBags.loading">
-          <thead>
-          <tr>
-            <th scope="col" width="20%">Nombre</th>
-            <th scope="col">Detalle</th>
-            <th scope="col">Ultima Modificación</th>
-            <th scope="col" width="20%">Precio</th>
-            <th scope="col">Remover</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr
-            *ngFor="let cartBagProduct of (cartBag.products | paginate: { itemsPerPage: 10, currentPage: productsPage, id: 'products' }); let productIndex = index">
-
-            <td>{{cartBagProduct.productName}}</td>
-            <td>
-              <i class="fa fa-eye" (click)="openProductModal(productDetailModal,cartBagProduct)" id="detail"></i>
-            </td>
-            <td>{{cartBagProduct.productDate}}</td>
-            <td>${{cartBagProduct.supplierProductPrice}}</td>
-            <td>
-              <div class="remove-button">
-                <button type="submit" class="btn btn-danger"
-                        (click)="openProductDeleteModal(deleteModal, cartBagIndex, productIndex,cartBagProduct)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <pagination-controls id="products"
-                           class="paginator"
-                           (pageChange)="productsPage = $event"
-                           autoHide="true"
-                           previousLabel="Anterior"
-                           nextLabel="Siguiente">
-      </pagination-controls>
-    </div>
-
-    <!--DETAIL CART-BAG-PRODUCT MODAL-->
-    <ng-template #productDetailModal>
-      <div class="modal-header" (keyup.esc)="resetModal('PRODUCT')">
-        <h4 class="modal-title pull-left">
-          <span *ngIf="cartBagProductModal">Detalles del Producto: {{cartBagProductModal.productName}}</span>
-        </h4>
-
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal('PRODUCT')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="detail-modal" *ngIf="cartBagProductModal">
-            <!--TODO SEBAS IMAGE FROM PRODUCT-->
-            <!--<td class="cartBagProduct-image"><img class="cartBagProduct-img" [src]="cartBagProduct.imageUrl" alt="Product Image"></td>-->
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><b>Nombre: </b><span>{{cartBagProductModal.productName}}</span></li>
-              <li class="list-group-item"><b>Decripcion: </b><span >{{cartBagProductModal.productDescription}}</span></li>
-              <li class="list-group-item"><b>Aporte por: </b><span >{{cartBagProductModal.userName}}</span></li>
-              <li class="list-group-item"><b>Última Modificación: </b><span >{{cartBagProductModal.supplierProductDate}}</span></li>
-              <li class="list-group-item"><b>Fecha de Creación: </b><span>{{cartBagProductModal.productDate}}</span></li>
-              <li class="list-group-item"><b>Precio: </b><span>${{cartBagProductModal.supplierProductPrice}}</span></li>
-            </ul>
-          </div>
         </div>
-
       </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-secondary" (click)="resetModal('PRODUCT')">Volver</button>
-      </div>
-    </ng-template>
-
-    <!--Delete confirmation modal-->
-    <ng-template #deleteModal>
-      <div class="modal-header" (keyup.esc)="resetModal()">
-        <h4 class="modal-title pull-left">Eliminar
-          <span *ngIf="cartBagProductModal">Producto {{cartBagProductModal.productName}}</span>
-        </h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="resetModal(); modalRef.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ¿Está seguro que desea eliminar el producto del carrito?
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-danger" (click)="this.deleteProduct()">Eliminar</button>
-        <button type="submit" class="btn btn-secondary" (click)="resetModal('DELETEPRODUCT'); modalRef.hide();">Cancelar</button>
-      </div>
-    </ng-template>
-
-
+        <mat-accordion>
+          <ng-container class="suppliers" *ngFor="let cartBag of cartBags; let  cartBagIndex = index">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ getSupplierNameBySupId(cartBag.supplierId)}}
+                  ${{getCartBagTotalPriceBySupId(cartBag.supplierId)}}
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-cart-product-table
+                [cartBagProducts]="cartBag.products"
+              >
+              </app-cart-product-table>
+            </mat-expansion-panel>
+          </ng-container>
+        </mat-accordion>
+    </div>
   </div>
 </div>
 

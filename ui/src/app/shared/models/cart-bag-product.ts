@@ -19,12 +19,15 @@ export class CartBagProduct {
     return new CartBagProduct(DateModel.from(jsonObject.supplierProductDate),
       jsonObject.supplierProductPrice, DateModel.from(jsonObject.productDate),
       jsonObject.productName, jsonObject.productDescription,
-      jsonObject.userName);
+      jsonObject.userName, jsonObject.id);
   }
 
 
-  constructor(public supplierProductDate: DateModel, public supplierProductPrice: number,
-              public productDate: DateModel, public productName: string,
-              public productDescription: string, public userName: string) {
+  constructor(
+    public supplierProductDate: DateModel, public supplierProductPrice: number,
+    public productDate: DateModel, public productName: string,
+    public productDescription: string, public userName: string,
+    public id?: number,
+  ) {
   }
 }

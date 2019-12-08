@@ -1,6 +1,6 @@
 ///<reference path="../../../../node_modules/@angular/router/src/router.d.ts"/>
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {Component, OnInit} from '@angular/core';
+import {BsModalService} from "ngx-bootstrap";
 import {Title} from "@angular/platform-browser";
 import {CartService} from "../../shared/services/cart.service";
 import {Router} from "@angular/router";
@@ -13,7 +13,6 @@ import {SupplierProductService} from "../../shared/services/supplierProduct.serv
 import {CartBag} from "../../shared/models/cart-bag.model";
 import {CartBagProduct} from "../../shared/models/cart-bag-product";
 import {Supplier} from "../../shared/models/supplier.model";
-import {CartProduct} from "../../shared/models/cartProduct.model";
 import {MatSnackBar} from "@angular/material";
 
 @Component({
@@ -26,14 +25,12 @@ import {MatSnackBar} from "@angular/material";
 })
 
 export class CartComponent implements OnInit {
-
   public cartBags: CartBag[];
   public cartBagsPrices: Map<number, number>; // <supplierId, totalPrice>
   public suppliers: Map<number, Supplier>; // <supplierId, Supplier>
 
   public userId: number;
   public currentCart: Cart;
-  public productsPage: number = 1;
   public alerts: {
     details: {
       loading: boolean,
@@ -52,13 +49,11 @@ export class CartComponent implements OnInit {
   };
   private _CB_Index: number;
   private _CBP_Index: number;
-  public cartBagProductModal: CartBagProduct;
 
-  modalRef: BsModalRef;
 
-  constructor(public cartService: CartService, public cartProductService: CartProductService, public authService: UserAuthService,
-              public productService: ProductService, public supplierService: SupplierService,
-              public supplierProductService: SupplierProductService,
+  constructor(public cartService: CartService,
+              public authService: UserAuthService,
+              public supplierService: SupplierService,
               public router: Router, private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
@@ -101,7 +96,7 @@ export class CartComponent implements OnInit {
       this.alerts.user.loading = false;
       this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+        verticalPosition: 'top', panelClass: ['snack-bar-error']
 
       });
     })
@@ -118,16 +113,18 @@ export class CartComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+          verticalPosition: 'top', panelClass: ['snack-bar-error']
 
-        });        this.alerts.cart.loading = false;
+        });
+        this.alerts.cart.loading = false;
       })
   }
 
   private getCurrentCartBags() {
+    this.alerts.cartBags.loading = true;
     this.cartService.getCartBagsById(this.currentCart.id)
       .then(res => {
-        this.alerts.cartBags.loading = true;
+        console.log('CARTBAGS', res);
         this.cartBags = res;
         this.saveSuppliersAndTotalPrice();
         this.cartBags = this.sortCartBagByTotalPrice();
@@ -136,9 +133,10 @@ export class CartComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener el carrito, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+          verticalPosition: 'top', panelClass: ['snack-bar-error']
 
         });
+        this.alerts.cartBags.loading = false;
       })
   }
 
@@ -188,7 +186,7 @@ export class CartComponent implements OnInit {
         .catch(() => {
           this.snackBar.open('Hubo un error al obtener el proveedor, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'              ,panelClass: ['snack-bar-error']
+            verticalPosition: 'top', panelClass: ['snack-bar-error']
 
           });
           //todo supplier
@@ -201,37 +199,4 @@ export class CartComponent implements OnInit {
     this.router.navigate(['user/cart/history']);
   }
 
-  //MODAL METHODS
-
-  deleteProduct() {
-  }
-
-  deleteAllProducts(){
-  }
-
-  openProductModal(template: TemplateRef<any>, cartBagProduct: CartBagProduct) {
-    // this.cartBagProductModal = CartBagProduct.from(cartBagProduct);
-    this.cartBagProductModal = cartBagProduct;
-    this.modalRef = this.modalService.show(template);
-  }
-
-  openProductDeleteModal(template: TemplateRef<any>, cartBagIndex: number, cartBagProductIndex: number, cartBagProductToDelete: CartBagProduct)   {
-    this._CB_Index = cartBagIndex;
-    this._CBP_Index = cartBagProductIndex;
-    this.cartBagProductModal = cartBagProductToDelete;
-    this.modalRef = this.modalService.show(template);
-  }
-
-  resetModal(reference: string) {
-    this.modalRef.hide();
-    switch (reference.toUpperCase()) {
-      case "PRODUCT":
-        this.cartBagProductModal = CartBagProduct.empty();
-        break;
-      case "PRODUCTDELETE":
-        this._CB_Index = -1;
-        this._CBP_Index = -1;
-        break;
-    }
-  }
 }

@@ -52,6 +52,8 @@ import {
 } from '@angular/material';
 import {StatisticsComponent} from "./admin/admin-user/statistics/statistics.component";
 import {ChartsModule} from "ng2-charts";
+import { CartProductTableComponent } from './user/cart/cart-product-table/cart-product-table.component';
+import {MatCardModule} from "@angular/material/card";
 
 
 @NgModule({
@@ -74,33 +76,35 @@ import {ChartsModule} from "ng2-charts";
     SuppliersComponent,
     HistoryComponent,
     StatisticsComponent,
+    CartProductTableComponent,
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    ModalModule.forRoot(),
-    NgxPaginationModule,
-    CollapseModule.forRoot(),
-    TruncateModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho',
-      libraries: ['places']
-    }),
-    BrowserAnimationsModule,
-    MatInputModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatButtonModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatSnackBarModule,
-    ChartsModule
-],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpModule,
+        ModalModule.forRoot(),
+        NgxPaginationModule,
+        CollapseModule.forRoot(),
+        TruncateModule,
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyDg0UYABvnABeQTvN65iUv-IwSgWhBDRho',
+            libraries: ['places']
+        }),
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatButtonModule,
+        MatIconModule,
+        MatExpansionModule,
+        MatSnackBarModule,
+        ChartsModule,
+        MatCardModule
+    ],
   providers : [
     CookieService,
     HttpService,
