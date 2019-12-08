@@ -1,5 +1,13 @@
 @import "../../../../../styles";
 
+.history-cart-product-table{
+  overflow-y: auto;
+  #price{
+    font-weight: bold;
+    color: gray;
+  }
+}
+
 ::ng-deep mat-expansion-panel {
   mat-expansion-panel-header {
     mat-panel-title {
