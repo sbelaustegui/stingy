@@ -64,7 +64,8 @@ export class AdminProfileComponent implements OnInit {
       this.alerts.getting.loading = false;
       this.snackBar.open('Hubo un error al obtener el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });    })
   }
 
@@ -74,13 +75,15 @@ export class AdminProfileComponent implements OnInit {
       this.alerts.updating.loading = false;
       this.snackBar.open('El usuario fué actualizado correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
       });
     }).catch(() => {
       this.alerts.updating.loading = false;
       this.snackBar.open('Hubo un error al actualizar el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
     })
   }
@@ -103,7 +106,8 @@ export class AdminProfileComponent implements OnInit {
     this.userService.deleteUser(this.user.id).then(() => {
       this.snackBar.open('El usuario fué eliminado correctamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-success']
       });
       this.alerts.delete.loading = false;
       this.authService.logout().then(() => {
@@ -112,7 +116,8 @@ export class AdminProfileComponent implements OnInit {
     }).catch(() => {
       this.snackBar.open('Hubo un error al eliminar el usuario, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error']
       });
       this.alerts.delete.loading = true;
     })
