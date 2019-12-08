@@ -54,6 +54,10 @@
   }
 }
 
+::ng-deep .form-control-feedback{
+  color: $danger-color;
+}
+
 ::ng-deep .header-table {
   min-height: 64px !important;;
   ::ng-deep .mat-form-field {

@@ -15,47 +15,5 @@
         color: white;
       }
     }
-
-    h2 {
-      color: white;
-      font-family: Open-Sans, "Lilita One", sans-serif;
-    }
-
-    .upload-button {
-      button {
-        font-size: 26px;
-        background-color: transparent;
-        color: black;
-        border: none;
-      }
-
-      i {
-        color: #cc6600;
-      }
-    }
-
-
-
-    .container-table {
-      display: flex;
-      flex-direction: column;
-      min-width: 300px;
-
-      .mat-header-cell {
-        font-weight: bold;
-        font-color: black;
-      }
-    }
-
-    .header-table {
-      min-height: 64px;
-
-      .mat-form-field {
-        font-size: 14px;
-        width: 100%;
-        color: white;
-        font-weight: bold;
-      }
-    }
   }
 }
