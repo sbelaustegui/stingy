@@ -416,7 +416,8 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
         this.location.longitude = position.coords.longitude;
         this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success'],
         });
       });
       this.alerts.location.loading = false;
@@ -424,7 +425,9 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
       this.location = Location.empty();
       this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error'],
+
       });
     }
   }

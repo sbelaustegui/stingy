@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
@@ -8,7 +8,7 @@ import {CategoryService} from "../../../shared/services/category.service";
 import {SubcategoryService} from "../../../shared/services/subcategory.service";
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from "@angular/material";
+import {MatSnackBar, MatTableDataSource} from "@angular/material";
 
 @Component({
   selector: 'app-categories',
@@ -94,7 +94,8 @@ export class CategoriesComponent implements OnInit {
       .catch(() => {
         this.snackBar.open('Hubo un error al obtener las subcategorias, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.subcategories.loading = false;
       })
@@ -111,7 +112,8 @@ export class CategoriesComponent implements OnInit {
       .catch(err => {
         this.snackBar.open('Hubo un error al obtener las categorias, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
         this.alerts.categories.loading = false;
       })
@@ -131,14 +133,17 @@ export class CategoriesComponent implements OnInit {
           this.modalRef.hide();
           this.snackBar.open('La categoria fue actualizada correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
+
           });
         })
         .catch(() => {
           this.alerts.add.loading = false;
           this.snackBar.open('Hubo un error al actualizar la categoria, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     } else {
@@ -152,14 +157,17 @@ export class CategoriesComponent implements OnInit {
           this.modalRef.hide();
           this.snackBar.open('La categoria fue agregada correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
+
           });
         })
         .catch(() => {
           this.alerts.add.loading = false;
           this.snackBar.open('Hubo un error al agregar la categoria, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     }
@@ -180,14 +188,16 @@ export class CategoriesComponent implements OnInit {
           this.modalRef.hide();
           this.snackBar.open('La subcategoria fue actualizada correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
           });
         })
         .catch(() => {
           this.alerts.add.loading = false;
           this.snackBar.open('Hubo un error al agregar la subcategoria, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     } else {
@@ -202,14 +212,16 @@ export class CategoriesComponent implements OnInit {
           this.modalRef.hide();
           this.snackBar.open('La subcategoria fue agregada correctamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
           });
         })
         .catch(() => {
           this.alerts.add.loading = false;
           this.snackBar.open('Hubo un error al agregar la subcategoria, por favor inténtelo nuevamente.', '', {
             duration: 5000,
-            verticalPosition: 'top'
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error']
           });
         })
     }
@@ -228,14 +240,16 @@ export class CategoriesComponent implements OnInit {
 
         this.snackBar.open('La categoria fue eliminada correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
         });
       })
       .catch(() => {
         this.alerts.categories.deleting = false;
         this.snackBar.open('Hubo un error al eliminar la categoria, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
   }
@@ -255,14 +269,16 @@ export class CategoriesComponent implements OnInit {
         this.modalRef.hide();
         this.snackBar.open('La subcategoria fue eliminada correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success']
         });
       })
       .catch(() => {
         this.alerts.subcategories.deleting = false;
         this.snackBar.open('Hubo un error al eliminar la subcategoria, por favor inténtelo nuevamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
         });
       })
   }

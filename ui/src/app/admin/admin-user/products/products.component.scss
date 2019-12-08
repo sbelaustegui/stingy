@@ -1,10 +1,11 @@
+@import "../../../../styles";
+
 .admin-products {
   padding-right: 50px;
   padding-left: 50px;
 
   .row {
     padding-top: 2%;
-    background-color: #8BC4FF;
 
     h2 {
       color: white;
@@ -28,13 +29,14 @@
 
         i {
           font-size: 24px;
-          color: limegreen;
+          color: $success-color;
+          cursor: pointer;
         }
       }
 
       .user-name {
         text-align: center;
-        color: #58bee0;
+        color: $primary-color;
         font-weight: bold;
         cursor: pointer;
       }

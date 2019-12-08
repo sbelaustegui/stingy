@@ -1,3 +1,6 @@
+@import "../../../../styles";
+
+
 .profile{
   .row{
     margin: 4%;
@@ -9,7 +12,7 @@
       #register-button{
         width: 100%;
         font-weight: bold;
-        background-color: #58bee0;
+        background-color: $primary-color;
         color: white;
       }
     }

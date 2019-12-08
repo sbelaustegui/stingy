@@ -1,10 +1,12 @@
+@import "../../../../styles";
+
 .statistics {
   padding-right: 50px;
   padding-left: 50px;
 
   .row {
     padding-top: 2%;
-    background-color: #8BC4FF;
+    background-color: $background-color;
     display: flex;
     flex-direction: row;
 

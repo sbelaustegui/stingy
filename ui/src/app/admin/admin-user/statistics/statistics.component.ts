@@ -48,7 +48,8 @@ export class StatisticsComponent implements OnInit {
       }).catch(() => {
       this.snackBar.open('Hubo un error al obtener los productos, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error'],
       });
       this.alerts.products.loading = false;
     })
@@ -73,7 +74,8 @@ export class StatisticsComponent implements OnInit {
       }).catch(err => {
       this.snackBar.open('Hubo un error al obtener los datos, por favor inténtelo nuevamente.', '', {
         duration: 5000,
-        verticalPosition: 'top'
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error'],
       });
       this.alerts.statistics.loading = false;
     })

@@ -1,21 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-.error {
-  color: red;
-  margin-left: 5px;
-  float: left !important;
-}
-
-.disabled {
-  pointer-events: none;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-.fa-spinner {
-  color: white;
-}
-
+$primary-color: #4f98e6;
+$danger-color: #e64f75;
+$success-color: #4fe69d;
+$warning-color: #e6af4f;
+$background-color: #8BC4FF;
