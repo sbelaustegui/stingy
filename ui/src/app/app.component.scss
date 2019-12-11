@@ -162,3 +162,7 @@
     background-color: $danger-color !important;
   }
 
+
+  ::ng-deep .nav-item{
+    outline: none;
+  }

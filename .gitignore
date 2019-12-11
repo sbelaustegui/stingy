@@ -8,3 +8,5 @@ target
 /RUNNING_PID
 /public
 /conf/application.conf
+
+S3Client.scala
