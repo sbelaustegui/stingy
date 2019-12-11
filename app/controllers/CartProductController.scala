@@ -18,7 +18,7 @@ class CartProductController @Inject()(cc: ControllerComponents) extends Abstract
     request =>
       request.body.asJson.get.asOpt[CartProductCreate] match {
         case Some(cartProductCreate) =>
-          if (CartProduct.hasProduct(cartProductCreate.supplierProductId)) {
+          if (CartProduct.hasProduct(cartProductCreate.supplierProductId, cartProductCreate.cartId)) {
             BadRequest(
               Json.toJson(
                 ResponseGenerated(

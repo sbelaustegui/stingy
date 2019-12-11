@@ -47,8 +47,8 @@ object CartProductDAO {
     ECartProduct.getCartProductsByCartId(id).map(CartProduct.apply).toList
   }
 
- def hasProduct(productId: Long) : Boolean = {
-    ECartProduct.hasProduct(productId)
+ def hasProduct(productId: Long, cartId: Long) : Boolean = {
+    ECartProduct.hasProduct(productId, cartId)
   }
 
   def getCartProductIdByCartIdAndSupplierProductId(cartId: Long, supplierProductId: Long) : Long = {
