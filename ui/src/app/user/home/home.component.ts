@@ -287,12 +287,21 @@ export class HomeComponent implements OnInit {
   addToCart(productId: number) {
     if (this.supplierProducts.has(productId)) {
       this.supplierProducts.get(productId).forEach(sp => {
-        this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id));
-        this.snackBar.open('El producto se agregó con éxito.', '', {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['snack-bar-success']
-      });
+        this.cartProductService.addCartProduct(new CartProduct(this.currentCartId, sp.id))
+          .then(res => {
+            this.snackBar.open('El producto se agregó con éxito.', '', {
+              duration: 5000,
+              verticalPosition: 'top',
+              panelClass: ['snack-bar-success']
+            })
+        }).catch(err => {
+          this.snackBar.open('Hubo un error al agregar el product, por favor inténtelo nuevamente. Revise que no este ya agregado.', '', {
+            duration: 5000,
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-error'],
+
+          });
+        })
       })
     }
   }

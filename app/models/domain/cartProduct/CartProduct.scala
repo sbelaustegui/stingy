@@ -37,6 +37,10 @@ object CartProduct extends CartProductJsonFormat {
     CartProductDAO.getById(id)
   }
 
+  def hasProduct(productId : Long) : Boolean = {
+    CartProductDAO.hasProduct(productId)
+  }
+
   def getByCartId(id : Long) : List[CartProduct] = {
     CartProductDAO.getByCartId(id)
   }

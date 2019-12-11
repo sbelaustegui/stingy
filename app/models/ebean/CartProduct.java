@@ -50,6 +50,10 @@ public class CartProduct extends Model {
         return Ebean.find(CartProduct.class).where().eq("cart_id", id).findList();
     }
 
+    public static boolean hasProduct(Long id){
+        return Ebean.find(CartProduct.class).where().eq("supplier_product_id", id).findOne() != null;
+    }
+
     public static Long getCartProductIdByCartIdAndSupplierProductId(Long cartId, Long supplierProductId){
         return Objects.requireNonNull(Ebean.find(CartProduct.class).where().eq("cart_id", cartId).where().eq("supplier_product_id", supplierProductId).findOne()).id;
     }

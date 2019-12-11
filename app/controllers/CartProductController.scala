@@ -18,23 +18,33 @@ class CartProductController @Inject()(cc: ControllerComponents) extends Abstract
     request =>
       request.body.asJson.get.asOpt[CartProductCreate] match {
         case Some(cartProductCreate) =>
-          CartProduct.saveOrUpdate(CartProduct(cartProductCreate)) match {
-            case Some(savedCartProduct) =>
-              Ok(
-                Json.toJson(
-                  ResponseGenerated(
-                    OK, "Ok",  Json.toJson(savedCartProduct)
-                  )
+          if (CartProduct.hasProduct(cartProductCreate.supplierProductId)) {
+            BadRequest(
+              Json.toJson(
+                ResponseGenerated(
+                  BAD_REQUEST, "Product already added"
                 )
               )
-            case None =>
-             BadRequest(
-                Json.toJson(
-                  ResponseGenerated(
-                    BAD_REQUEST, "CartProduct Name already in use"
+            )
+          } else {
+            CartProduct.saveOrUpdate(CartProduct(cartProductCreate)) match {
+              case Some(savedCartProduct) =>
+                Ok(
+                  Json.toJson(
+                    ResponseGenerated(
+                      OK, "Ok", Json.toJson(savedCartProduct)
+                    )
                   )
                 )
-              )
+              case None =>
+                BadRequest(
+                  Json.toJson(
+                    ResponseGenerated(
+                      BAD_REQUEST, "CartProduct Name already in use"
+                    )
+                  )
+                )
+            }
           }
         case None =>
           BadRequest(
