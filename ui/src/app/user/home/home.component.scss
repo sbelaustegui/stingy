@@ -77,6 +77,8 @@
 }
 
 .search-row {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
   width: 100%;
   margin-top: 50px;
   .name {
@@ -95,17 +97,26 @@
     height: 73%;
     font-size: 20px;
   }
+
+  #input-search{
+    width: 300px !important;
+  }
+  .custom-select{
+    width: 250px !important;
+  }
 }
 
 .results {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
   @media (max-width: 768px){
     margin-top: 500px;
   }
   h3 {
     color: white;
     font-size: 40px;
-    margin-left: 50px;
-    margin-bottom: 20px;
     &.no-results {
       text-align: center;
       font-size: 25px;

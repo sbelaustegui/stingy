@@ -6,9 +6,11 @@
           <h1 class="helpr-title">Buscá un producto para conseguir el mejor precio.</h1>
         </div>
         <form class="form-inline my-2 my-lg-0" *ngIf="!alerts.categories.loading">
-          <div class="row search-row">
-            <div class="col-md-3 name">
-              <input class="form-control mr-sm-2 name-input" type="search" [(ngModel)]="productName"
+          <div class="search-row">
+            <div class="name">
+              <input class="form-control mr-sm-2 name-input"
+                     id="input-search"
+                     type="search" [(ngModel)]="productName"
                      [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" aria-label="Search">
             </div>
             <div class="col-md-3">
@@ -26,13 +28,15 @@
               </select>
             </div>
             <div class="col-md-2" style="text-align: center">
-              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit" (click)="search(); location.id ? undefined : openModal(locationModal)" [disabled]="!this.productName || this.productName === '' || !this.selectedSubcategoryId">Buscar
+              <button class="btn btn-success my-2 my-sm-0 search-button" type="submit"
+                      (click)="search(); location.id ? undefined : openModal(locationModal)"
+                      [disabled]="!this.productName || this.productName === '' || !this.selectedSubcategoryId">Buscar
               </button>
             </div>
             <div class="col-md-1" style="text-align: center; padding-top: 5px;">
               <button class="btn btn-light my-2 my-sm-0 location-button"
-                    (click)="openModal(locationModal)">
-            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                      (click)="openModal(locationModal)">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -40,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div class="row results">
+  <div class="results">
     <h3 class="col-12" *ngIf="searched" #results>Productos encontrados</h3>
     <div class="col-12 loader">
     <span *ngIf="alerts.search.loading" class="mx-auto">
@@ -48,7 +52,7 @@
     </span>
     </div>
     <div class="col-md-12" *ngIf="searchedProducts.length > 0 && !alerts.location.loading">
-      <div class="row products-row">
+      <div class="products-row">
         <div class="col-md-4 col-sm-6 col-12 col-lg-3" *ngFor="let product of searchedProducts">
           <div class="card">
             <img class="card-img-top mx-auto" [src]="product.imageUrl" alt="Product img">
@@ -59,14 +63,19 @@
               </p>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
+              <li class="list-group-item"
+                  *ngFor="let supplierProduct of getSupplierProductsMap(product.id); let i = index">
                 <span style="font-weight: bold">{{getSupplierMap(supplierProduct.supplierId)?.name}}: </span>
                 <span style="font-weight: bold">$ {{supplierProduct.price}}</span>
-                <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)" data-toggle="tooltip" data-placement="top" title="Modificar Precio"><i class="fa fa-info-circle"></i></span>
+                <span style="margin-left: 5px; cursor: pointer;" (click)="openModal(priceModal, supplierProduct, i)"
+                      data-toggle="tooltip" data-placement="top" title="Modificar Precio"><i
+                  class="fa fa-info-circle"></i></span>
               </li>
               <li class="list-group-item">
                 <button class="btn btn-primary" (click)="addToCart(product.id); productsAdded.set(product.id, true)"
-                        *ngIf="supplierProducts.get(product.id)?.length > 0 && !productsAdded.get(product.id)">Agregar al carrito</button>
+                        *ngIf="supplierProducts.get(product.id)?.length > 0 && !productsAdded.get(product.id)">Agregar
+                  al carrito
+                </button>
                 <span *ngIf="productsAdded.get(product.id)">Agregado.</span>
                 <span *ngIf="supplierProducts.get(product.id)?.length <= 0">No hay productos en su zona.</span>
               </li>
@@ -89,7 +98,8 @@
     </button>
   </div>
   <div class="modal-body">
-    <agm-map [latitude]="location.latitude" [longitude]="location.longitude" *ngIf="!alerts.location.error && !alerts.location.loading">
+    <agm-map [latitude]="location.latitude" [longitude]="location.longitude"
+             *ngIf="!alerts.location.error && !alerts.location.loading">
       <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
     </agm-map>
   </div>
@@ -113,7 +123,8 @@
         <span class="input-group-text">$</span>
       </div>
       <!--<label for="input">Nuevo Precio: </label>-->
-      <input id="input" type="number" [min]="0" class="form-control" placeholder="Ingrese nuevo precio" [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
+      <input id="input" type="number" [min]="0" class="form-control" placeholder="Ingrese nuevo precio"
+             [(ngModel)]="selectedSupplierProduct.price" aria-label="Amount">
     </div>
   </div>
   <div class="modal-footer">
