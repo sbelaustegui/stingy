@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DateModel} from "../../../shared/models/date-model";
 import {Product} from "../../../shared/models/product.model";
 import {Chart} from 'chart.js'
+import {SupplierProductService} from "../../../shared/services/supplierProduct.service";
 
 @Component({
   selector: 'app-statistics',
@@ -34,7 +35,9 @@ export class StatisticsComponent implements OnInit {
   dateFrom: Date = new Date(2010, 10, 20);
   dateTo: Date = new Date();
 
-  constructor(private titleService: Title, public productService: ProductService, public snackBar: MatSnackBar) {
+  constructor(private titleService: Title,
+              public productService: ProductService,
+              public snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -86,7 +89,7 @@ export class StatisticsComponent implements OnInit {
 
   private createChart(xTitle: string, yTitle: string): Chart {
     this._chart = new Chart(this._canvas.nativeElement.getContext('2d'), {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: [],
         datasets: [
@@ -127,6 +130,9 @@ export class StatisticsComponent implements OnInit {
                 fontSize: 16,
                 stepSize: 40,
               },
+              ticks: {
+                min: 0
+              }
             },
           ],
         },

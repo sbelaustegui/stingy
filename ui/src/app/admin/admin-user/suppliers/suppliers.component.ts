@@ -22,7 +22,7 @@ import {ReportStatisticsModel} from "../../../shared/models/report-statistics.mo
 })
 
 export class SuppliersComponent implements OnInit, AfterViewInit {
-  myAnimation:any;
+  myAnimation: any;
 
   supplier_Columns = ['id', 'name', 'description', 'update', 'remove'];
   supplier_DataSource: MatTableDataSource<Supplier>;
@@ -38,7 +38,6 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   public supplierToDelete: Supplier;
   public report: Report;
   public reportToDelete: Report;
-  public unresolvedReports: Report[];
   public requester: User;
   public requesters: Map<number, User>;
   public alerts: {
@@ -73,7 +72,6 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.suppliersMap = new Map<number, Supplier>();
     this.reportsMap = new Map<number, Report>();
-    this.unresolvedReports = [];
     this.titleService.setTitle('Provedores | Stingy');
     this.newSupplier = Supplier.empty();
     this.report = Report.empty();
@@ -103,11 +101,12 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
     this.getSuppliers();
     this.getUnresolveReports();
   }
-  ngAfterViewInit(): void{
+
+  ngAfterViewInit(): void {
     this.findCurrentGeoLocation();
   }
 
-  mapReading(){
+  mapReading() {
     this.myAnimation = 'BOUNCE';
   }
 
@@ -270,9 +269,10 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
     this.report.solved = true;
     this.reportService.resolveReport(this.report.id)
       .then(() => {
-        this.unresolvedReports.splice(this.unresolvedReports.findIndex(r => r.id == this.report.id), 1);
+        this.reportsMap.delete(this.report.id);
         this.getUnresolveReports();
         this.uploadSupplier();
+        this.setReportsData();
       })
       .catch(error => {
         this.snackBar.open('Hubo un error al marcar como resuelto un reporte, por favor inténtelo nuevamente.', '', {
@@ -310,7 +310,7 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   placeMarker($event) {
     this.newSupplier.location.latitude = $event.coords.lat;
     this.newSupplier.location.longitude = $event.coords.lng;
-    this.location.latitude=$event.coords.lat;
+    this.location.latitude = $event.coords.lat;
     this.location.longitude = $event.coords.lng;
   }
 

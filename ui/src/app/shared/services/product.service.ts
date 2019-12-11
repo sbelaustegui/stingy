@@ -91,6 +91,7 @@ export class ProductService {
   public getProductStatistics(productId: number, from: DateModel, to: DateModel): Promise<any[]> {
     return this.http.post('/api/supplier/product/prices', {productId, from, to })
       .then(res => {
+        console.log('DATA', res);
         return res.data;
       });
   }
