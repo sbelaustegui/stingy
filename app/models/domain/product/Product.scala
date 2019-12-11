@@ -1,6 +1,6 @@
 package models.domain.product
 
-import models.dao.ProductDAO
+import models.dao.{ImageDAO, ProductDAO, ProductImageDAO}
 import models.domain.product.productImage.ProductImage
 import models.domain.util.Date
 import models.ebean.{Product => EProduct}
@@ -62,7 +62,18 @@ object Product extends ProductJsonFormat {
   }
 
   def delete(product: Product): Option[Boolean] = {
-    ProductDAO.delete(product)
+    product.id match {
+      case Some(id) =>
+        ProductImageDAO.getByProductId(id) match {
+          case Some(p) =>
+            ProductImageDAO.delete(p) match {
+              case _ =>
+                ProductDAO.delete(product)
+            }
+          case _ =>
+            ProductDAO.delete(product)
+        }
+    }
   }
 
   def getUserProductStatistics(id: Long): ProductStatistics = {

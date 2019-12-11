@@ -34,8 +34,8 @@ export class AdminLoginComponent implements OnInit {
     this.loginLoading = true;
     this.adminAuthService.login(this.loginUser).then(() => {
       this.loginUserError = false;
-      this.loginLoading = false;
       window.location.reload();
+      this.loginLoading = false;
       // this.router.navigate(['admin', 'admin-user', 'categories']);
     }).catch(() => {
       this.loginUserError = true;

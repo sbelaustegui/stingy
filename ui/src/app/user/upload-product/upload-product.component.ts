@@ -160,7 +160,7 @@ export class UploadProductComponent implements OnInit {
             .then(() => {
               console.log('PRODUCT', this.newProduct);
               this.alerts.adding.product = false;
-              this.saveImage(res.id);
+              // this.saveImage(res.id);
               this.uploadSupplierProduct(res.id);
             })
             .catch(() => {

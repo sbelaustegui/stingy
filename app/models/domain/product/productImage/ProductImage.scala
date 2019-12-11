@@ -14,8 +14,16 @@ object ProductImage extends ProductImageFormat {
     ProductImage(Some(eProductImage.getId), Product(eProductImage.getProduct), Image(eProductImage.getImage))
   }
 
+  def delete(productImage: ProductImage): Option[Boolean] = {
+    ProductImageDAO.delete(productImage)
+  }
+
   def getById(id: Long): Option[ProductImage] = {
     ProductImageDAO.getById(id)
+  }
+
+  def getByProductId(id: Long): Option[ProductImage] = {
+    ProductImageDAO.getByProductId(id)
   }
 }
 

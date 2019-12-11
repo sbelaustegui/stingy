@@ -68,6 +68,10 @@ object ProductImageDAO {
     toScalaOption(EProductImage.getById(id)).map(ProductImage.apply)
   }
 
+  def getByProductId(id: Long): Option[ProductImage] = {
+    toScalaOption(EProductImage.getByProductId(id)).map(ProductImage.apply)
+  }
+
   def deleteMultiple(images: List[ProductImage]): Option[Boolean] = {
     var result = true
     images.foreach(image => {

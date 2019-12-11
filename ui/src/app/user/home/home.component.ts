@@ -333,7 +333,7 @@ export class HomeComponent implements OnInit {
   priceUpdate() {
     if (this.selectedSupplierProduct.price <= 0) {
       this.alerts.price.loading = true;
-      this.supplierProductService.addSupplierProduct(new SupplierProduct(this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
+      this.supplierProductService.addSupplierProduct(new SupplierProduct(this.user.id, this.selectedSupplierProduct.supplierId, this.selectedSupplierProduct.productId, this.selectedSupplierProduct.price))
         .then(res => {
           this.supplierProducts.get(res.productId)[this.selectedSupplierProductIndex] = res;
           this.alerts.price.loading = false;
