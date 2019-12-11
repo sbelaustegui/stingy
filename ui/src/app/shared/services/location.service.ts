@@ -38,6 +38,16 @@ export class LocationService {
       });
   }
 
+  public addUserLocation(location: Location, userId: number): Promise<Location> {
+    location.userId = userId;
+    return this.http
+      .post('/api/location/user', location)
+      .then(res => {
+        this._locationsById.set(res.data.id, res.data);
+        return res.data;
+      });
+  }
+
   public updateLocation(location: Location): Promise<Location> {
     if(this._locationsById.get(location.id)) {
       return this.http

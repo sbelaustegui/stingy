@@ -20,6 +20,7 @@ import {Location} from "../../shared/models/location.model";
 import {LocationService} from "../../shared/services/location.service";
 import {CartService} from "../../shared/services/cart.service";
 import {MatSnackBar} from "@angular/material";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-home',
@@ -80,7 +81,7 @@ export class HomeComponent implements OnInit {
 
   constructor(public subcategoryService: SubcategoryService, public categoryService: CategoryService,
               public cartProductService: CartProductService, public userAuthService: UserAuthService,
-              public productService: ProductService, public supplierService: SupplierService,
+              public productService: ProductService, public supplierService: SupplierService, public userService: UserService,
               public supplierProductService: SupplierProductService, public locationService: LocationService,
               public modalService: BsModalService, public cartService: CartService, private titleService: Title, public snackBar: MatSnackBar) {
   }
@@ -133,9 +134,8 @@ export class HomeComponent implements OnInit {
       this.user = res;
       this.locationService.getLocationById(res.locationId).then(l => {
         this.location = l;
-      });
+      }).catch(() => this.findCurrentGeoLocation());
       this.getCurrentCart();
-      this.findCurrentGeoLocation();
     }).catch(() => {
       this.snackBar.open('Hubo un error al obtener la información del usuario loggeado, por favor inténtelo nuevamente.', '', {
         duration: 5000,
@@ -228,6 +228,7 @@ export class HomeComponent implements OnInit {
               panelClass: ['snack-bar-error']
 
             });
+
             break;
           case "No user for that id":
             this.snackBar.open('Hubo un error al obtener los productos. No se encontró usuario para ese id.', '', {
@@ -313,11 +314,26 @@ export class HomeComponent implements OnInit {
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
         this.resetModal();
-        this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['snack-bar-success'],
-        });
+        this.locationService.addUserLocation(this.location, this.user.id)
+          .then(l => {
+            this.location = l;
+            let newUser = {id: this.user.id, locationId: l.id};
+            // this.userService.updateUser(newUser)
+            //   .then(r => {
+              this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
+                duration: 5000,
+                verticalPosition: 'top',
+                panelClass: ['snack-bar-success'],
+              });
+            })
+          .catch(err => {
+              this.snackBar.open('Hubo un error al guardar su ubicación, por favor inténtelo nuevamente.', '', {
+                duration: 5000,
+                verticalPosition: 'top',
+                panelClass: ['snack-bar-error'],
+
+              });
+        })
       });
       this.alerts.location.loading = false;
     } catch (e) {

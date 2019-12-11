@@ -82,6 +82,7 @@ POST        /api/supplier/product/prices                        controllers.Supp
 
 # Location
 POST        /api/location                                       controllers.LocationController.register()
+POST        /api/location/user                                  controllers.LocationController.registerWithUser()
 GET         /api/location/id/:id                                controllers.LocationController.getById(id: Long)
 PUT         /api/location                                       controllers.LocationController.update()
 DELETE      /api/location/:id                                   controllers.LocationController.delete(id: Long)

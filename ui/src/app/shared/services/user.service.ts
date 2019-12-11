@@ -60,7 +60,7 @@ export class UserService {
         })
   }
 
-  public updateUser(user: User): Promise<User> {
+  public updateUser(user: any): Promise<User> {
     if(this._usersById.get(user.id)) {
       return this.http
         .put('/api/user', user)
