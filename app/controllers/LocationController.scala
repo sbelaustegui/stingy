@@ -37,7 +37,7 @@ class LocationController extends Controller {
         case Some(location) =>
           User.getById(location.userId) match {
             case Some(user) =>
-              val loc = Location.saveOrUpdate(Location(new LocationCreate(location.latitude, location.longitude)))
+              val loc = Location.saveOrUpdate(Location(new LocationCreate(location.longitude, location.latitude)))
               val newUser = user.copy(location = loc)
               User.saveOrUpdate(newUser)
               Ok(

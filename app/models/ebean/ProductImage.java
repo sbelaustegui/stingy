@@ -40,7 +40,12 @@ public class ProductImage extends Model {
     }
 
     public static Optional<ProductImage> getByProductId(Long id) {
-        return Optional.of(Ebean.find(ProductImage.class).where().eq("product_id", id).findOne());
+        ProductImage productImage = Ebean.find(ProductImage.class).where().eq("product_id", id).findOne();
+        if(productImage != null) {
+            return Optional.of(productImage);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public static List<ProductImage> getProductImages(Long productId) {
