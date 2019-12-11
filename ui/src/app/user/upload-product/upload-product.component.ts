@@ -150,11 +150,6 @@ export class UploadProductComponent implements OnInit {
       });
       return;
     } else {
-      this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
-        duration: 5000,
-        verticalPosition: 'top', panelClass: ['snack-bar-error']
-
-      });
       this.alerts.adding.product = true;
       this.newProduct.isValidated = false;
       this.newProduct.userId = this.userId;
@@ -163,9 +158,10 @@ export class UploadProductComponent implements OnInit {
         .then(res => {
           this.productService.addProductImage(res.id, this.file)
             .then(() => {
+              console.log('PRODUCT', this.newProduct);
               this.alerts.adding.product = false;
               this.saveImage(res.id);
-              this.uploadSupplierProduct();
+              this.uploadSupplierProduct(res.id);
             })
             .catch(() => {
               this.snackBar.open('Hubo un error al cargar la imagen del producto. Revise los datos e inténtelo nuevamente.', '', {
@@ -186,28 +182,36 @@ export class UploadProductComponent implements OnInit {
     }
   }
 
-  private uploadSupplierProduct() {
+  private uploadSupplierProduct(productID: number) {
     this.alerts.adding.product = true;
-    this.newSupplierProduct.supplierId = parseInt(String(this.newSupplierProduct.supplierId));
-    this.supplierProductService.addSupplierProduct(this.newSupplierProduct)
-      .then(res => {
-        this.alerts.adding.supplierProduct = false;
-        this.snackBar.open('El producto fue agregado correctamente.', '', {
-          duration: 5000,
-          verticalPosition: 'top', panelClass: ['snack-bar-success']
+    console.log('SUPPLIER PRODUCT', this.newSupplierProduct);
+    this.newSupplierProduct.productId = productID;
+    this.userAuthService.loggedUser.then(u => {
+      this.newSupplierProduct.userId   = u.id;
+      this.newSupplierProduct.supplierId = parseInt(String(this.newSupplierProduct.supplierId));
+      this.supplierProductService.addSupplierProduct(this.newSupplierProduct)
+        .then(res => {
 
+          this.alerts.adding.supplierProduct = false;
+          this.snackBar.open('El producto fue agregado correctamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top', panelClass: ['snack-bar-success']
+
+          });
+          this.resetUploadProduct();
+          this.alerts.adding.product = false;
+
+        })
+        .catch(error => {
+          this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top', panelClass: ['snack-bar-error']
+
+          });
+          this.alerts.adding.supplierProduct = false;
         });
-        this.resetUploadProduct();
+    });
 
-      })
-      .catch(error => {
-        this.snackBar.open('Hubo un error al cargar el producto. Revise los datos e inténtelo nuevamente.', '', {
-          duration: 5000,
-          verticalPosition: 'top', panelClass: ['snack-bar-error']
-
-        });
-        this.alerts.adding.supplierProduct = false;
-      });
   }
 
   private initializeEmptyObjects() {

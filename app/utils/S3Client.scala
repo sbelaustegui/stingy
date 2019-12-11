@@ -7,6 +7,8 @@ import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
 import com.amazonaws.services.s3.model._
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 
+//BELA <3
+
 object S3Client {
 
   private val bucketName = "stingy"
