@@ -30,6 +30,7 @@ import {MatSnackBar} from "@angular/material";
     UserAuthService, BsModalService, CartService]
 })
 export class HomeComponent implements OnInit {
+  myAnimation: any;
 
   public subcategories: Subcategory[];
   public searchedProducts: Product[];
@@ -296,28 +297,28 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public findCurrentGeoLocation() {
+  findCurrentGeoLocation() {
     try {
       this.alerts.location.loading = true;
       navigator.geolocation.getCurrentPosition(position => {
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
+        this.resetModal();
         this.snackBar.open('Su ubicación se actualizó correctamente.', '', {
           duration: 5000,
-          verticalPosition: 'top'
-          ,panelClass: ['snack-bar-success']
-      });
-        this.locationService.updateLocation(this.location).then(this.modalRef ? this.modalRef.hide : undefined);
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-success'],
+        });
       });
       this.alerts.location.loading = false;
     } catch (e) {
-      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '',
-        {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['snack-bar-error']
+      this.location = Location.empty();
+      this.snackBar.open('Hubo un error al obtener su ubicación, por favor inténtelo nuevamente. Revise los permisos de su navegador.', '', {
+        duration: 5000,
+        verticalPosition: 'top',
+        panelClass: ['snack-bar-error'],
 
-        });
+      });
     }
   }
 
@@ -359,4 +360,7 @@ export class HomeComponent implements OnInit {
     this.modalRef.hide();
   }
 
+  mapReading() {
+    this.myAnimation = 'BOUNCE';
+  }
 }

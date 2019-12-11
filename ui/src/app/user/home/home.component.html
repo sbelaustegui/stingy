@@ -98,13 +98,19 @@
     </button>
   </div>
   <div class="modal-body">
-    <agm-map [latitude]="location.latitude" [longitude]="location.longitude"
-             *ngIf="!alerts.location.error && !alerts.location.loading">
-      <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
+    <agm-map [latitude]="location.latitude"
+             [longitude]="location.longitude"
+             (mapReady)="mapReading()"
+    >
+      <agm-marker
+        [animation]="myAnimation"
+        [latitude]="location.latitude"
+        [longitude]="location.longitude">
+      </agm-marker>
     </agm-map>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-light" (click)="findCurrentGeoLocation()">Posicionarme</button>
+    <button type="submit" class="btn btn-primary" (click)="findCurrentGeoLocation()">Posicionarme</button>
   </div>
 </ng-template>
 
