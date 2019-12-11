@@ -31,6 +31,9 @@ export class StatisticsComponent implements OnInit {
   label: string = "Seleccion un Producto";
   data: any[] = [];
 
+  dateFrom: Date = new Date(2010, 10, 20);
+  dateTo: Date = new Date();
+
   constructor(private titleService: Title, public productService: ProductService, public snackBar: MatSnackBar) {
   }
 
@@ -56,13 +59,13 @@ export class StatisticsComponent implements OnInit {
   }
 
   getStatistics(): void {
-    if (this.selectedProduct === undefined) {
+    if (this.selectedProduct === undefined || this.dateFrom === undefined || this.dateTo === undefined) {
       this.updateChart('Seleccione un Producto', [], []);
       return;
     }
     this.alerts.statistics.loading = true;
-    let from = DateModel.dateModelFromDateWithTime(new Date(2010, 10, 20));
-    let to = DateModel.dateModelFromDateWithTime(new Date());
+    const from = dateParse(this.dateFrom);
+    const to = dateParse(this.dateTo);
     this.productService.getProductStatistics(this.selectedProduct.id, from, to)
       .then(res => {
         console.log('STATICS', res);
@@ -90,7 +93,7 @@ export class StatisticsComponent implements OnInit {
           {
             data: [],
             label: this.label,
-            fill:false,
+            fill: false,
             backgroundColor:
               'rgb(88,190,224)',
             borderColor:
@@ -140,8 +143,21 @@ export class StatisticsComponent implements OnInit {
 
     this._chart.update();
   }
+
+  setDateTo(event: any): void {
+    if (event)
+      this.dateTo = new Date(event);
+  }
+
+  setDateFrom(event: any): void {
+    if (event)
+      this.dateFrom = new Date(event);
+  }
 }
 
+const dateParse = function (date: Date): DateModel {
+  return DateModel.dateModelFromDateWithTime(date);
+};
 
 
 

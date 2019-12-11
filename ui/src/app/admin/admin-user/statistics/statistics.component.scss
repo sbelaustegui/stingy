@@ -3,27 +3,57 @@
 .statistics {
   padding-right: 50px;
   padding-left: 50px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
   .row {
     padding-top: 2%;
     background-color: $background-color;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 20px ;
+    width: 100%;
 
     h2 {
       color: white;
       font-family: Open-Sans, "Lilita One", sans-serif;
-      padding-bottom: 20px ;
 
     }
 
-  }
-  .blank-separator{
-    padding: 40px 0;
   }
   .chart-container{
     display: block;
     background-color: white;
     border-radius: 10px;
+  }
+  .input-row{
+    display: grid;
+    grid-template-columns: auto 350px 350px;
+    grid-column-gap: 30px;
+    width: 100%;
+    padding: 20px 0;
+    .input-group{
+      display: flex;
+      flex-direction: row;
+      width: 100% !important;
+
+      .input-group-text{
+        height: 47px;
+        width: 100px;
+        border-radius: 5px 0 0 5px;
+      }
+      input{
+        width: 250px!important;
+        border-radius: 0 5px 5px 0;
+      }
+    }
+  }
+  .header-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 15px;
   }
 }

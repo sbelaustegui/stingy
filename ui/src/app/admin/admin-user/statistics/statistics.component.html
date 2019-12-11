@@ -10,21 +10,52 @@
           <span class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-6 ">
+      <div class="col-lg-12">
+        <div class="header-row" *ngIf="!alerts.products.loading">
           <h2>Estadísticas</h2>
+          <button class="btn btn-success my-2 my-sm-0 search-button" type="submit"
+                  (click)="getStatistics()">
+            Buscar
+          </button>
         </div>
         <div class="col-lg-12" *ngIf="!alerts.products.loading">
-          <select
-            class="form-control"
-            [(ngModel)]="selectedProduct"
-            (change)="getStatistics()"
-          >
-            <option [value]="undefined" selected>Seleccione una producto</option>
-            <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
-          </select>
-          <div class="col-lg-4 offset-lg-4 col-2 offset-5" *ngIf="alerts.statistics.loading">
-            <span class="mx-auto"><i class="fa fa-spinner fa-pulse fa-fw fa-4x"></i></span>
+          <div class="input-row">
+            <select
+              class="form-control"
+              [(ngModel)]="selectedProduct"
+            >
+              <option [value]="undefined" selected>Seleccione una producto</option>
+              <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
+            </select>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Desde</span>
+              </div>
+              <label>
+                <input
+                  type="date"
+                  class="form-control"
+                  value="dateFrom"
+                  [ngModel]="dateFrom | date:'yyyy-MM-dd'"
+                  (ngModelChange)="setDateFrom($event)"
+                  [value]="dateFrom | date:'yyyy-MM-dd'"
+                >
+              </label>
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Hasta</span>
+              </div>
+              <label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [ngModel]="dateTo | date:'yyyy-MM-dd'"
+                  (ngModelChange)="setDateTo($event)"
+                  [value]="dateTo | date:'yyyy-MM-dd'"
+                >
+              </label>
+            </div>
           </div>
         </div>
         <div class="blank-separator"></div>
