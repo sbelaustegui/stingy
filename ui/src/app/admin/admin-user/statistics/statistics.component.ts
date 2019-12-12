@@ -5,7 +5,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {DateModel} from "../../../shared/models/date-model";
 import {Product} from "../../../shared/models/product.model";
 import {Chart} from 'chart.js'
-import {SupplierProductService} from "../../../shared/services/supplierProduct.service";
 
 @Component({
   selector: 'app-statistics',
@@ -29,7 +28,7 @@ export class StatisticsComponent implements OnInit {
   private _canvas: ElementRef;
   private _chart: Chart;
   labels: string[] = [];
-  label: string = "Seleccion un Producto";
+  label: string = "Seleccione un Producto";
   data: any[] = [];
 
   dateFrom: Date = new Date(2010, 10, 20);
@@ -42,8 +41,8 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('ABM Estadisticas | Stingy');
-    this.createChart('FECHA', 'PRECIO');
     this.getProducts();
+    this.createChart('FECHA', 'PRECIO');
   }
 
   getProducts() {
@@ -52,13 +51,13 @@ export class StatisticsComponent implements OnInit {
         this.products = res;
         this.alerts.products.loading = false;
       }).catch(() => {
-      this.snackBar.open('Hubo un error al obtener los productos, por favor inténtelo nuevamente.', '', {
-        duration: 5000,
-        verticalPosition: 'top',
-        panelClass: ['snack-bar-error'],
-      });
-      this.alerts.products.loading = false;
-    })
+        this.snackBar.open('Hubo un error al obtener los productos, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error'],
+        });
+        this.alerts.products.loading = false;
+    });
   }
 
   getStatistics(): void {
@@ -87,7 +86,7 @@ export class StatisticsComponent implements OnInit {
     })
   }
 
-  private createChart(xTitle: string, yTitle: string): Chart {
+  private createChart(xTitle: string, yTitle: string) {
     this._chart = new Chart(this._canvas.nativeElement.getContext('2d'), {
       type: 'bar',
       data: {

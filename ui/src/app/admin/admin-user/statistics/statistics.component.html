@@ -11,9 +11,9 @@
         </div>
       </div>
       <div class="col-lg-12">
-        <div class="header-row" *ngIf="!alerts.products.loading">
+        <div class="header-row" >
           <h2>Estadísticas</h2>
-          <button class="btn btn-success my-2 my-sm-0 search-button" type="submit"
+          <button *ngIf="!alerts.products.loading" class="btn btn-success my-2 my-sm-0 search-button" type="submit" [disabled]="!selectedProduct || alerts.statistics.loading"
                   (click)="getStatistics()">
             Buscar
           </button>
