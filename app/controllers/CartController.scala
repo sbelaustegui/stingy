@@ -141,7 +141,7 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
         val oldCart = cart.copy(current = false)
         Cart.saveOrUpdate(oldCart) match {
           case Some(_) =>
-            val cart: Cart = new Cart(None, cart.userId, true, Date.now)
+            val cart: Cart = new Cart(None, oldCart.userId, true, Date.now)
             Cart.saveOrUpdate(cart) match {
               case Some(newCart) =>
                 Ok(
