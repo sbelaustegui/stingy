@@ -4,6 +4,7 @@ import javax.inject.Inject
 import models.domain.cart._
 import models.domain.supplierProduct.SupplierProduct
 import models.domain.user.User
+import models.domain.util.Date
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils._
@@ -123,6 +124,43 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
             )
           )
         )
+      case None =>
+        BadRequest(
+          Json.toJson(
+            ResponseGenerated(
+              BAD_REQUEST, "No user for that id"
+            )
+          )
+        )
+    }
+  }
+
+  def finishCart(id: Long) = Action {
+    Cart.getById(id) match {
+      case Some(cart) =>
+        val oldCart = cart.copy(current = false)
+        Cart.saveOrUpdate(oldCart) match {
+          case Some(_) =>
+            val cart: Cart = new Cart(None, cart.userId, true, Date.now)
+            Cart.saveOrUpdate(oldCart) match {
+              case Some(_) =>
+                Ok(
+                  Json.toJson(
+                    ResponseGenerated(
+                      OK, "Carts founded", Json.toJson(Cart.getCartsByUserId(id))
+                    )
+                  )
+                )
+              }
+          case None =>
+            BadRequest(
+              Json.toJson(
+                ResponseGenerated(
+                  BAD_REQUEST, "Error when creating User Cart"
+                )
+              )
+            )
+        }
       case None =>
         BadRequest(
           Json.toJson(

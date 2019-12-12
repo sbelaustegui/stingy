@@ -52,6 +52,7 @@ POST        /api/product/image                                  controllers.Prod
 # Cart
 POST        /api/cart                                           controllers.CartController.register()
 GET         /api/cart/all                                       controllers.CartController.getAll
+GET         /api/cart/finish/:id                                controllers.CartController.finishCart
 GET         /api/cart/id/:id                                    controllers.CartController.getById(id: Long)
 GET         /api/cart/user/:id                                  controllers.CartController.getByUserId(id: Long)
 GET         /api/carts/user/:id                                 controllers.CartController.getCartsByUserId(id: Long)
