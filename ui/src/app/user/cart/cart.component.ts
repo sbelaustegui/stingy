@@ -55,6 +55,7 @@ export class CartComponent implements OnInit {
               private authService: UserAuthService,
               private supplierService: SupplierService,
               private router: Router,
+              private cartProductService: CartProductService,
               private titleService: Title, private modalService: BsModalService, public snackBar: MatSnackBar) {
   }
 
@@ -198,6 +199,27 @@ export class CartComponent implements OnInit {
   // EXTERNAL METHODS
   goToHistory() {
     this.router.navigate(['user/cart/history']);
+  }
+
+  deleteProduct(cartBagProductToDelete) {
+    console.log('PRODUCT TO DELETE', cartBagProductToDelete);
+    this.cartProductService.deleteCartProduct(this.currentCart.id, cartBagProductToDelete.supplierProductId)
+      .then(res => {
+        // this.cartBags = this.cartBags.filter(p => p.id !== cartBagProductToDelete.id);
+        this.getCurrentCartBags();
+          this.snackBar.open('El producto fue eliminado correctamente.', '', {
+            duration: 5000,
+            verticalPosition: 'top',
+            panelClass: ['snack-bar-success']
+          });
+      })
+      .catch(() => {
+        this.snackBar.open('Hubo un error al eliminar el producto, por favor inténtelo nuevamente.', '', {
+          duration: 5000,
+          verticalPosition: 'top',
+          panelClass: ['snack-bar-error']
+        });
+      })
   }
 
 }

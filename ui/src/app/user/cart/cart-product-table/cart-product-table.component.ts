@@ -5,6 +5,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {CartProductService} from "../../../shared/services/cartProduct.service";
 import {DateModel} from "../../../shared/models/date-model";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-cart-product-table',
@@ -22,12 +23,14 @@ export class CartProductTableComponent implements OnInit {
   @Input()
   cartId: number;
 
+  @Output()
+  $deleteCartEvent: BehaviorSubject<CartBagProduct> = new BehaviorSubject<CartBagProduct>(null);
+
   cartBagProductDetail: CartBagProduct = CartBagProduct.empty();
   cartBagProductToDelete: CartBagProduct = CartBagProduct.empty();
 
   constructor(
     private modalService: BsModalService,
-    private cartProductService: CartProductService,
     private snackBar: MatSnackBar
   ) {
   }
@@ -38,26 +41,9 @@ export class CartProductTableComponent implements OnInit {
 
 
   deleteProduct() {
-    console.log('PRODUCT TO DELETE', this.cartBagProductToDelete.id);
-    this.cartProductService.deleteCartProduct(this.cartId, this.cartBagProductToDelete.supplierProductId)
-      .then(res => {
+    this.$deleteCartEvent.next(this.cartBagProductToDelete);
+    this.modalRef.hide();
 
-        this.cartBagProducts = this.cartBagProducts.filter(p => p.id !== this.cartBagProductToDelete.id);
-        this.dataSource.data = this.cartBagProducts;
-        this.modalRef.hide();
-        this.snackBar.open('El producto fue eliminado correctamente.', '', {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['snack-bar-success']
-        });
-      })
-      .catch(() => {
-        this.snackBar.open('Hubo un error al eliminar el producto, por favor inténtelo nuevamente.', '', {
-          duration: 5000,
-          verticalPosition: 'top',
-          panelClass: ['snack-bar-error']
-        });
-      })
   }
 
   openProductModal(template: TemplateRef<any>, cartBagProduct: CartBagProduct) {
@@ -69,7 +55,6 @@ export class CartProductTableComponent implements OnInit {
     this.cartBagProductToDelete = cartBagProductToDelete;
     this.modalRef = this.modalService.show(template);
   }
-
   resetModal(reference: string) {
     this.modalRef.hide();
     switch (reference.toUpperCase()) {
