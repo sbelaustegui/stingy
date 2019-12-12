@@ -1,13 +1,14 @@
 <div class="cart">
   <div class="row">
-    <button (click)="finishCart()">
 
-    </button>
     <!--PRODUCTS TABLE-->
     <div class="col-8 offset-2">
       <div class="row">
         <h2>Carrito Actual</h2>
-        <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="goToHistory()">Historial</button>
+          <button id="saveButton" (click)="finishCart()" class="btn btn-success my-2 my-sm-0 search-button" type="submit">
+            Guardar
+          </button>
+          <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="goToHistory()">Historial</button>
       </div>
       <div class="row" *ngIf="alerts.cartBags.loading">
         <div class="col-12" style="text-align: center;">
@@ -16,26 +17,26 @@
             </span>
         </div>
       </div>
-        <mat-accordion>
-          <ng-container class="suppliers" *ngFor="let cartBag of cartBags; let  cartBagIndex = index">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{ getSupplierNameBySupId(cartBag.supplierId)}}
-                  ${{getCartBagTotalPriceBySupId(cartBag.supplierId)}}
-                </mat-panel-title>
-                <mat-panel-description>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <app-cart-product-table
-                [cartBagProducts]="cartBag.products"
-                [cartId]="currentCart.id"
-                ($deleteCartEvent)="deleteProduct($event)"
-              >
-              </app-cart-product-table>
-            </mat-expansion-panel>
-          </ng-container>
-        </mat-accordion>
+      <mat-accordion>
+        <ng-container class="suppliers" *ngFor="let cartBag of cartBags; let  cartBagIndex = index">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ getSupplierNameBySupId(cartBag.supplierId)}}
+                ${{getCartBagTotalPriceBySupId(cartBag.supplierId)}}
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-cart-product-table
+              [cartBagProducts]="cartBag.products"
+              [cartId]="currentCart.id"
+              ($deleteCartEvent)="deleteProduct($event)"
+            >
+            </app-cart-product-table>
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-accordion>
     </div>
   </div>
 </div>

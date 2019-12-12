@@ -203,6 +203,7 @@ export class CartComponent implements OnInit {
 
   deleteProduct(cartBagProductToDelete: CartBagProduct) {
     console.log('PRODUCT TO DELETE', cartBagProductToDelete);
+    if (!cartBagProductToDelete) return;
     this.cartProductService.deleteCartProduct(this.currentCart.id, cartBagProductToDelete.supplierProductId)
       .then(res => {
         this.getCurrentCart(this.userId);
