@@ -201,12 +201,11 @@ export class CartComponent implements OnInit {
     this.router.navigate(['user/cart/history']);
   }
 
-  deleteProduct(cartBagProductToDelete) {
+  deleteProduct(cartBagProductToDelete: CartBagProduct) {
     console.log('PRODUCT TO DELETE', cartBagProductToDelete);
     this.cartProductService.deleteCartProduct(this.currentCart.id, cartBagProductToDelete.supplierProductId)
       .then(res => {
-        // this.cartBags = this.cartBags.filter(p => p.id !== cartBagProductToDelete.id);
-        this.getCurrentCartBags();
+        this.getCurrentCart(this.userId);
           this.snackBar.open('El producto fue eliminado correctamente.', '', {
             duration: 5000,
             verticalPosition: 'top',
