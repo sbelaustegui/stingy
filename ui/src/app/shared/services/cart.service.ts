@@ -28,7 +28,7 @@ export class CartService {
     this._cartsById = new Map();
   }
 
-  public cartFinish(cartID: number): Promise<void> {
+  public cartFinish(cartID: number): Promise<Cart> {
     return this.http.get(' api/cart/finish/' + cartID).then(res => {
       return res.data
     });

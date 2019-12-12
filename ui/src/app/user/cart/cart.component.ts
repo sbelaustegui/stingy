@@ -221,4 +221,9 @@ export class CartComponent implements OnInit {
       })
   }
 
+  finishCart() {
+    this.cartService.cartFinish(this.currentCart.id).then(res => {
+      // this.currentCart = res;
+    })
+  }
 }
