@@ -13,6 +13,8 @@ GET         /api/carts/user/:id                                 controllers.Cart
 GET         /api/cart/cartBags/:cartId                          controllers.CartController.getCartBagsByCartId(cartId: Long)
 PUT         /api/cart                                           controllers.CartController.update()
 DELETE      /api/cart/:id                                       controllers.CartController.delete(id: Long)
+GET         api/cart/finish/:cartID                           controllers.CartController.getById(id: Long)
+
 */
 
 @Injectable()
@@ -24,6 +26,12 @@ export class CartService {
   constructor(private http: HttpService) {
     this._allCartsLoaded = false;
     this._cartsById = new Map();
+  }
+
+  public cartFinish(cartID: number): Promise<void> {
+    return this.http.get(' api/cart/finish/' + cartID).then(res => {
+      return res.data
+    });
   }
 
   get carts(): Promise<Cart[]> {
