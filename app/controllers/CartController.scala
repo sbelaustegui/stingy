@@ -142,12 +142,12 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
         Cart.saveOrUpdate(oldCart) match {
           case Some(_) =>
             val cart: Cart = new Cart(None, cart.userId, true, Date.now)
-            Cart.saveOrUpdate(oldCart) match {
-              case Some(_) =>
+            Cart.saveOrUpdate(cart) match {
+              case Some(newCart) =>
                 Ok(
                   Json.toJson(
                     ResponseGenerated(
-                      OK, "Carts founded", Json.toJson(Cart.getCartsByUserId(id))
+                      OK, "Carts founded", Json.toJson(newCart)
                     )
                   )
                 )
